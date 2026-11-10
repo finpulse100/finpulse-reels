@@ -1,0 +1,447 @@
+<!doctype html>
+<!--
+  FIN PULSE · reel template (from the approved Viksit Bharat video)
+  - 1080x1920, driven by setT(seconds). DURS (in the script) sets each scene's length; the total must be 45 s.
+  - To make a new video: keep the structure, replace the text, numbers and graphics inside each <section class="scene">,
+    and keep every scene's content inside the safe area (top 17cqw, bottom 30cqw, left 6cqw, right 11cqw).
+  - Per-scene entrance timings are in the data-a="kind:start:duration" attributes and the s1..s6 functions.
+  - Check with check.py, render with render.py. Font: Inter (installed locally); no network is needed.
+-->
+
+<html>
+<head>
+<meta charset="utf-8">
+<title>Viksit Bharat Reel</title>
+<style>
+  /* 1080x1920 canvas. Everything is sized in cqw (1cqw = 10.8px) and driven by setT(seconds), so each frame is deterministic. */
+  :root {
+    --bg: #0a3a33;
+    --ink: #03140d;
+    --ink-dim: rgba(3, 20, 13, 0.86);
+    --chip-bg: #05261a;
+    --chip-ink: #a7ffd6;
+    --green: #0a7a4b;
+    --saffron: #f59e0b;
+    --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  .frame { position: relative; width: 1080px; height: 1920px; container-type: inline-size; overflow: hidden; background: var(--bg); font-family: var(--font); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .blob { position: absolute; border-radius: 50%; will-change: transform; }
+  .scene { position: absolute; inset: 0; display: none; }
+  .scene.on { display: block; }
+  .inner { position: absolute; inset: 0; padding: 17cqw 11cqw 30cqw 6cqw; display: flex; flex-direction: column; justify-content: center; gap: 3.6cqw; min-width: 0; }
+  .safe { display: none; position: absolute; inset: 17cqw 11cqw 30cqw 6cqw; border: 2px dashed rgba(255, 255, 255, 0.8); z-index: 9; pointer-events: none; }
+  body.dbg .safe { display: block; }
+
+  /* ---------- Pill tag ---------- */
+  .tag-pill {
+    position: relative; align-self: center;
+    display: inline-flex; align-items: center; justify-content: center; gap: 2.6cqw;
+    padding: 2.4cqw 6.4cqw; border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
+    backdrop-filter: blur(40px) saturate(100%);
+    -webkit-backdrop-filter: blur(40px) saturate(100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2cqw 6cqw rgba(0, 0, 0, 0.45), inset 0 0.5cqw 1cqw rgba(255, 255, 255, 0.95), inset 0 -0.7cqw 1.4cqw rgba(3, 20, 13, 0.14);
+    color: var(--ink); font-size: 4.6cqw; font-weight: 800; line-height: 1.2; white-space: nowrap; flex: none;
+  }
+  .tag-pill::before { content: ""; position: absolute; inset: 1cqw; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.75); pointer-events: none; }
+  .dot { position: relative; width: 2.6cqw; height: 2.6cqw; border-radius: 50%; background: var(--green); }
+
+  .h {
+    margin: 0; text-align: center; color: #fff; font-size: 8.8cqw; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; text-wrap: balance; flex: none;
+    text-shadow: 0 0.6cqw 2.4cqw rgba(0, 0, 0, 0.45);
+  }
+  .h .w { display: inline-block; }
+
+  /* ---------- Glass (your styles, then made denser so the boxes read clearly) ---------- */
+  .glass {
+    background: rgba(255, 255, 255, 0.37);
+    backdrop-filter: blur(40px) saturate(100%);
+    -webkit-backdrop-filter: blur(40px) saturate(100%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.50);
+  }
+  .frame .glass {
+    position: relative; overflow: hidden;
+    background: rgba(255, 255, 255, 0.62);
+    border: 3px solid rgba(255, 255, 255, 0.85);
+    border-radius: 4cqw;
+    box-shadow: 0 2cqw 7cqw rgba(0, 0, 0, 0.5);
+  }
+  .frame .glass.dim { background: rgba(255, 255, 255, 0.4); }
+  .glass::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.5) 50%, transparent 62%);
+    transform: translateX(var(--sw, -130%));
+  }
+
+  .card { padding: 4.2cqw; display: flex; flex-direction: column; gap: 2.4cqw; min-width: 0; flex: none; }
+  .lab { margin: 0; font-size: 3.6cqw; font-weight: 700; line-height: 1.2; color: var(--ink-dim); }
+  .val { margin: 0; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; color: var(--ink); }
+  .huge { font-size: 29cqw; letter-spacing: -0.04em; text-align: center; line-height: 1; }
+  .big { font-size: 7.4cqw; }
+  .mid { font-size: 5.6cqw; }
+  .sub { margin: 0; font-size: 3.6cqw; font-weight: 700; line-height: 1.2; color: var(--ink-dim); }
+  .svg { width: 100%; height: auto; display: block; flex: none; }
+  .svg text { font-family: var(--font); font-weight: 700; fill: var(--ink-dim); }
+  .ax { stroke: rgba(3, 20, 13, 0.35); stroke-width: 0.5; fill: none; }
+  .dash { fill: none; stroke: var(--green); stroke-width: 1.2; stroke-dasharray: 2.4 2.2; stroke-linecap: round; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 2cqw; }
+  .chip { background: var(--chip-bg); color: var(--chip-ink); font-size: 4cqw; font-weight: 700; line-height: 1.1; padding: 1.6cqw 3.6cqw; border-radius: 999px; }
+
+  .ic { flex: none; width: 9cqw; height: 9cqw; border-radius: 50%; background: var(--chip-bg); display: grid; place-items: center; }
+  .ic svg { width: 56%; height: 56%; stroke: var(--chip-ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ic svg .f { fill: var(--chip-ink); stroke: none; }
+
+  .row-chip { display: flex; align-items: center; gap: 3cqw; padding: 2.4cqw 3.6cqw; flex: none; }
+  .row-chip .ic { width: 8.6cqw; height: 8.6cqw; }
+  .row-chip span.t { font-size: 4.3cqw; font-weight: 800; line-height: 1.15; color: var(--ink); }
+
+  .arrow { align-self: center; width: 9cqw; height: 9cqw; border-radius: 50%; background: var(--chip-bg); display: grid; place-items: center; flex: none; }
+  .arrow svg { width: 60%; height: 60%; stroke: var(--chip-ink); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3cqw; flex: none; }
+  .pillar { padding: 3cqw 3.4cqw; align-items: flex-start; gap: 2cqw; }
+  .pillar .val { font-size: 5.4cqw; }
+  .pillar .ic { width: 8.6cqw; height: 8.6cqw; }
+
+  .avatar { flex: none; width: 9.6cqw; height: 9.6cqw; border-radius: 50%; background: var(--chip-bg); color: var(--chip-ink); display: grid; place-items: center; font-size: 3.6cqw; font-weight: 800; }
+  .who { display: flex; align-items: center; gap: 2.2cqw; }
+  .who b { display: block; font-size: 4cqw; line-height: 1.1; color: var(--ink); font-weight: 800; }
+  .who span.s { display: block; font-size: 3.2cqw; font-weight: 700; color: var(--ink-dim); }
+  .tick { display: flex; align-items: center; gap: 3cqw; }
+  .tick span.t { font-size: 4.4cqw; font-weight: 800; line-height: 1.15; color: var(--ink); }
+  .tick .ic { width: 8cqw; height: 8cqw; }
+
+  /* per-scene spacing so each scene fills the taller safe area */
+  #s1 .inner { gap: 5.5cqw; } #s1 .card { padding: 5.4cqw; } #s1 .h { font-size: 9.4cqw; }
+  #s2 .inner { gap: 4.2cqw; }
+  #s3 .inner { gap: 3cqw; } #s3 .row-chip { padding: 2cqw 3.6cqw; }
+  #s5 .inner { gap: 5cqw; }
+  #s6 .inner { gap: 5.6cqw; } #s6 .card.tk { padding: 5cqw 4.4cqw; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="b3"></div><div class="blob" id="b4"></div>
+
+  <!-- 1 · Hook -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Viksit Bharat 2047</div>
+    <h2 class="h" data-split="0.35">India's goal needs bolder business</h2>
+    <div class="glass card" data-a="pop:0.9:0.8">
+      <p class="lab">The target year</p>
+      <p class="val huge" id="yr">2047</p>
+      <svg class="svg" viewBox="0 0 100 36">
+        <defs>
+          <linearGradient id="a1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12b981" stop-opacity="0.45"/><stop offset="1" stop-color="#12b981" stop-opacity="0"/></linearGradient>
+          <mask id="mk1" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="36"><path id="p1m" d="M6 27 C 26 26, 38 22, 52 16 S 80 5, 92 4.5" fill="none" stroke="#fff" stroke-width="4"/></mask>
+          <clipPath id="cl1"><rect id="clr1" x="0" y="0" width="0" height="36"/></clipPath>
+        </defs>
+        <path d="M6 27 C 26 26, 38 22, 52 16 S 80 5, 92 4.5 L92 29 L6 29 Z" fill="url(#a1)" clip-path="url(#cl1)"/>
+        <line class="ax" x1="4" y1="29" x2="96" y2="29"/>
+        <path class="dash" mask="url(#mk1)" d="M6 27 C 26 26, 38 22, 52 16 S 80 5, 92 4.5"/>
+        <g id="dots1"></g>
+        <g id="mk1g"><circle id="mr1" r="6" fill="#f59e0b" fill-opacity="0.3"/><circle r="3.4" fill="#f59e0b" stroke="#fff" stroke-width="1"/></g>
+        <text x="6" y="34.5" font-size="3.4">Today</text>
+        <text x="94" y="34.5" font-size="3.4" text-anchor="end">2047</text>
+      </svg>
+    </div>
+  </div></section>
+
+  <!-- 2 · Mindset shift -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>The mindset shift</div>
+    <h2 class="h" data-split="0.35">From cautious growth to bold ambition</h2>
+    <div class="glass dim card" id="bef" data-a="left:1.0:0.7" style="flex-direction:row; align-items:center; justify-content:space-between; gap:3cqw">
+      <div style="min-width:0"><p class="lab">Before</p><p class="val mid">Cautious growth</p></div>
+      <svg class="svg" style="width:22cqw" viewBox="0 0 60 24"><path id="p2a" pathLength="1" d="M2 16 L18 15 L34 16.5 L58 14" fill="none" stroke="rgba(3,20,13,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="arrow" data-a="drop:2.0:0.5"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+    <div class="glass card" data-a="pop:2.3:0.8">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:3cqw">
+        <div style="min-width:0"><p class="lab">What it takes</p><p class="val big">Bold ambition</p></div>
+        <svg class="svg" style="width:22cqw" viewBox="0 0 60 24">
+          <defs><linearGradient id="a2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12b981" stop-opacity="0.5"/><stop offset="1" stop-color="#12b981" stop-opacity="0"/></linearGradient></defs>
+          <path id="ar2" d="M2 21 C14 20, 22 14, 32 11 S48 4, 58 2 L58 23 L2 23 Z" fill="url(#a2)"/>
+          <path id="p2b" pathLength="1" d="M2 21 C14 20, 22 14, 32 11 S48 4, 58 2" fill="none" stroke="#0a7a4b" stroke-width="2.2" stroke-linecap="round"/>
+          <circle id="e2" cx="58" cy="2" r="2.4" fill="#f59e0b" stroke="#fff" stroke-width="0.8"/>
+        </svg>
+      </div>
+      <div class="chips"><span class="chip" data-a="pop:3.2:0.5">Innovation</span><span class="chip" data-a="pop:3.45:0.5">Risk-taking</span><span class="chip" data-a="pop:3.7:0.5">Collaboration</span></div>
+    </div>
+  </div></section>
+
+  <!-- 3 · Think global -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Build for the world</div>
+    <h2 class="h" data-split="0.35">Think global, not just domestic</h2>
+    <div class="glass card" data-a="pop:0.9:0.8" style="padding:2cqw">
+      <svg class="svg" viewBox="0 0 100 48">
+        <g id="rings">
+          <circle cx="50" cy="24" r="22" fill="none" stroke="rgba(3,20,13,0.35)" stroke-width="0.6" stroke-dasharray="1.6 1.8"/>
+          <circle cx="50" cy="24" r="15.5" fill="none" stroke="rgba(3,20,13,0.4)" stroke-width="0.6" stroke-dasharray="1.6 1.8"/>
+          <circle cx="50" cy="24" r="11" fill="rgba(18,185,129,0.22)"/>
+          <g id="orbit">
+            <circle cx="72" cy="24" r="2.4" fill="#0a7a4b"/><circle cx="61" cy="43.05" r="2.4" fill="#f59e0b"/><circle cx="39" cy="43.05" r="2.4" fill="#0a7a4b"/>
+            <circle cx="28" cy="24" r="2.4" fill="#f59e0b"/><circle cx="39" cy="4.95" r="2.4" fill="#0a7a4b"/><circle cx="61" cy="4.95" r="2.4" fill="#f59e0b"/>
+            <circle cx="63.4" cy="31.75" r="1.8" fill="#0a7a4b"/><circle cx="36.6" cy="31.75" r="1.8" fill="#0a7a4b"/><circle cx="50" cy="8.5" r="1.8" fill="#0a7a4b"/>
+          </g>
+        </g>
+        <circle id="core" cx="50" cy="24" r="8.6" fill="#05261a"/>
+        <text x="50" y="26" font-size="5.2" text-anchor="middle" style="fill:#a7ffd6">India</text>
+      </svg>
+    </div>
+    <div class="glass row-chip" data-a="right:2.2:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="6" cy="17" r="2.6"/><circle cx="18" cy="17" r="2.6"/><circle cx="12" cy="6" r="2.6"/><path d="M12 8.6 7 14.6M12 8.6l5 6M8.6 17h6.8"/></svg></span>
+      <span class="t">Strong ecosystems</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.55:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/></svg></span>
+      <span class="t">Technology and R&amp;D</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.9:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span>
+      <span class="t">Globally competitive companies</span>
+    </div>
+  </div></section>
+
+  <!-- 4 · Apex Advantage -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Apex Advantage</div>
+    <h2 class="h" data-split="0.35">India's true Apex Advantage</h2>
+    <svg class="svg" viewBox="0 -8 100 46">
+      <circle id="glow4" cx="70" cy="8" r="17" fill="#f59e0b" fill-opacity="0.28"/>
+      <g id="mtB"><polygon points="0,38 24,16 40,30 58,12 72,26 100,38" fill="rgba(3,20,13,0.3)"/></g>
+      <g id="mtF"><polygon points="4,38 36,14 50,26 70,4 96,38" fill="#0a5d44" stroke="rgba(255,255,255,0.8)" stroke-width="0.8"/></g>
+      <g id="snow"><polygon points="70,4 63,13 67,11 70,15 74,11 77,13" fill="#ffffff"/></g>
+      <line id="pole" pathLength="1" x1="70" y1="4" x2="70" y2="-8" stroke="#05261a" stroke-width="1.2" stroke-linecap="round"/>
+      <g id="flag"><polygon points="70,-8 83,-4 70,0" fill="#f59e0b"/></g>
+    </svg>
+    <div class="grid2">
+      <div class="glass card pillar" data-a="pop:2.5:0.55"><span class="ic"><svg viewBox="0 0 24 24"><path class="f" d="M13 2 5 13h6l-1 9 8-11h-6l1-9z"/></svg></span><p class="val">Courage</p></div>
+      <div class="glass card pillar" data-a="pop:2.8:0.55"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6l-8-3z"/></svg></span><p class="val">Resilience</p></div>
+      <div class="glass card pillar" data-a="pop:3.1:0.55"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg></span><p class="val">Trust</p></div>
+      <div class="glass card pillar" data-a="pop:3.4:0.55"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle class="f" cx="12" cy="12" r="1.4"/></svg></span><p class="val">Execution</p></div>
+    </div>
+  </div></section>
+
+  <!-- 5 · Small cities -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Inclusive growth</div>
+    <h2 class="h" data-split="0.35">Smaller cities will drive inclusive growth</h2>
+    <div class="glass card" data-a="pop:0.9:0.8" style="padding:2.6cqw">
+      <svg class="svg" id="net" viewBox="0 0 100 50"></svg>
+    </div>
+    <div class="grid2">
+      <div class="glass card" data-a="pop:3.0:0.6" style="gap:1.4cqw"><p class="val mid">MSMEs</p><p class="sub">Crucial to inclusive growth</p></div>
+      <div class="glass card" data-a="pop:3.3:0.6" style="gap:1.4cqw"><p class="val mid" style="font-size:4.6cqw">Entrepreneurs</p><p class="sub">Across smaller cities</p></div>
+    </div>
+  </div></section>
+
+  <!-- 6 · Takeaway -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Key takeaway</div>
+    <h2 class="h" data-split="0.35">Bold ambition, backed by execution</h2>
+    <div class="glass card tk" data-a="pop:0.9:0.7" style="gap:3.4cqw">
+      <div class="tick" data-a="right:1.2:0.5"><span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span><span class="t">Think bold, not cautious</span></div>
+      <div class="tick" data-a="right:1.65:0.5"><span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span><span class="t">Ecosystems, tech, R&amp;D</span></div>
+      <div class="tick" data-a="right:2.1:0.5"><span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span><span class="t">Back small-city MSMEs</span></div>
+    </div>
+    <div class="grid2">
+      <div class="glass card" data-a="pop:2.9:0.6"><div class="who"><span class="avatar">RS</span><div><b>Romal Shetty</b><span class="s">Deloitte</span></div></div></div>
+      <div class="glass card" data-a="pop:3.15:0.6"><div class="who"><span class="avatar">VP</span><div><b>Vinay Prabhakar</b><span class="s">Deloitte</span></div></div></div>
+    </div>
+  </div></section>
+
+  <div class="safe"></div>
+</div>
+
+<script>
+  var DURS = [6.5, 7.5, 7.5, 7.5, 7.5, 8.5];   // seconds per scene; the sum is the video length (45 s)
+  window.COVER_T = 3.2;                           // time used for the cover image (scene 1 fully built)
+  var OUT = 0.4;
+  var STARTS = []; (function () { var a = 0; DURS.forEach(function (d) { STARTS.push(a); a += d; }); })();
+  window.TOTAL = DURS.reduce(function (a, b) { return a + b; }, 0);
+
+  var clamp = function (x, a, b) { a = a === undefined ? 0 : a; b = b === undefined ? 1 : b; return Math.min(b, Math.max(a, x)); };
+  var E = {
+    outCubic: function (x) { return 1 - Math.pow(1 - x, 3); },
+    outBack: function (x) { var s = 1.5, c = s + 1; return 1 + c * Math.pow(x - 1, 3) + s * Math.pow(x - 1, 2); },
+    inCubic: function (x) { return x * x * x; },
+    inOut: function (x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+  };
+  var $ = function (id) { return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // ----- split headlines into words -----
+  document.querySelectorAll('.h[data-split]').forEach(function (h) {
+    var base = parseFloat(h.getAttribute('data-split'));
+    var words = h.textContent.trim().split(/\s+/);
+    h.textContent = '';
+    words.forEach(function (w, i) {
+      var s = document.createElement('span'); s.className = 'w'; s.textContent = w;
+      s._a = { k: 'up', s: base + i * 0.08, d: 0.6 };
+      h.appendChild(s);
+      if (i < words.length - 1) h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  // ----- gather animated elements per scene -----
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function (sc) {
+    sc._els = [];
+    sc.querySelectorAll('[data-a]').forEach(function (el) {
+      var p = el.getAttribute('data-a').split(':');
+      el._a = { k: p[0], s: parseFloat(p[1]), d: parseFloat(p[2]) };
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function (el) { sc._els.push(el); });
+    sc._glass = Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el, t) {
+    var a = el._a, p = clamp((t - a.s) / a.d), e = E.outCubic(p), b = E.outBack(p), o = clamp(p * 2), x = 0, y = 0, s = 1;
+    if (a.k === 'pop') { s = 0.86 + 0.14 * b; y = (1 - e) * 6; }
+    else if (a.k === 'up') { y = (1 - e) * 7; }
+    else if (a.k === 'drop') { y = -(1 - e) * 6; s = 0.94 + 0.06 * b; }
+    else if (a.k === 'left') { x = -(1 - e) * 18; }
+    else if (a.k === 'right') { x = (1 - e) * 18; }
+    else if (a.k === 'zoom') { s = Math.max(0, b); o = clamp(p * 3); }
+    el.style.opacity = o;
+    el.style.transform = 'translate(' + x.toFixed(3) + 'cqw,' + y.toFixed(3) + 'cqw) scale(' + s.toFixed(4) + ')';
+  }
+
+  // ----- background blobs -----
+  function blob(el, color, size, x, y) {
+    el.style.width = size + 'cqw'; el.style.height = size + 'cqw';
+    el.style.left = x + 'cqw'; el.style.top = y + 'cqw';
+    el.style.background = 'radial-gradient(closest-side, ' + color + ' 0%, ' + color + ' 38%, rgba(0,0,0,0) 100%)';
+  }
+  blob($('b1'), 'rgba(12,122,88,1)', 130, -40, -40);
+  blob($('b2'), 'rgba(245,158,11,0.95)', 92, 52, 62);
+  blob($('b3'), 'rgba(45,156,219,0.95)', 120, -26, 120);
+  blob($('b4'), 'rgba(59,91,219,0.9)', 70, 52, 112);
+  function orbs(T) {
+    $('b1').style.transform = 'translate(' + (9 * Math.sin(T * 0.45)).toFixed(2) + 'cqw,' + (7 * Math.cos(T * 0.38)).toFixed(2) + 'cqw)';
+    $('b2').style.transform = 'translate(' + (-10 * Math.sin(T * 0.36 + 1)).toFixed(2) + 'cqw,' + (9 * Math.cos(T * 0.41)).toFixed(2) + 'cqw)';
+    $('b3').style.transform = 'translate(' + (10 * Math.cos(T * 0.33)).toFixed(2) + 'cqw,' + (-9 * Math.sin(T * 0.4 + 2)).toFixed(2) + 'cqw)';
+    $('b4').style.transform = 'translate(' + (-8 * Math.cos(T * 0.5 + 1)).toFixed(2) + 'cqw,' + (8 * Math.sin(T * 0.47)).toFixed(2) + 'cqw)';
+  }
+
+  // ----- scene 1 -----
+  var p1m = $('p1m'), len1 = p1m.getTotalLength(), dots1 = [], fr1 = [0, 0.3, 0.55, 0.78];
+  p1m.style.strokeDasharray = len1;
+  fr1.forEach(function () { var c = document.createElementNS(NS, 'circle'); c.setAttribute('r', 1.8); c.setAttribute('fill', '#0a7a4b'); $('dots1').appendChild(c); dots1.push(c); });
+  function s1(t) {
+    $('yr').textContent = Math.round(2000 + 47 * E.outCubic(clamp((t - 1.1) / 1.3)));
+    var pp = clamp((t - 1.5) / 1.8), ep = E.inOut(pp);
+    p1m.style.strokeDashoffset = len1 * (1 - ep);
+    var pt = p1m.getPointAtLength(len1 * ep);
+    $('mk1g').setAttribute('transform', 'translate(' + pt.x + ' ' + pt.y + ') scale(' + E.outBack(clamp((t - 1.5) / 0.4)).toFixed(3) + ')');
+    $('mr1').setAttribute('r', (6 + Math.sin(t * 4) * 1.1).toFixed(2));
+    $('clr1').setAttribute('width', pt.x);
+    dots1.forEach(function (c, i) {
+      var q = fr1[i], d = p1m.getPointAtLength(len1 * q);
+      c.setAttribute('cx', d.x); c.setAttribute('cy', d.y);
+      c.setAttribute('r', (1.8 * Math.max(0, E.outBack(clamp((ep - q) / 0.08)))).toFixed(3));
+    });
+  }
+
+  // ----- scene 2 -----
+  function s2(t) {
+    $('p2a').style.strokeDasharray = '1'; $('p2a').style.strokeDashoffset = 1 - E.inOut(clamp((t - 1.3) / 0.7));
+    var q = E.inOut(clamp((t - 2.6) / 0.9));
+    $('p2b').style.strokeDasharray = '1'; $('p2b').style.strokeDashoffset = 1 - q;
+    $('ar2').style.opacity = clamp((t - 3.0) / 0.8);
+    $('e2').setAttribute('r', (2.4 * Math.max(0, E.outBack(clamp((t - 3.4) / 0.4)))).toFixed(3));
+    var f = clamp((t - 2.2) / 0.5);
+    $('bef').style.opacity = (1 - 0.4 * f) * clamp((t - 1.0) / 0.35);
+  }
+
+  // ----- scene 3 -----
+  function s3(t) {
+    var g = E.outBack(clamp((t - 1.0) / 0.9)), sc = Math.max(0, g);
+    $('rings').setAttribute('transform', 'translate(50 24) scale(' + sc.toFixed(3) + ') translate(-50 -24)');
+    $('orbit').setAttribute('transform', 'rotate(' + ((t - 1) * 14).toFixed(2) + ' 50 24)');
+    $('core').setAttribute('r', (8.6 + Math.sin(t * 3) * 0.35).toFixed(2));
+  }
+
+  // ----- scene 4 -----
+  var pole = $('pole'); pole.style.strokeDasharray = '1';
+  function s4(t) {
+    var a = E.outCubic(clamp((t - 0.9) / 0.9)), b = E.outCubic(clamp((t - 1.2) / 0.9));
+    $('mtB').setAttribute('transform', 'translate(0 ' + ((1 - a) * 46).toFixed(2) + ')');
+    $('mtF').setAttribute('transform', 'translate(0 ' + ((1 - b) * 46).toFixed(2) + ')');
+    $('snow').setAttribute('transform', 'translate(70 14) scale(' + Math.max(0, E.outBack(clamp((t - 2.0) / 0.4))).toFixed(3) + ') translate(-70 -14)');
+    pole.style.strokeDashoffset = 1 - E.outCubic(clamp((t - 2.0) / 0.5));
+    $('flag').setAttribute('transform', 'translate(70 0) scale(' + Math.max(0, E.outBack(clamp((t - 2.5) / 0.5))).toFixed(3) + ' 1) translate(-70 0)');
+    $('glow4').setAttribute('fill-opacity', (clamp((t - 1.8) / 0.6) * (0.28 + 0.06 * Math.sin(t * 3))).toFixed(3));
+  }
+
+  // ----- scene 5 (network) -----
+  var NODES = [[50,25,3.6,1],[28,16,2.2,0],[72,14,2.6,1],[18,34,2,0],[40,41,2.6,1],[64,37,2,0],[84,30,2.6,1],[12,14,1.6,0],[90,10,1.6,0],[56,7,1.8,0],[34,28,1.8,0],[78,43,1.6,0],[24,45,1.6,0],[6,27,1.4,0]];
+  var EDGES = [[0,1],[0,2],[0,10],[0,5],[0,9],[1,7],[1,10],[2,8],[2,6],[2,9],[3,10],[3,13],[3,12],[4,10],[4,12],[4,5],[5,6],[5,11],[6,11]];
+  var dist = NODES.map(function () { return 99; }); dist[0] = 0;
+  for (var it = 0; it < 8; it++) EDGES.forEach(function (e) { var a = e[0], b = e[1]; if (dist[a] + 1 < dist[b]) dist[b] = dist[a] + 1; if (dist[b] + 1 < dist[a]) dist[a] = dist[b] + 1; });
+  var net = $('net'), edgeEls = [], nodeEls = [];
+  EDGES.forEach(function (e) {
+    var a = NODES[e[0]], b = NODES[e[1]], l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', a[0]); l.setAttribute('y1', a[1]); l.setAttribute('x2', b[0]); l.setAttribute('y2', b[1]);
+    l.setAttribute('stroke', 'rgba(3,20,13,0.4)'); l.setAttribute('stroke-width', 0.7); l.setAttribute('stroke-linecap', 'round');
+    l.setAttribute('pathLength', 1); l.style.strokeDasharray = '1';
+    net.appendChild(l); edgeEls.push({ el: l, t0: 0.9 + Math.min(dist[e[0]], dist[e[1]]) * 0.3 + 0.1 });
+  });
+  NODES.forEach(function (n, i) {
+    var g = document.createElementNS(NS, 'g');
+    var halo = document.createElementNS(NS, 'circle'); halo.setAttribute('r', n[2] * 2); halo.setAttribute('fill', '#f59e0b'); halo.setAttribute('fill-opacity', n[3] ? 0.25 : 0);
+    var c = document.createElementNS(NS, 'circle'); c.setAttribute('r', n[2]); c.setAttribute('fill', n[3] ? '#f59e0b' : '#0a7a4b');
+    if (n[3]) { c.setAttribute('stroke', '#fff'); c.setAttribute('stroke-width', 0.8); }
+    g.appendChild(halo); g.appendChild(c); net.appendChild(g);
+    nodeEls.push({ g: g, halo: halo, n: n, t0: 0.9 + dist[i] * 0.3 });
+  });
+  function s5(t) {
+    edgeEls.forEach(function (e) { e.el.style.strokeDashoffset = 1 - E.outCubic(clamp((t - e.t0) / 0.35)); });
+    nodeEls.forEach(function (o) {
+      var s = Math.max(0, E.outBack(clamp((t - o.t0) / 0.4)));
+      o.g.setAttribute('transform', 'translate(' + o.n[0] + ' ' + o.n[1] + ') scale(' + s.toFixed(3) + ')');
+      if (o.n[3]) o.halo.setAttribute('r', (o.n[2] * (2 + 0.5 * Math.sin(t * 3 + o.n[0]))).toFixed(2));
+    });
+  }
+
+  // ----- scene 6 -----
+  var cks = Array.prototype.slice.call(document.querySelectorAll('.ck'));
+  cks.forEach(function (c) { c.style.strokeDasharray = '1'; });
+  function s6(t) {
+    cks.forEach(function (c, i) { c.style.strokeDashoffset = 1 - E.outCubic(clamp((t - (1.45 + i * 0.45)) / 0.35)); });
+  }
+
+  var FX = [s1, s2, s3, s4, s5, s6];
+
+  window.setT = function (T) {
+    orbs(T);
+    var i = 0; for (var k = 0; k < STARTS.length; k++) if (T >= STARTS[k] - 1e-6) i = k;
+    var t = T - STARTS[i], d = DURS[i];
+    scenes.forEach(function (sc, k) { sc.classList.toggle('on', k === i); });
+    var sc = scenes[i];
+    sc._els.forEach(function (el) { applyAnim(el, t); });
+    FX[i](t);
+    sc._glass.forEach(function (g, gi) {
+      var q = ((t * 0.45 + gi * 0.27) % 1);
+      g.style.setProperty('--sw', (q < 0.45 ? (-130 + 260 * (q / 0.45)) : 160).toFixed(1) + '%');
+    });
+    var o = clamp((t - (d - OUT)) / OUT), inner = sc.querySelector('.inner');
+    inner.style.opacity = 1 - E.inCubic(o);
+    inner.style.transform = 'translateY(' + (-2 * E.inCubic(o)).toFixed(3) + 'cqw)';
+    var pill = sc.querySelector('.tag-pill');
+    if (pill) { var base = pill.style.transform; pill.style.transform = base + ' translateY(' + (Math.sin(T * 2) * 0.5).toFixed(3) + 'cqw)'; }
+  };
+  setT(0);
+</script>
+</body>
+</html>
