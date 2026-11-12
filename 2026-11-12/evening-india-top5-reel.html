@@ -1,0 +1,565 @@
+<!doctype html>
+<!--
+  FIN PULSE · Evening Reel · 2026-11-12
+  Story: India's stock market returns to world's top 5 at $5.45 trillion
+  Hook B (Evening): Rank counter reveal 7→5 + contradiction mechanic
+  Palette: Forest Dark #000f08
+  Music: the_mountain-soft-background-492811.mp3
+  DURS: [7, 7, 7.5, 7.5, 7, 9] = 45s
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>India Top 5 Market</title>
+<style>
+  :root {
+    --bg: #000f08;
+    --ink: #03140d;
+    --ink-dim: rgba(3,20,13,0.82);
+    --chip-bg: #052d1a;
+    --chip-ink: #86efac;
+    --green: #10b981;
+    --green2: #34d399;
+    --gold: #f59e0b;
+    --red: #10b981;
+    --red2: #34d399;
+    --font: 'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html,body { margin:0; padding:0; width:1080px; height:1920px; overflow:hidden; background:#000; }
+  .frame { position:relative; width:1080px; height:1920px; container-type:inline-size; overflow:hidden; background:var(--bg); font-family:var(--font); color:var(--ink); font-variant-numeric:tabular-nums; }
+
+  .blob { position:absolute; border-radius:50%; will-change:transform; }
+  .scene { position:absolute; inset:0; display:none; }
+  .scene.on { display:block; }
+  .inner { position:absolute; inset:0; padding:17cqw 11cqw 30cqw 6cqw; display:flex; flex-direction:column; justify-content:center; gap:3.6cqw; min-width:0; }
+  .safe { display:none; position:absolute; inset:17cqw 11cqw 30cqw 6cqw; border:2px dashed rgba(255,255,255,0.8); z-index:9; pointer-events:none; }
+  body.dbg .safe { display:block; }
+
+  /* Handle overlay */
+  .handle-overlay { position:absolute; bottom:7cqw; right:5cqw; font-size:3.4cqw; font-weight:800; color:rgba(255,255,255,0.72); letter-spacing:0.01em; pointer-events:none; text-shadow:0 1px 4px rgba(0,0,0,0.6); z-index:8; }
+
+  /* Tag pill */
+  .tag-pill {
+    position:relative; align-self:center;
+    display:inline-flex; align-items:center; justify-content:center; gap:2.6cqw;
+    padding:2.4cqw 6.4cqw; border-radius:999px;
+    background:linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.52));
+    backdrop-filter:blur(40px) saturate(100%);
+    -webkit-backdrop-filter:blur(40px) saturate(100%);
+    border:1.5px solid rgba(255,255,255,0.9);
+    box-shadow:0 2cqw 6cqw rgba(0,0,0,0.45),inset 0 0.5cqw 1cqw rgba(255,255,255,0.95),inset 0 -0.7cqw 1.4cqw rgba(3,20,13,0.14);
+    color:var(--ink); font-size:4.6cqw; font-weight:800; line-height:1.2; white-space:nowrap; flex:none;
+  }
+  .tag-pill::before { content:""; position:absolute; inset:1cqw; border-radius:999px; border:1px solid rgba(255,255,255,0.75); pointer-events:none; }
+  .dot { position:relative; width:2.6cqw; height:2.6cqw; border-radius:50%; background:var(--green); }
+
+  .h { margin:0; text-align:center; color:#fff; font-size:8.8cqw; font-weight:800; letter-spacing:-0.02em; line-height:1.1; text-wrap:balance; flex:none; text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.45); }
+  .h .w { display:inline-block; }
+
+  /* Glass cards */
+  .frame .glass {
+    position:relative; overflow:hidden;
+    background:rgba(255,255,255,0.88);
+    border:3px solid rgba(255,255,255,0.95);
+    border-radius:4cqw;
+    box-shadow:0 2cqw 7cqw rgba(0,0,0,0.5);
+  }
+  .frame .glass.dim { background:rgba(255,255,255,0.4); }
+  .glass::after {
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.5) 50%,transparent 62%);
+    transform:translateX(var(--sw,-130%));
+  }
+
+  .card { padding:4.2cqw; display:flex; flex-direction:column; gap:2.4cqw; min-width:0; flex:none; }
+  .lab { margin:0; font-size:3.6cqw; font-weight:700; line-height:1.2; color:var(--ink-dim); }
+  .val { margin:0; font-weight:800; letter-spacing:-0.02em; line-height:1.05; color:var(--ink); }
+  .big { font-size:7.4cqw; }
+  .mid { font-size:5.6cqw; }
+  .sub { margin:0; font-size:3.6cqw; font-weight:700; line-height:1.2; color:var(--ink-dim); }
+  .svg { width:100%; height:auto; display:block; flex:none; }
+  .svg text { font-family:var(--font); font-weight:700; fill:var(--ink-dim); }
+
+  .ic { flex:none; width:9cqw; height:9cqw; border-radius:50%; background:var(--chip-bg); display:grid; place-items:center; }
+  .ic svg { width:56%; height:56%; stroke:var(--chip-ink); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .ic svg .f { fill:var(--chip-ink); stroke:none; }
+
+  .row-chip { display:flex; align-items:center; gap:3cqw; padding:2.4cqw 3.6cqw; flex:none; }
+  .row-chip .ic { width:8.6cqw; height:8.6cqw; }
+  .row-chip span.t { font-size:4.3cqw; font-weight:800; line-height:1.15; color:var(--ink); }
+
+  .grid2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:3cqw; flex:none; }
+  .pillar { padding:3cqw 3.4cqw; align-items:flex-start; gap:2cqw; }
+  .pillar .val { font-size:5.4cqw; }
+
+  .tick { display:flex; align-items:center; gap:3cqw; }
+  .tick span.t { font-size:4.4cqw; font-weight:800; line-height:1.15; color:var(--ink); }
+  .tick .ic { width:8cqw; height:8cqw; }
+
+  /* Scene-specific spacing */
+  #s1 .inner { gap:4.5cqw; } #s1 .h { font-size:9.4cqw; }
+  #s2 .inner { gap:3.8cqw; }
+  #s3 .inner { gap:3cqw; } #s3 .row-chip { padding:2cqw 3.6cqw; }
+  #s4 .inner { gap:3.4cqw; }
+  #s5 .inner { gap:3.8cqw; }
+  #s6 .inner { gap:5cqw; } #s6 .card.tk { padding:5cqw 4.4cqw; }
+
+  /* Rank counter */
+  .rank-big { font-size:12cqw; font-weight:900; color:var(--gold); letter-spacing:-0.04em; line-height:1; text-align:center; text-shadow:0 0 4cqw rgba(245,158,11,0.6); flex:none; }
+
+  /* Stat row */
+  .stat-row { display:flex; gap:2.6cqw; flex:none; }
+  .stat-row .glass { flex:1; padding:3cqw; gap:1.6cqw; display:flex; flex-direction:column; }
+  .stat-row .lab { font-size:3.2cqw; }
+  .stat-row .val { font-size:5.2cqw; }
+
+  /* Bar chart labels */
+  .bar-label { font-size:3.2cqw; fill:var(--ink-dim); font-weight:700; }
+  .bar-val { font-size:3.4cqw; fill:var(--ink); font-weight:800; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- Handle -->
+  <div class="handle-overlay">@finpulsemarkets</div>
+
+  <!-- Safe zone debug -->
+  <div class="safe"></div>
+
+  <!-- S1 · Hook — Rank reveal 7→5 -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>MARKET MILESTONE</div>
+    <h2 class="h" data-split="0.4">Taiwan fell. India rose. If you hold Nifty, watch this.</h2>
+    <div class="glass card" data-a="pop:1.0:0.7" style="align-items:center;gap:1.4cqw;padding:3cqw 4cqw;">
+      <p class="lab" style="text-align:center;">India's global stock market rank</p>
+      <div style="display:flex;align-items:center;gap:5cqw;">
+        <div style="text-align:center;">
+          <p class="lab">Was</p>
+          <p class="val" style="font-size:7cqw;color:rgba(3,20,13,0.4);text-decoration:line-through;">#7</p>
+        </div>
+        <svg viewBox="0 0 40 20" style="width:10cqw;flex:none;"><path d="M2 10h32M26 4l8 6-8 6" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div style="text-align:center;">
+          <p class="lab">Now</p>
+          <p class="rank-big" id="rankNum">5</p>
+        </div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="glass card" data-a="pop:1.5:0.6">
+        <p class="lab">Nifty from Oct low</p>
+        <p class="val" style="font-size:5.4cqw;color:#059669;">+14%</p>
+      </div>
+      <div class="glass card" data-a="pop:1.75:0.6">
+        <p class="lab">FII inflows Nov</p>
+        <p class="val" style="font-size:4.6cqw;">₹66,302 Cr</p>
+      </div>
+      <div class="glass card" data-a="pop:2.0:0.6">
+        <p class="lab">Market cap</p>
+        <p class="val" style="font-size:4.6cqw;">$5.45T</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- S2 · Reveal — Entity + bar chart -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE NUMBER</div>
+    <h2 class="h" data-split="0.35">India is the world's 5th largest stock market</h2>
+    <div class="glass card" data-a="pop:0.9:0.75" style="gap:1.8cqw;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:3cqw;">
+        <div>
+          <p class="lab">BSE · NSE MARKET CAP</p>
+          <p class="val big" style="color:#059669;">$5.45 Trillion</p>
+          <p class="sub">↑ Back in top 5 as of Nov 12, 2026</p>
+        </div>
+        <span class="ic" style="width:12cqw;height:12cqw;background:#052d1a;">
+          <svg viewBox="0 0 24 24" style="width:60%;height:60%;">
+            <polyline points="2,18 8,10 13,14 20,5" stroke="#86efac" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="17,5 20,5 20,8" stroke="#86efac" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+      <svg class="svg" id="barChart" viewBox="0 0 100 60" style="margin-top:1cqw;">
+        <!-- Bar chart: Global top 5 markets. Left col=label (0-18), bar starts at 20, max bar=68 units (US $80T) -->
+        <!-- Labels fixed on left, values fixed on right -->
+        <text x="0" y="6.5" font-size="3.5" font-family="Inter,sans-serif" font-weight="700" fill="rgba(3,20,13,0.7)">US</text>
+        <rect id="bar0" x="20" y="1" width="0" height="7" rx="1.2" fill="#10b981"/>
+        <text x="90" y="6.5" font-size="3" font-family="Inter,sans-serif" font-weight="800" fill="rgba(3,20,13,0.85)" text-anchor="end">$80T</text>
+
+        <text x="0" y="18.5" font-size="3.5" font-family="Inter,sans-serif" font-weight="700" fill="rgba(3,20,13,0.7)">China</text>
+        <rect id="bar1" x="20" y="13" width="0" height="7" rx="1.2" fill="#10b981" fill-opacity="0.75"/>
+        <text x="90" y="18.5" font-size="3" font-family="Inter,sans-serif" font-weight="800" fill="rgba(3,20,13,0.85)" text-anchor="end">$13.3T</text>
+
+        <text x="0" y="30.5" font-size="3.5" font-family="Inter,sans-serif" font-weight="700" fill="rgba(3,20,13,0.7)">Japan</text>
+        <rect id="bar2" x="20" y="25" width="0" height="7" rx="1.2" fill="#10b981" fill-opacity="0.6"/>
+        <text x="90" y="30.5" font-size="3" font-family="Inter,sans-serif" font-weight="800" fill="rgba(3,20,13,0.85)" text-anchor="end">$8.42T</text>
+
+        <text x="0" y="42.5" font-size="3.5" font-family="Inter,sans-serif" font-weight="700" fill="rgba(3,20,13,0.7)">HK</text>
+        <rect id="bar3" x="20" y="37" width="0" height="7" rx="1.2" fill="#f59e0b" fill-opacity="0.8"/>
+        <text x="90" y="42.5" font-size="3" font-family="Inter,sans-serif" font-weight="800" fill="rgba(3,20,13,0.85)" text-anchor="end">$5.67T</text>
+
+        <text x="0" y="54.5" font-size="3.5" font-family="Inter,sans-serif" font-weight="800" fill="#059669">India ★</text>
+        <rect id="bar4" x="20" y="49" width="0" height="7" rx="1.5" fill="#10b981"/>
+        <text x="90" y="54.5" font-size="3" font-family="Inter,sans-serif" font-weight="800" fill="#059669" text-anchor="end">$5.45T</text>
+      </svg>
+    </div>
+  </div></section>
+
+  <!-- S3 · Why -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHY IT HAPPENED</div>
+    <h2 class="h" data-split="0.35">Three things pushed India up two places</h2>
+    <div class="glass row-chip" data-a="right:1.0:0.65">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z" class="f" fill="#86efac" stroke="none"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="#86efac" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="t">FII inflows ₹66,302 Cr poured into India in November</span>
+    </div>
+    <div class="glass row-chip" data-a="right:1.5:0.65">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="#86efac" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="t">Crude oil dropped 22% — from $118 to $92 a barrel</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.0:0.65">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" stroke="#86efac" stroke-width="2" fill="none"/><path d="M8 21h8M12 17v4" stroke="#86efac" stroke-width="2" fill="none" stroke-linecap="round"/><polyline points="6,13 9,10 12,12 16,7 20,9" stroke="#86efac" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="t">Taiwan's AI selloff: TAIEX fell 40,000 → money rotated to India</span>
+    </div>
+  </div></section>
+
+  <!-- S4 · What it means for you -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHAT THIS MEANS FOR YOU</div>
+    <h2 class="h" data-split="0.35">Your Nifty SIP just joined a top-5 global story</h2>
+    <div class="glass card" data-a="pop:0.9:0.7" style="gap:2cqw;">
+      <div style="display:flex;align-items:center;gap:2.6cqw;">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#86efac" stroke-width="2" fill="none"/><polyline points="8,12 11,15 16,9" stroke="#86efac" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="val" style="font-size:4.4cqw;">Large-cap indices benefit most from FII buying</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:2.6cqw;">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#86efac" stroke-width="2" fill="none"/><polyline points="8,12 11,15 16,9" stroke="#86efac" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <p class="val" style="font-size:4.4cqw;">Lower crude = lower inflation = room for RBI to hold rates</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:2.6cqw;">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#f59e0b" stroke-width="2" fill="none"/><line x1="12" y1="9" x2="12" y2="13" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="0.5" fill="#f59e0b" stroke="#f59e0b"/></svg></span>
+        <p class="val" style="font-size:4.4cqw;">Rankings have flipped 3× this year — gains can reverse fast</p>
+      </div>
+    </div>
+    <p style="margin:0;font-size:3.2cqw;font-weight:700;color:rgba(255,255,255,0.55);text-align:center;flex:none;">Educational content, not financial advice.</p>
+  </div></section>
+
+  <!-- S5 · The gap — can India reach #4? -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE NEXT FRONTIER</div>
+    <h2 class="h" data-split="0.35">Hong Kong is only $220 billion ahead</h2>
+    <div class="glass card" data-a="pop:0.9:0.75" style="gap:3cqw;">
+      <div style="display:flex;justify-content:space-between;gap:3cqw;align-items:flex-end;">
+        <div>
+          <p class="lab">Hong Kong (#4)</p>
+          <p class="val mid">$5.67T</p>
+        </div>
+        <div style="text-align:right;">
+          <p class="lab">India (#5)</p>
+          <p class="val mid" style="color:#059669;">$5.45T</p>
+        </div>
+      </div>
+      <svg class="svg" id="gapChart" viewBox="0 0 100 28">
+        <!-- Gap bar visualisation -->
+        <rect x="1" y="4" width="0" height="8" rx="1.5" id="hkBar" fill="#f59e0b"/>
+        <rect x="1" y="16" width="0" height="8" rx="1.5" id="inBar" fill="#10b981"/>
+        <text x="1" y="2.5" class="bar-label" style="fill:#f59e0b;">Hong Kong</text>
+        <text x="1" y="27" class="bar-label" style="fill:#10b981;font-weight:900;">India ★</text>
+      </svg>
+      <p class="sub" style="text-align:center;">The gap: just $220 billion — roughly 4% of India's market cap</p>
+    </div>
+    <div class="grid2">
+      <div class="glass card" data-a="pop:2.6:0.6" style="gap:1.4cqw;">
+        <p class="lab">Nifty gain in Nov</p>
+        <p class="val" style="font-size:5.4cqw;color:#059669;">+6.3%</p>
+      </div>
+      <div class="glass card" data-a="pop:2.9:0.6" style="gap:1.4cqw;">
+        <p class="lab">India was at rank</p>
+        <p class="val" style="font-size:5.4cqw;">#7 in Oct</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- S6 · CTA — no exit fade (isLast) -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>KEY TAKEAWAY</div>
+    <h2 class="h" data-split="0.3">India went from 7th to 5th in one month</h2>
+    <div class="glass card tk" data-a="pop:0.9:0.7" style="gap:3.4cqw;">
+      <div class="tick" data-a="right:1.2:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M6 12.5l4 4 8-9" stroke="#86efac" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="t">India market cap: $5.45 trillion (₹511 lakh crore)</span>
+      </div>
+      <div class="tick" data-a="right:1.65:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M6 12.5l4 4 8-9" stroke="#86efac" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="t">Nifty 50 up +14% from its October 8 low</span>
+      </div>
+      <div class="tick" data-a="right:2.1:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M6 12.5l4 4 8-9" stroke="#86efac" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="t">HK only $220B ahead — India could reach #4</span>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.9:0.65" style="padding:3.6cqw;gap:2cqw;">
+      <div style="display:flex;align-items:center;gap:3cqw;">
+        <span class="ic" style="width:10cqw;height:10cqw;background:#052d1a;">
+          <svg viewBox="0 0 24 24" style="width:55%;height:55%;"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" stroke="#86efac" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="4" y1="22" x2="4" y2="15" stroke="#86efac" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <div>
+          <p style="margin:0;font-size:4.6cqw;font-weight:800;color:var(--ink);">Follow @finpulsemarkets</p>
+          <p style="margin:0;font-size:3.4cqw;font-weight:700;color:var(--ink-dim);">Daily market moves, explained in 45 seconds</p>
+        </div>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:3.5:0.6" style="padding:3.2cqw;text-align:center;">
+      <p style="margin:0;font-size:4.2cqw;font-weight:800;color:var(--ink);">Do you think India will overtake Hong Kong to reach #4? 👇</p>
+    </div>
+  </div></section>
+
+</div>
+
+<script>
+  /* ========================================================
+     FIN PULSE · 2026-11-12 Evening · India Top 5
+     DURS: [7, 7, 7.5, 7.5, 7, 9] = 45s
+  ======================================================== */
+  var DURS = [7, 7, 7.5, 7.5, 7, 9];
+  window.COVER_T = 0.5;
+  var OUT = 0.4;
+  var STARTS = []; (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+  window.TOTAL = DURS.reduce(function(a,b){ return a+b; }, 0);
+
+  var clamp = function(x,a,b){ a=a===undefined?0:a; b=b===undefined?1:b; return Math.min(b,Math.max(a,x)); };
+  var E = {
+    outCubic: function(x){ return 1-Math.pow(1-x,3); },
+    outBack:  function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+    inCubic:  function(x){ return x*x*x; },
+    inOut:    function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+  };
+  var $=function(id){ return document.getElementById(id); };
+  var NS='http://www.w3.org/2000/svg';
+
+  /* ---- split headlines ---- */
+  document.querySelectorAll('.h[data-split]').forEach(function(h){
+    var base=parseFloat(h.getAttribute('data-split'));
+    var words=h.textContent.trim().split(/\s+/);
+    h.textContent='';
+    words.forEach(function(w,i){
+      var s=document.createElement('span'); s.className='w'; s.textContent=w;
+      s._a={k:'up',s:base+i*0.08,d:0.6};
+      h.appendChild(s);
+      if(i<words.length-1) h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  /* ---- gather animated elements ---- */
+  var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function(sc){
+    sc._els=[];
+    sc.querySelectorAll('[data-a]').forEach(function(el){
+      var p=el.getAttribute('data-a').split(':');
+      el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+    sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el,t){
+    var a=el._a,p=clamp((t-a.s)/a.d),e=E.outCubic(p),b=E.outBack(p),o=clamp(p*2),x=0,y=0,s=1;
+    if(a.k==='pop'){ s=0.86+0.14*b; y=(1-e)*6; }
+    else if(a.k==='up'){ y=(1-e)*7; }
+    else if(a.k==='drop'){ y=-(1-e)*6; s=0.94+0.06*b; }
+    else if(a.k==='left'){ x=-(1-e)*18; }
+    else if(a.k==='right'){ x=(1-e)*18; }
+    el.style.opacity=o;
+    el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+  }
+
+  /* ---- background blobs (Forest Dark: green/emerald/teal/gold) ---- */
+  function blob(el,color,size,x,y){
+    el.style.width=size+'cqw'; el.style.height=size+'cqw';
+    el.style.left=x+'cqw'; el.style.top=y+'cqw';
+    el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+  }
+  blob($('b1'),'rgba(5,150,105,0.95)',140,-50,-30);
+  blob($('b2'),'rgba(245,158,11,0.85)',85, 55, 70);
+  blob($('b3'),'rgba(20,184,166,0.9)', 110,-20,130);
+  blob($('b4'),'rgba(16,185,129,0.75)',75, 50,120);
+
+  function orbs(T){
+    $('b1').style.transform='translate('+(9*Math.sin(T*0.44)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.37)).toFixed(2)+'cqw)';
+    $('b2').style.transform='translate('+(-10*Math.sin(T*0.35+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.42)).toFixed(2)+'cqw)';
+    $('b3').style.transform='translate('+(10*Math.cos(T*0.32)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.41+2)).toFixed(2)+'cqw)';
+    $('b4').style.transform='translate('+(-8*Math.cos(T*0.51+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.46)).toFixed(2)+'cqw)';
+  }
+
+  /* ---- S1: Rank reveal 7→5 ---- */
+  function s1(t){
+    // Rank counter counts down 7 → 5 (starts at t=1.0, takes 1.2s)
+    var rankProg = clamp((t-1.0)/1.2);
+    var rankVal = Math.round(7 - 2*E.outCubic(rankProg));
+    var rankEl = $('rankNum');
+    if(rankEl) rankEl.textContent = '#'+rankVal;
+    // Glow pulse on rank number when it reaches 5
+    if(rankVal===5){
+      var glow = Math.abs(Math.sin(t*3.5))*0.6;
+      if(rankEl) rankEl.style.textShadow='0 0 '+(4+glow*8)+'cqw rgba(16,185,129,'+(0.5+glow)+')';
+    }
+  }
+
+  /* ---- S2: Bar chart ---- */
+  // Bar widths proportional to market cap (max = US $80T → 86 units)
+  // Bar widths: scale to max 68 units (US $80T = 68), bars start at x=20, values fixed at x=90
+  var BAR_DATA = [
+    {id:'bar0',target:68.0,t0:0.6},
+    {id:'bar1',target:11.3,t0:0.9},
+    {id:'bar2',target:7.16,t0:1.1},
+    {id:'bar3',target:4.83,t0:1.3},
+    {id:'bar4',target:4.63,t0:1.5}
+  ];
+  function s2(t){
+    BAR_DATA.forEach(function(b){
+      var prog=E.outCubic(clamp((t-b.t0)/0.7));
+      var el=$(b.id); if(el) el.setAttribute('width',(b.target*prog).toFixed(2));
+    });
+  }
+
+  /* ---- S5: Gap chart ---- */
+  function s5(t){
+    var hkProg=E.outCubic(clamp((t-0.9)/0.8));
+    var inProg=E.outCubic(clamp((t-1.2)/0.8));
+    var hk=$('hkBar'); if(hk) hk.setAttribute('width',(88*hkProg).toFixed(2));
+    var inn=$('inBar'); if(inn) inn.setAttribute('width',(84.4*inProg).toFixed(2));
+  }
+
+  /* ---- S6: Checkmark draws ---- */
+  var cks6=Array.prototype.slice.call(document.querySelectorAll('.ck6'));
+  cks6.forEach(function(c){ c.style.strokeDasharray='1'; c.style.strokeDashoffset='1'; });
+  function s6(t){
+    cks6.forEach(function(c,i){ c.style.strokeDashoffset=1-E.outCubic(clamp((t-(1.45+i*0.45))/0.35)); });
+  }
+
+  var FX=[s1,s2,function(){},function(){},s5,s6];
+
+  /* ========================================================
+     AUDIO ENGINE — 10 SFX (Web Audio API, base64 WAV tones)
+  ======================================================== */
+  var _actx=null, _sfxBuf={}, _cued={};
+  var SFX_DATA={
+    whoosh:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    tick:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    beep:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    final_beep:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    reveal_whoosh:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    impact:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    swoosh:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    glass_pop:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    ding:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    pulse:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA='
+  };
+  function initAudio(){
+    if(_actx) return;
+    try{
+      _actx=new(window.AudioContext||window.webkitAudioContext)();
+      Object.keys(SFX_DATA).forEach(function(k){
+        var bin=atob(SFX_DATA[k]);
+        var buf=new Uint8Array(bin.length);
+        for(var i=0;i<bin.length;i++) buf[i]=bin.charCodeAt(i);
+        _actx.decodeAudioData(buf.buffer,function(decoded){ _sfxBuf[k]=decoded; }).catch(function(){});
+      });
+    } catch(e){}
+  }
+  document.addEventListener('click',initAudio,{once:true});
+  document.addEventListener('touchstart',initAudio,{once:true});
+
+  function cue(T,name,vol){
+    if(!_sfxBuf[name]) return;
+    var key=name+'@'+T.toFixed(2);
+    if(_cued[key]) return;
+    _cued[key]=true;
+    try{
+      var src=_actx.createBufferSource();
+      src.buffer=_sfxBuf[name];
+      var g=_actx.createGain(); g.gain.value=vol||1;
+      src.connect(g); g.connect(_actx.destination);
+      src.start();
+    } catch(e){}
+  }
+
+  /* ---- SFX cues per scene ---- */
+  function cueSFX(T,si,t){
+    if(si===0){
+      cue(T,'whoosh',1.4);
+      if(t>1.0) cue(T,'tick',1.1);
+      if(t>2.1) cue(T,'reveal_whoosh',1.2);
+      if(t>2.5) cue(T,'ding',1.3);
+    } else if(si===1){
+      cue(T,'glass_pop',1.0);
+      if(t>0.9) cue(T,'swoosh',0.9);
+    } else if(si===2){
+      cue(T,'whoosh',1.0);
+    } else if(si===3){
+      cue(T,'impact',1.0);
+    } else if(si===4){
+      cue(T,'pulse',1.0);
+    } else if(si===5){
+      cue(T,'final_beep',1.2);
+      if(t>1.2) cue(T,'ding',1.1);
+    }
+  }
+
+  /* ========================================================
+     MASTER DRIVER: setT(seconds)
+  ======================================================== */
+  window.setT = function(T){
+    orbs(T);
+    var i=0;
+    for(var k=0;k<STARTS.length;k++) if(T>=STARTS[k]-1e-6) i=k;
+    var t=T-STARTS[i], d=DURS[i];
+    var isLast=(i===DURS.length-1);
+
+    scenes.forEach(function(sc,k){ sc.classList.toggle('on',k===i); });
+    var sc=scenes[i];
+    sc._els.forEach(function(el){ applyAnim(el,t); });
+    FX[i](t);
+
+    sc._glass.forEach(function(g,gi){
+      var q=((t*0.45+gi*0.27)%1);
+      g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+    });
+
+    /* Scene exit fade — SKIP on last scene */
+    var inner=sc.querySelector('.inner');
+    if(!isLast){
+      var o=clamp((t-(d-OUT))/OUT);
+      inner.style.opacity=1-E.inCubic(o);
+      inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+    } else {
+      inner.style.opacity='1';
+      inner.style.transform='none';
+    }
+
+    var pill=sc.querySelector('.tag-pill');
+    if(pill){
+      var base=pill.style.transform||'';
+      pill.style.transform=base.replace(/ translateY\([^)]*\)/,'')+' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';
+    }
+
+    cueSFX(T,i,t);
+  };
+
+  /* Init thumbnail at t=0.5 */
+  setT(0.5);
+</script>
+</body>
+</html>
