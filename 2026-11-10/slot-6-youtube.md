@@ -1,4 +1,0 @@
-# Slot 6 YouTube package (10 Nov 2026)
-Title: FPIs pour Rs 53,739 crore into Indian stocks #Shorts
-Description: Foreign portfolio investors net bought Rs 53,739 crore of Indian equities on 2-9 Nov 2026 (six trading days), after net outflows of Rs 35,861 crore in September and Rs 34,843 crore in October. An AI sell-off in the US, South Korea, Taiwan and Japan made India look more attractive, but 2026 is still a net outflow of about Rs 2.41 lakh crore. Source: Business Standard, PTI, NSDL data. Follow Fin Pulse for market updates. Not financial advice. #Shorts #FPI #StockMarket #Nifty50 #IndianStockMarket
-Tags: fpi,fii,stock market,nifty,india,nsdl,investing,fin pulse,shorts

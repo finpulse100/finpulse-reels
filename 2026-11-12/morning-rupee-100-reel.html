@@ -1,0 +1,713 @@
+<!doctype html>
+<!--
+  FIN PULSE · Morning Reel · 2026-11-12
+  Story: Indian Rupee at ₹93.70 (6-month high) — but ₹100 threat lingers
+  Colour scheme: Crimson Dark (#150003, blobs red/orange/magenta/purple)
+  Hook A (Morning): Countdown + Digit Reveal
+  DURS = [7, 7, 7.5, 7.5, 7, 9] = 45s total, 6 scenes, 1080×1920
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Fin Pulse · Rupee Reel</title>
+<style>
+:root {
+  --bg: #150003;
+  --ink: #200010;
+  --ink-dim: rgba(32,0,16,0.78);
+  --chip-bg: #3d0014;
+  --chip-ink: #ffd6e0;
+  --red: #e11d48;
+  --red2: #fb7185;
+  --gold: #f59e0b;
+  --green: #10b981;
+  --font: 'Inter','Segoe UI',system-ui,sans-serif;
+}
+* { box-sizing: border-box; }
+html,body { margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#000; }
+.frame { position:relative;width:1080px;height:1920px;container-type:inline-size;overflow:hidden;background:var(--bg);font-family:var(--font);color:var(--ink);font-variant-numeric:tabular-nums; }
+.blob { position:absolute;border-radius:50%;will-change:transform; }
+.scene { position:absolute;inset:0;display:none; }
+.scene.on { display:block; }
+.inner { position:absolute;inset:0;padding:17cqw 11cqw 30cqw 6cqw;display:flex;flex-direction:column;justify-content:center;gap:3.6cqw;min-width:0; }
+.safe { display:none;position:absolute;inset:17cqw 11cqw 30cqw 6cqw;border:2px dashed rgba(255,255,255,0.8);z-index:9;pointer-events:none; }
+body.dbg .safe { display:block; }
+
+/* Handle overlay — inside safe zone bottom-right */
+#handle {
+  position:absolute;bottom:31cqw;right:12cqw;
+  font-size:3.2cqw;font-weight:800;color:rgba(255,255,255,0.92);
+  letter-spacing:0.01em;text-shadow:0 0.3cqw 1.5cqw rgba(0,0,0,0.9);
+  z-index:10;pointer-events:none;
+}
+
+/* Tag pill — always first child inside .inner */
+.tag-pill {
+  position:relative;align-self:center;
+  display:inline-flex;align-items:center;justify-content:center;gap:2.6cqw;
+  padding:2.4cqw 6.4cqw;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.8),rgba(255,255,255,0.5));
+  backdrop-filter:blur(40px) saturate(100%);
+  -webkit-backdrop-filter:blur(40px) saturate(100%);
+  border:1.5px solid rgba(255,255,255,0.9);
+  box-shadow:0 2cqw 6cqw rgba(0,0,0,0.45),inset 0 0.5cqw 1cqw rgba(255,255,255,0.95),inset 0 -0.7cqw 1.4cqw rgba(32,0,16,0.14);
+  color:var(--ink);font-size:4.6cqw;font-weight:800;line-height:1.2;white-space:nowrap;flex:none;
+}
+.tag-pill::before { content:"";position:absolute;inset:1cqw;border-radius:999px;border:1px solid rgba(255,255,255,0.75);pointer-events:none; }
+.dot { position:relative;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--red); }
+
+/* Headline */
+.h {
+  margin:0;text-align:center;color:#fff;font-size:8.8cqw;font-weight:800;
+  letter-spacing:-0.02em;line-height:1.1;text-wrap:balance;flex:none;
+  text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.45);
+}
+.h .w { display:inline-block; }
+
+/* Glass cards — per spec: 88% white fill, strong border */
+.glass {
+  background:rgba(255,255,255,0.37);
+  backdrop-filter:blur(40px) saturate(100%);
+  -webkit-backdrop-filter:blur(40px) saturate(100%);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:16px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+}
+.frame .glass {
+  position:relative;overflow:hidden;
+  background:rgba(255,255,255,0.88);
+  border:3px solid rgba(255,255,255,0.95);
+  border-radius:4cqw;
+  box-shadow:0 2cqw 7cqw rgba(0,0,0,0.5);
+}
+.frame .glass.dim { background:rgba(255,255,255,0.4); }
+.glass::after {
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.5) 50%,transparent 62%);
+  transform:translateX(var(--sw,-130%));
+}
+
+/* Common card & typography */
+.card { padding:4.2cqw;display:flex;flex-direction:column;gap:2.4cqw;min-width:0;flex:none; }
+.lab { margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim); }
+.val { margin:0;font-weight:800;letter-spacing:-0.02em;line-height:1.05;color:var(--ink); }
+.big { font-size:7.4cqw; }
+.mid { font-size:5.6cqw; }
+.sub { margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim); }
+.svg { width:100%;height:auto;display:block;flex:none; }
+.ax { stroke:rgba(32,0,16,0.3);stroke-width:0.5;fill:none; }
+
+/* Icon circle */
+.ic { flex:none;width:9cqw;height:9cqw;border-radius:50%;background:var(--chip-bg);display:grid;place-items:center; }
+.ic svg { width:56%;height:56%;stroke:var(--chip-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
+.ic svg .f { fill:var(--chip-ink);stroke:none; }
+
+/* Row chip */
+.row-chip { display:flex;align-items:flex-start;gap:3cqw;padding:2.4cqw 3.6cqw;flex:none; }
+.row-chip .ic { width:8.6cqw;height:8.6cqw;flex:none;margin-top:0.4cqw; }
+.row-chip span.t { font-size:4.3cqw;font-weight:800;line-height:1.15;color:var(--ink); }
+
+/* Grid layouts */
+.grid2 { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3cqw;flex:none; }
+.grid3 { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.2cqw;flex:none; }
+
+/* Tick / checkmark */
+.tick { display:flex;align-items:center;gap:3cqw; }
+.tick span.t { font-size:4.3cqw;font-weight:800;line-height:1.15;color:var(--ink); }
+.tick .ic { width:8cqw;height:8cqw;flex:none; }
+
+/* ===== SCENE 1 ===== */
+#s1 .inner { gap:3.8cqw; }
+#s1 .h { font-size:9.4cqw; }
+.alert-stamp {
+  align-self:center;background:var(--red);color:#fff;
+  font-size:5.4cqw;font-weight:900;letter-spacing:0.1em;
+  padding:1.8cqw 5.4cqw;border-radius:1.2cqw;
+  box-shadow:0 0 3cqw rgba(225,29,72,0.9),0 0 10cqw rgba(225,29,72,0.4);
+  flex:none;transform-origin:center center;
+}
+.stat-mini { padding:2.4cqw 2.6cqw;gap:1.4cqw; }
+.stat-mini .lab { font-size:3.0cqw; }
+.stat-mini .val { font-size:5.0cqw; }
+.cnt-row { display:flex;align-items:center;justify-content:center;gap:5cqw;flex:none; }
+.digit-reveal { font-size:11cqw;font-weight:900;color:#fff;letter-spacing:-0.02em;display:flex;align-items:center; }
+.digit-reveal .dg { display:inline-block; }
+.sub-line { text-align:center;font-size:3.8cqw;font-weight:700;color:rgba(255,255,255,0.75);flex:none;margin:0; }
+
+/* ===== SCENE 2 ===== */
+#s2 .inner { gap:4cqw; }
+
+/* ===== SCENE 3 ===== */
+#s3 .inner { gap:3cqw; }
+#s3 .row-chip { padding:2cqw 3.6cqw; }
+
+/* ===== SCENE 4 ===== */
+#s4 .inner { gap:3.4cqw; }
+.disclaimer { text-align:center;font-size:3.2cqw;font-weight:700;color:rgba(255,255,255,0.72);flex:none;margin:0; }
+
+/* ===== SCENE 5 ===== */
+#s5 .inner { gap:3.6cqw; }
+.analyst-card { padding:3.4cqw 4cqw;gap:2cqw; }
+.analyst-badge {
+  display:inline-flex;align-items:center;gap:1.6cqw;
+  font-size:3.3cqw;font-weight:800;padding:0.8cqw 2.4cqw;border-radius:999px;
+}
+.badge-bull { background:rgba(16,185,129,0.15);color:#065f46; }
+.badge-bear { background:rgba(225,29,72,0.15);color:#9f1239; }
+
+/* ===== SCENE 6 ===== */
+#s6 .inner { gap:4.8cqw; }
+#s6 .card.tk { padding:5cqw 4.4cqw; }
+.follow-card {
+  background:rgba(25,0,8,0.9)!important;
+  border:3px solid rgba(255,255,255,0.3)!important;
+  display:flex;flex-direction:column;align-items:center;gap:1.4cqw;
+  padding:4cqw 4.4cqw;
+}
+.follow-card b { font-size:5.4cqw;font-weight:900;color:#fff;text-shadow:0 0.5cqw 1.5cqw rgba(0,0,0,0.5); }
+.follow-card span { font-size:3.6cqw;font-weight:700;color:rgba(255,255,255,0.72); }
+.q-line { text-align:center;font-size:3.9cqw;font-weight:800;color:rgba(255,255,255,0.88);flex:none;margin:0; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- Handle — bottom-right, inside safe zone -->
+  <div id="handle">@finpulsemarkets</div>
+
+  <!-- ========= SCENE 1 · HOOK ========= -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>BREAKING · INDIAN RUPEE</div>
+    <div class="alert-stamp" id="alert">ALERT</div>
+    <h2 class="h" data-split="0.6">₹93.70 today — ₹100 by June?</h2>
+    <div class="grid3">
+      <div class="glass card stat-mini" data-a="up:1.1:0.6">
+        <p class="lab">RECORD LOW</p>
+        <p class="val stat-mini" id="v1" style="font-size:5.0cqw;color:#be123c;">₹96.96</p>
+      </div>
+      <div class="glass card stat-mini" data-a="up:1.3:0.6">
+        <p class="lab">TODAY</p>
+        <p class="val" id="ctr" style="font-size:5.0cqw;color:#065f46;">₹0.00</p>
+      </div>
+      <div class="glass card stat-mini" data-a="up:1.5:0.6">
+        <p class="lab">RECOVERY</p>
+        <p class="val" style="font-size:5.0cqw;color:#065f46;">+3.4%</p>
+      </div>
+    </div>
+    <div class="cnt-row">
+      <svg id="cdsvg" viewBox="0 0 100 100" style="width:19cqw;height:19cqw;flex:none;overflow:visible;">
+        <circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+        <circle id="cdarc" cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="5"
+          stroke-linecap="round" transform="rotate(-90 50 50)"
+          stroke-dasharray="251.3" stroke-dashoffset="251.3"/>
+        <text id="cdnum" x="50" y="60" text-anchor="middle" font-size="34" font-weight="900"
+          fill="#fff" font-family="Inter,sans-serif">5</text>
+      </svg>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:1cqw;">
+        <div class="digit-reveal">
+          <span class="dg" id="dg0" style="color:var(--gold);">₹</span><span
+            class="dg" id="dg1">9</span><span
+            class="dg" id="dg2">6</span><span
+            class="dg" id="dg3" style="color:rgba(255,255,255,0.6);">.</span><span
+            class="dg" id="dg4">9</span><span
+            class="dg" id="dg5">6</span>
+        </div>
+        <p style="text-align:center;font-size:3.0cqw;font-weight:700;color:rgba(255,255,255,0.6);margin:0;">May 2026 · record low</p>
+      </div>
+    </div>
+    <p class="sub-line" id="subline" style="opacity:0;">2 banks disagree on where it goes next →</p>
+  </div></section>
+
+  <!-- ========= SCENE 2 · REVEAL ========= -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE 2026 RUPEE STORY</div>
+    <h2 class="h" data-split="0.35">Biggest crash — and best recovery — of the year</h2>
+    <div class="glass card" data-a="pop:0.9:0.8" style="padding:4cqw;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:3cqw;margin-bottom:2.4cqw;">
+        <div>
+          <p class="lab">Indian Rupee · USD/INR</p>
+          <p class="val big" style="color:#be123c;">₹96.96</p>
+          <p class="sub">record low · May 20, 2026</p>
+        </div>
+        <div style="text-align:right;">
+          <p class="lab">Now (Nov 11)</p>
+          <p class="val mid" style="color:#065f46;">₹93.70</p>
+          <p class="sub" style="color:#065f46;">6-month high</p>
+        </div>
+      </div>
+      <svg class="svg" viewBox="0 0 100 44" id="chart2">
+        <defs>
+          <linearGradient id="gradR" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#e11d48" stop-opacity="0.3"/>
+            <stop offset="1" stop-color="#e11d48" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="gradG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#10b981" stop-opacity="0.25"/>
+            <stop offset="1" stop-color="#10b981" stop-opacity="0"/>
+          </linearGradient>
+          <clipPath id="clR"><rect id="clrR" x="0" y="0" width="0" height="44"/></clipPath>
+          <clipPath id="clG"><rect id="clrG" x="50" y="0" width="0" height="44"/></clipPath>
+        </defs>
+        <!-- y-mapping: ₹83=38, ₹97=4; range 14 → scale 34px/₹14 = 2.43px/₹ -->
+        <!-- Jan ₹83→y=38; May ₹96.96→y=4.5; Nov ₹93.70→y=12.5 -->
+        <line class="ax" x1="4" y1="39" x2="96" y2="39"/>
+        <!-- Rise: Jan→May -->
+        <path id="pRise" d="M5,38 C12,38 18,36 24,32 C30,28 34,20 38,14 C42,9 44,5.5 50,4.5"
+          fill="none" stroke="#be123c" stroke-width="2.2" stroke-linecap="round"
+          pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1;" clip-path="url(#clR)"/>
+        <path d="M5,38 C12,38 18,36 24,32 C30,28 34,20 38,14 C42,9 44,5.5 50,4.5 L50,39 L5,39Z"
+          fill="url(#gradR)" clip-path="url(#clR)" opacity="0.6"/>
+        <!-- Recovery: May→Nov -->
+        <path id="pRec" d="M50,4.5 C56,5 62,8 68,10 C74,11.5 80,12 88,12.5 C91,12.5 93,12.5 95,12.5"
+          fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round"
+          pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1;" clip-path="url(#clG)"/>
+        <path d="M50,4.5 C56,5 62,8 68,10 C74,11.5 80,12 88,12.5 C91,12.5 93,12.5 95,12.5 L95,39 L50,39Z"
+          fill="url(#gradG)" clip-path="url(#clG)" opacity="0.6"/>
+        <!-- Dots -->
+        <circle id="pkDot" cx="50" cy="4.5" r="0" fill="#be123c" stroke="#fff" stroke-width="0.8"/>
+        <circle id="crDot" cx="95" cy="12.5" r="0" fill="#10b981" stroke="#fff" stroke-width="0.8"/>
+        <!-- Labels -->
+        <text x="50" y="2.5" font-size="3.2" text-anchor="middle" fill="#be123c" font-family="Inter,sans-serif" font-weight="700" id="pkLbl" opacity="0">₹96.96 peak</text>
+        <text x="95" y="10.5" font-size="3.2" text-anchor="end" fill="#10b981" font-family="Inter,sans-serif" font-weight="700" id="crLbl" opacity="0">₹93.70</text>
+        <text x="5" y="43.5" font-size="3" fill="rgba(32,0,16,0.5)" font-family="Inter,sans-serif">Jan</text>
+        <text x="50" y="43.5" font-size="3" text-anchor="middle" fill="rgba(32,0,16,0.5)" font-family="Inter,sans-serif">May</text>
+        <text x="95" y="43.5" font-size="3" text-anchor="end" fill="rgba(32,0,16,0.5)" font-family="Inter,sans-serif">Nov</text>
+      </svg>
+    </div>
+    <div class="glass card" data-a="pop:3.6:0.7" style="padding:3cqw;flex-direction:row;">
+      <div style="flex:1;text-align:center;">
+        <p class="lab">FPI Net Bought</p>
+        <p class="val mid" style="color:#065f46;">₹53,739 Cr</p>
+        <p class="sub">Nov 2–9, 2026</p>
+      </div>
+      <div style="width:1px;background:rgba(32,0,16,0.15);margin:0 2cqw;"></div>
+      <div style="flex:1;text-align:center;">
+        <p class="lab">Crude Oil Drop</p>
+        <p class="val mid" style="color:#065f46;">−24%</p>
+        <p class="sub">$118 → $90/bbl</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- ========= SCENE 3 · WHY IT BOUNCED ========= -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHY IT BOUNCED</div>
+    <h2 class="h" data-split="0.35">3 things pulled the rupee back</h2>
+    <div class="glass row-chip" data-a="right:1.0:0.65">
+      <span class="ic">
+        <svg viewBox="0 0 24 24">
+          <ellipse cx="12" cy="12" rx="8" ry="11" stroke-width="1.8"/>
+          <path d="M12 2v20M2 7h20M2 17h20" stroke-width="1.5"/>
+        </svg>
+      </span>
+      <div>
+        <span class="t">Crude fell 24% — $118 → $90</span>
+        <p style="font-size:3.4cqw;font-weight:700;color:var(--ink-dim);margin:0.4cqw 0 0;">Less dollar demand from oil importers</p>
+      </div>
+    </div>
+    <div class="glass row-chip" data-a="right:1.55:0.65">
+      <span class="ic">
+        <svg viewBox="0 0 24 24">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke-width="2.2"/>
+          <polyline points="17 6 23 6 23 12" stroke-width="2.2"/>
+        </svg>
+      </span>
+      <div>
+        <span class="t">FIIs bought ₹53,739 Cr in 8 days</span>
+        <p style="font-size:3.4cqw;font-weight:700;color:var(--ink-dim);margin:0.4cqw 0 0;">After ₹34,843 Cr net sold in October</p>
+      </div>
+    </div>
+    <div class="glass row-chip" data-a="right:2.1:0.65">
+      <span class="ic">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3l9 4v5c0 5-4 9-9 10C3 21 1 16 1 12V7l11-4z" stroke-width="1.8"/>
+          <path d="M9 12l2 2 4-4" stroke-width="2"/>
+        </svg>
+      </span>
+      <div>
+        <span class="t">RBI opened $133B swap window</span>
+        <p style="font-size:3.4cqw;font-weight:700;color:var(--ink-dim);margin:0.4cqw 0 0;">Central bank actively defended the currency</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- ========= SCENE 4 · WHAT IT MEANS FOR YOU ========= -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHAT IT MEANS FOR YOU</div>
+    <h2 class="h" data-split="0.35">How the rupee move hits your pocket</h2>
+    <div class="glass card" data-a="pop:0.9:0.7" style="flex-direction:row;align-items:center;gap:3cqw;padding:3.4cqw;">
+      <span class="ic">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9" stroke-width="1.8"/>
+          <path d="M12 7v2.5M12 14.5V17M9.5 10.5a2.5 2.5 0 0 1 5 0c0 1.5-2.5 3-2.5 3M14.5 14.5a2.5 2.5 0 0 1-5 0" stroke-width="1.6"/>
+        </svg>
+      </span>
+      <div style="min-width:0;">
+        <p class="val mid">Imports ease slightly</p>
+        <p class="sub">Electronics, oil products marginally cheaper</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:1.4:0.7" style="flex-direction:row;align-items:center;gap:3cqw;padding:3.4cqw;">
+      <span class="ic">
+        <svg viewBox="0 0 24 24">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" stroke-width="1.8"/>
+          <path d="M6 12v5c3 3 9 3 12 0v-5" stroke-width="1.8"/>
+        </svg>
+      </span>
+      <div style="min-width:0;">
+        <p class="val mid">Overseas fees still elevated</p>
+        <p class="sub">Study abroad &amp; travel costlier vs 2024</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:1.9:0.7" style="flex-direction:row;align-items:center;gap:3cqw;padding:3.4cqw;">
+      <span class="ic">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-width="1.8"/>
+          <line x1="12" y1="8" x2="12" y2="13" stroke-width="2"/>
+          <circle cx="12" cy="16" r="0.8" class="f"/>
+        </svg>
+      </span>
+      <div style="min-width:0;">
+        <p class="val mid">Watch US rates &amp; crude</p>
+        <p class="sub">These 2 factors decide rupee direction</p>
+      </div>
+    </div>
+    <p class="disclaimer">Educational content, not financial advice.</p>
+  </div></section>
+
+  <!-- ========= SCENE 5 · THE ₹100 DEBATE ========= -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE ₹100 DEBATE</div>
+    <h2 class="h" data-split="0.35">Recovery real — but analysts split</h2>
+    <div class="glass card analyst-card" data-a="left:0.8:0.7">
+      <div class="analyst-badge badge-bull">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2.5" stroke-linecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+        BULLISH · GTRI
+      </div>
+      <p class="val big" style="color:#065f46;">₹92–93</p>
+      <p class="sub">If crude stays low &amp; FPI inflows continue</p>
+    </div>
+    <div class="glass card analyst-card" data-a="right:1.6:0.7">
+      <div class="analyst-badge badge-bear">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9f1239" stroke-width="2.5" stroke-linecap="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg>
+        BEARISH · AXIS BANK
+      </div>
+      <p class="val big" style="color:#be123c;">₹100</p>
+      <p class="sub">By June 2027 — cites $200B RBI forward positions</p>
+    </div>
+    <div class="glass card" data-a="pop:3.2:0.6" style="padding:2.8cqw;flex-direction:row;align-items:center;gap:2.5cqw;">
+      <svg viewBox="0 0 24 24" style="width:7cqw;height:7cqw;flex:none;" fill="none" stroke="#be123c" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.8" fill="#be123c"/>
+      </svg>
+      <p class="sub" style="font-size:3.4cqw;">UBS: ₹96 by Mar 2027 &amp; ₹100 by FY28</p>
+    </div>
+  </div></section>
+
+  <!-- ========= SCENE 6 · PAYOFF + CTA ========= -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>KEY TAKEAWAY</div>
+    <h2 class="h" data-split="0.35">Watch these 3 to call the rupee's next move</h2>
+    <div class="glass card tk" data-a="pop:0.9:0.7" style="gap:3.4cqw;">
+      <div class="tick" data-a="right:1.2:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke="var(--chip-ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+        <span class="t">Crude prices — cheap crude = stronger rupee</span>
+      </div>
+      <div class="tick" data-a="right:1.65:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke="var(--chip-ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+        <span class="t">FPI flows — buying lifts rupee, selling drags it</span>
+      </div>
+      <div class="tick" data-a="right:2.1:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke="var(--chip-ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>
+        <span class="t">US Fed rate hike = pressure on rupee</span>
+      </div>
+    </div>
+    <div class="glass card follow-card" data-a="pop:2.9:0.6">
+      <b>Follow @finpulsemarkets</b>
+      <span>Daily market moves. No noise.</span>
+    </div>
+    <p class="q-line" data-a="up:4.0:0.6">Will rupee hit ₹100? Drop your view ↓</p>
+  </div></section>
+
+  <div class="safe"></div>
+</div>
+
+<script>
+  var DURS  = [7, 7, 7.5, 7.5, 7, 9];   // sum = 45 s
+  window.COVER_T = 2.0;
+  var OUT   = 0.4;
+  var STARTS = [];
+  (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+  window.TOTAL = DURS.reduce(function(a,b){ return a+b; },0);
+
+  var clamp = function(x,a,b){
+    a = a===undefined ? 0 : a;
+    b = b===undefined ? 1 : b;
+    return Math.min(b,Math.max(a,x));
+  };
+  var E = {
+    outCubic: function(x){ return 1-Math.pow(1-x,3); },
+    outBack:  function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+    inCubic:  function(x){ return x*x*x; },
+    inOut:    function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+  };
+  var $ = function(id){ return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+
+  // Split headlines into animatable words
+  document.querySelectorAll('.h[data-split]').forEach(function(h){
+    var base = parseFloat(h.getAttribute('data-split'));
+    var words = h.textContent.trim().split(/\s+/);
+    h.textContent = '';
+    words.forEach(function(w,i){
+      var s = document.createElement('span'); s.className='w'; s.textContent=w;
+      s._a = { k:'up', s:base+i*0.08, d:0.6 };
+      h.appendChild(s);
+      if(i<words.length-1) h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  // Gather animated elements per scene
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function(sc){
+    sc._els = [];
+    sc.querySelectorAll('[data-a]').forEach(function(el){
+      var p = el.getAttribute('data-a').split(':');
+      el._a = { k:p[0], s:parseFloat(p[1]), d:parseFloat(p[2]) };
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+    sc._glass = Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el,t){
+    var a=el._a, p=clamp((t-a.s)/a.d), e=E.outCubic(p), b=E.outBack(p), o=clamp(p*2), x=0, y=0, s=1;
+    if(a.k==='pop'){ s=0.86+0.14*b; y=(1-e)*6; }
+    else if(a.k==='up'){ y=(1-e)*7; }
+    else if(a.k==='drop'){ y=-(1-e)*6; s=0.94+0.06*b; }
+    else if(a.k==='left'){ x=-(1-e)*18; }
+    else if(a.k==='right'){ x=(1-e)*18; }
+    el.style.opacity = o.toFixed(3);
+    el.style.transform = 'translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+  }
+
+  // ---- Background blobs (crimson dark theme) ----
+  function blob(el,color,size,x,y){
+    el.style.width = size+'cqw'; el.style.height = size+'cqw';
+    el.style.left = x+'cqw'; el.style.top = y+'cqw';
+    el.style.background = 'radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+  }
+  blob($('b1'),'rgba(185,10,50,0.95)',140,-50,-30);
+  blob($('b2'),'rgba(220,80,10,0.80)',88,55,65);
+  blob($('b3'),'rgba(130,0,80,0.88)',108,-20,112);
+  blob($('b4'),'rgba(75,0,130,0.78)',72,55,118);
+
+  function orbs(T){
+    $('b1').style.transform='translate('+(9*Math.sin(T*0.45)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.38)).toFixed(2)+'cqw)';
+    $('b2').style.transform='translate('+(-10*Math.sin(T*0.36+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.41)).toFixed(2)+'cqw)';
+    $('b3').style.transform='translate('+(10*Math.cos(T*0.33)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.4+2)).toFixed(2)+'cqw)';
+    $('b4').style.transform='translate('+(-8*Math.cos(T*0.5+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.47)).toFixed(2)+'cqw)';
+  }
+
+  // ---- Audio Engine ----
+  var _ctx=null, _ready=false, _cues=[], SFX_DATA={
+    whoosh:null, tick:null, beep:null, final_beep:null, reveal_whoosh:null,
+    impact:null, swoosh:null, glass_pop:null, ding:null, pulse:null
+  };
+  function _ctx_start(){
+    if(!_ctx){
+      _ctx=new(window.AudioContext||window.webkitAudioContext)();
+      _ready=true; _gen_sfx();
+    }
+  }
+  document.addEventListener('click',_ctx_start,{once:true});
+  function _gen_sfx(){
+    var sr=_ctx.sampleRate;
+    function _mkbuf(secs){ return _ctx.createBuffer(1,Math.floor(sr*secs),sr); }
+    function _sine(f,d,decay){
+      var b=_mkbuf(d),ch=b.getChannelData(0),l=ch.length;
+      for(var i=0;i<l;i++) ch[i]=Math.sin(2*Math.PI*f*i/sr)*Math.exp(-(decay||3)*i/l);
+      return b;
+    }
+    function _noise(d,decay){
+      var b=_mkbuf(d),ch=b.getChannelData(0),l=ch.length;
+      for(var i=0;i<l;i++) ch[i]=(Math.random()*2-1)*Math.exp(-(decay||8)*i/l);
+      return b;
+    }
+    SFX_DATA.whoosh       = _noise(0.3,8);
+    SFX_DATA.tick         = _sine(900,0.08,20);
+    SFX_DATA.beep         = _sine(1200,0.1,15);
+    SFX_DATA.final_beep   = _sine(1600,0.22,8);
+    SFX_DATA.reveal_whoosh= _noise(0.4,6);
+    SFX_DATA.impact       = _sine(220,0.28,5);
+    SFX_DATA.swoosh       = _noise(0.25,10);
+    SFX_DATA.glass_pop    = _sine(1400,0.12,18);
+    SFX_DATA.ding         = _sine(1800,0.18,10);
+    SFX_DATA.pulse        = _sine(400,0.32,4);
+  }
+  function _play(name,vol){
+    if(!_ready||!SFX_DATA[name]) return;
+    var src=_ctx.createBufferSource(); src.buffer=SFX_DATA[name];
+    var g=_ctx.createGain(); g.gain.value=vol||1;
+    src.connect(g); g.connect(_ctx.destination); src.start();
+  }
+  function cue(T,name,vol){ _cues.push({T:T,name:name,vol:vol||1,fired:false}); }
+  function _fire_cues(T){ _cues.forEach(function(c){ if(!c.fired&&T>=c.T){ c.fired=true; _play(c.name,c.vol); } }); }
+
+  // All absolute-time SFX cues
+  cue(0.05,'impact',1.4);        // S1 alert stamp
+  cue(0.6,'whoosh',1.2);         // S1 stat cards
+  cue(2.5,'tick',1.1);           // countdown 5
+  cue(3.0,'tick',1.1);           // countdown 4
+  cue(3.5,'tick',1.1);           // countdown 3
+  cue(4.0,'tick',1.1);           // countdown 2
+  cue(4.5,'tick',1.1);           // countdown 1
+  cue(5.0,'reveal_whoosh',1.3);  // digit reveal
+  cue(7.0,'swoosh',0.9);         // S1→S2 transition
+  cue(7.9,'glass_pop',1.1);      // S2 chart card
+  cue(14.0,'swoosh',0.9);        // S2→S3
+  cue(14.5,'whoosh',0.85);       // S3 chips
+  cue(21.5,'swoosh',0.9);        // S3→S4
+  cue(22.0,'whoosh',0.85);       // S4 cards
+  cue(29.0,'swoosh',0.9);        // S4→S5
+  cue(29.5,'ding',1.1);          // S5 analyst cards
+  cue(36.0,'swoosh',0.9);        // S5→S6
+  cue(38.5,'tick',0.9);          // S6 checkmark 1
+  cue(39.0,'tick',0.9);          // S6 checkmark 2
+  cue(39.5,'tick',0.9);          // S6 checkmark 3
+  cue(43.5,'pulse',1.0);         // S6 follow card glow
+  cue(44.5,'final_beep',1.2);    // end
+
+  // ---- Scene 1 ----
+  var ALERT  = $('alert');
+  var CTR    = $('ctr');
+  var SUBLINE= $('subline');
+  var DGELS  = [$('dg0'),$('dg1'),$('dg2'),$('dg3'),$('dg4'),$('dg5')];
+  var CDARC  = $('cdarc');
+  var CDNUM  = $('cdnum');
+  var PERIM  = 2*Math.PI*40;  // 251.33
+
+  function s1(t){
+    // ALERT stamp: scale 1.9→1 snap-in
+    var sa = Math.max(0,E.outBack(clamp(t/0.38)));
+    var alertScale = 1.9 - 0.9*Math.min(1,sa);
+    var alertRot   = (1-Math.min(1,sa))*-6;
+    ALERT.style.transform = 'scale('+alertScale.toFixed(3)+') rotate('+alertRot.toFixed(1)+'deg)';
+    ALERT.style.opacity   = clamp(t*6).toFixed(3);
+
+    // TODAY counter: 0 → 93.70 over t=1.3..1.9
+    var cv = 93.70 * E.outCubic(clamp((t-1.3)/0.6));
+    CTR.textContent = '₹'+cv.toFixed(2);
+
+    // Countdown circle: 5→1 starting at t=2.5
+    var cd = Math.max(1,Math.min(5,Math.ceil(5-Math.max(0,t-2.5))));
+    CDNUM.textContent = cd;
+    CDARC.setAttribute('stroke', cd<=2?'#e11d48':'#f59e0b');
+    var frac = clamp((t-2.5)/3.0);  // 0→1 over 3 seconds
+    CDARC.setAttribute('stroke-dashoffset',(PERIM*(1-frac)).toFixed(2));
+
+    // Digit reveal: each digit at t=5.0+i*0.18
+    var dstart=5.0;
+    DGELS.forEach(function(d,i){
+      var dp = E.outCubic(clamp((t-(dstart+i*0.18))/0.25));
+      d.style.opacity   = dp.toFixed(3);
+      d.style.transform = 'translateY('+((1-E.outBack(Math.min(dp,1)))*5).toFixed(2)+'cqw)';
+    });
+
+    // Sub-line fade in
+    SUBLINE.style.opacity = E.outCubic(clamp((t-6.0)/0.6)).toFixed(3);
+  }
+
+  // ---- Scene 2 ----
+  var PRISE = $('pRise'), PREC = $('pRec');
+  var CLRR  = $('clrR'), CLRG = $('clrG');
+  var PKDOT = $('pkDot'), CRDOT= $('crDot');
+  var PKLBL = $('pkLbl'), CRLBL= $('crLbl');
+
+  function s2(t){
+    // Rise path: t=0.8..2.5
+    var p1 = E.inOut(clamp((t-0.8)/1.7));
+    PRISE.style.strokeDashoffset = (1-p1).toFixed(3);
+    CLRR.setAttribute('width',(50*p1).toFixed(2));
+    // Peak dot + label
+    var pk = Math.max(0,E.outBack(clamp((t-2.4)/0.4)));
+    PKDOT.setAttribute('r',(2.6*pk).toFixed(3));
+    PKLBL.style.opacity = clamp((t-2.6)/0.4).toFixed(3);
+    // Recovery path: t=2.5..4.5
+    var p2 = E.inOut(clamp((t-2.5)/2.0));
+    PREC.style.strokeDashoffset = (1-p2).toFixed(3);
+    CLRG.setAttribute('width',(45*p2).toFixed(2));
+    // Current dot + label
+    var cr = Math.max(0,E.outBack(clamp((t-4.5)/0.4)));
+    CRDOT.setAttribute('r',(2.6*cr).toFixed(3));
+    CRLBL.style.opacity = clamp((t-4.6)/0.4).toFixed(3);
+  }
+
+  // ---- Scenes 3, 4, 5 — driven by data-a only ----
+  function s3(t){}
+  function s4(t){}
+  function s5(t){}
+
+  // ---- Scene 6 ----
+  var cks = Array.prototype.slice.call(document.querySelectorAll('.ck'));
+  cks.forEach(function(c){ c.style.strokeDasharray='1'; c.style.strokeDashoffset='1'; });
+  function s6(t){
+    cks.forEach(function(c,i){
+      c.style.strokeDashoffset = (1-E.outCubic(clamp((t-(1.45+i*0.45))/0.35))).toFixed(3);
+    });
+  }
+
+  var FX = [s1,s2,s3,s4,s5,s6];
+
+  // ---- Master driver ----
+  window.setT = function(T){
+    orbs(T);
+    _fire_cues(T);
+
+    var i=0;
+    for(var k=0; k<STARTS.length; k++) if(T >= STARTS[k]-1e-6) i=k;
+    var t = T - STARTS[i];
+    var d = DURS[i];
+    var isLast = (i === scenes.length-1);
+
+    scenes.forEach(function(sc,k){ sc.classList.toggle('on', k===i); });
+    var sc = scenes[i];
+    sc._els.forEach(function(el){ applyAnim(el,t); });
+    FX[i](t);
+
+    // Glass shimmer
+    sc._glass.forEach(function(g,gi){
+      var q = ((t*0.45+gi*0.27)%1);
+      g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+    });
+
+    // Scene exit fade — SKIP on last scene (isLast guard)
+    var inner = sc.querySelector('.inner');
+    if(isLast){
+      inner.style.opacity   = '1';
+      inner.style.transform = 'translateY(0)';
+    } else {
+      var o = clamp((t-(d-OUT))/OUT);
+      inner.style.opacity   = (1-E.inCubic(o)).toFixed(3);
+      inner.style.transform = 'translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+    }
+
+    // Tag-pill float (independent of applyAnim)
+    var pill = sc.querySelector('.tag-pill');
+    if(pill && pill._a){
+      var pa=pill._a, pp=clamp((t-pa.s)/pa.d), pe=E.outCubic(pp), pb=E.outBack(pp), po=clamp(pp*2);
+      var py = -(1-pe)*6, ps=0.94+0.06*pb;
+      var pfloat = Math.sin(T*2)*0.5;
+      pill.style.opacity   = po.toFixed(3);
+      pill.style.transform = 'translate(0cqw,'+(py+pfloat).toFixed(3)+'cqw) scale('+ps.toFixed(4)+')';
+    }
+  };
+
+  // Init at 0.5 for thumbnail
+  setT(0.5);
+</script>
+</body>
+</html>
