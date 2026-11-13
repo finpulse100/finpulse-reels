@@ -1,0 +1,558 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Razorpay IPO Evening Reel</title>
+<style>
+  :root{
+    --bg:#000a1a;--ink:#021020;--ink-dim:rgba(2,16,32,0.75);
+    --chip-bg:#001e40;--chip-ink:#80d8ff;
+    --acc:#00c8e0;--acc2:#0097b2;
+    --font:'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#000;}
+  .frame{
+    position:relative;width:1080px;height:1920px;
+    container-type:inline-size;overflow:hidden;
+    background:var(--bg);font-family:var(--font);color:var(--ink);
+    font-variant-numeric:tabular-nums;
+  }
+  .blob{position:absolute;border-radius:50%;will-change:transform;}
+  .scene{position:absolute;inset:0;display:none;}
+  .scene.on{display:block;}
+  .inner{
+    position:absolute;inset:0;
+    padding:17cqw 11cqw 30cqw 6cqw;
+    display:flex;flex-direction:column;justify-content:center;
+    gap:3.6cqw;min-width:0;
+  }
+  /* Handle */
+  #hdl{
+    position:absolute;bottom:20cqw;right:11cqw;
+    font-size:3.0cqw;font-weight:800;
+    color:rgba(255,255,255,0.78);letter-spacing:0.03em;
+    pointer-events:none;z-index:10;
+    text-shadow:0 0.3cqw 1.4cqw rgba(0,0,0,0.75);
+  }
+  /* Tag pill */
+  .tag-pill{
+    position:relative;align-self:center;
+    display:inline-flex;align-items:center;justify-content:center;gap:2.6cqw;
+    padding:2.4cqw 6.4cqw;border-radius:999px;
+    background:linear-gradient(180deg,rgba(255,255,255,0.80),rgba(255,255,255,0.50));
+    backdrop-filter:blur(40px) saturate(100%);
+    -webkit-backdrop-filter:blur(40px) saturate(100%);
+    border:1.5px solid rgba(255,255,255,0.90);
+    box-shadow:0 2cqw 6cqw rgba(0,0,0,0.45),
+      inset 0 0.5cqw 1cqw rgba(255,255,255,0.95),
+      inset 0 -0.7cqw 1.4cqw rgba(2,16,32,0.14);
+    color:var(--ink);font-size:4.6cqw;font-weight:800;
+    line-height:1.2;white-space:nowrap;flex:none;
+  }
+  .tag-pill::before{
+    content:"";position:absolute;inset:1cqw;border-radius:999px;
+    border:1px solid rgba(255,255,255,0.75);pointer-events:none;
+  }
+  .dot{
+    flex:none;width:2.6cqw;height:2.6cqw;border-radius:50%;
+    background:var(--acc);
+  }
+  /* Headlines */
+  .h{
+    margin:0;text-align:center;color:#fff;
+    font-size:8.8cqw;font-weight:800;
+    letter-spacing:-0.02em;line-height:1.1;
+    text-wrap:balance;flex:none;
+    text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.5);
+  }
+  .h .w{display:inline-block;}
+  /* Glass */
+  .frame .glass{
+    position:relative;overflow:hidden;
+    background:rgba(255,255,255,0.88);
+    border:3px solid rgba(255,255,255,0.95);
+    border-radius:4cqw;
+    box-shadow:0 2cqw 7cqw rgba(0,0,0,0.5);
+  }
+  .glass::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.5) 50%,transparent 62%);
+    transform:translateX(var(--sw,-130%));
+  }
+  .card{padding:4.2cqw;display:flex;flex-direction:column;gap:2.4cqw;min-width:0;flex:none;}
+  .lab{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+  .val{margin:0;font-weight:800;letter-spacing:-0.02em;line-height:1.05;color:var(--ink);}
+  .big{font-size:7.4cqw;}
+  .mid{font-size:5.6cqw;}
+  .sub{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+  .svg{width:100%;height:auto;display:block;flex:none;}
+  .svg text{font-family:var(--font);font-weight:700;fill:var(--ink-dim);}
+  .ic{
+    flex:none;width:9cqw;height:9cqw;border-radius:50%;
+    background:var(--chip-bg);display:grid;place-items:center;
+  }
+  .ic svg{width:56%;height:56%;stroke:var(--chip-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .row-chip{display:flex;align-items:center;gap:3cqw;padding:2.4cqw 3.6cqw;flex:none;}
+  .row-chip .ic{width:8.8cqw;height:8.8cqw;}
+  .row-chip span.t{font-size:4.3cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3cqw;flex:none;}
+  .pillar{padding:3cqw 3.4cqw;align-items:flex-start;gap:2cqw;}
+  .pillar .ic{width:8.4cqw;height:8.4cqw;}
+  .tick-row{display:flex;align-items:center;gap:3cqw;flex:none;}
+  .tick-row span.t{font-size:4.4cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+  .tick-row .ic{width:8.2cqw;height:8.2cqw;}
+  .disc{text-align:center;font-size:3.2cqw;font-weight:700;color:rgba(2,16,32,0.52);letter-spacing:0.02em;flex:none;}
+  /* Scene-specific */
+  #s1 .inner{gap:4.2cqw;}
+  #s1 .h{font-size:9.4cqw;}
+  #s2 .inner{gap:3.4cqw;}
+  #s3 .inner{gap:2.6cqw;}
+  #s4 .inner{gap:3.0cqw;}
+  #s5 .inner{gap:3.0cqw;}
+  #s6 .inner{gap:4.0cqw;}
+  /* Badge stamp */
+  .badge-wrap{display:flex;flex-direction:column;align-items:center;gap:1.8cqw;flex:none;}
+  .badge-wrap .b-txt{
+    font-size:4.4cqw;font-weight:900;letter-spacing:0.08em;
+    color:var(--acc);text-transform:uppercase;
+  }
+  /* Follow card: teal border, standard glass */
+  .follow-card{
+    border:3px solid var(--acc) !important;
+    box-shadow:0 0 2.5cqw var(--acc), 0 2cqw 7cqw rgba(0,0,0,0.5) !important;
+  }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+  <div id="hdl">@finpulsemarkets</div>
+
+  <!-- SCENE 1: HOOK B — Contradiction Reveal (7s) -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>IPO ALERT</div>
+    <h2 class="h" data-split="0.35">Revenue ↑65%. Still ₹1,209 Cr in losses.</h2>
+    <div class="glass card" data-a="pop:0.9:0.75" style="align-items:center;gap:2.2cqw;padding:3.8cqw">
+      <div class="badge-wrap" id="badge-wrap">
+        <svg style="width:13cqw;height:13cqw;flex:none" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="21" fill="none" stroke="var(--acc)" stroke-width="2.5"/>
+          <path id="b-ck" d="M14 24l7 7 13-13" fill="none" stroke="var(--acc)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/>
+        </svg>
+        <span class="b-txt">SEBI APPROVED</span>
+      </div>
+      <p class="val mid" style="text-align:center">RAZORPAY IPO</p>
+      <p class="lab" style="text-align:center">India's most-used payment gateway</p>
+    </div>
+    <div class="grid2">
+      <div class="glass card pillar" data-a="pop:1.4:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg></span>
+        <p class="lab">FY25 Revenue</p>
+        <p class="val" id="s1-rev" style="font-size:5.4cqw">₹0 Cr</p>
+      </div>
+      <div class="glass card pillar" data-a="pop:1.75:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+        <p class="lab">IPO Size</p>
+        <p class="val" style="font-size:5.4cqw">₹6,000 Cr</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:5.4:0.5" style="padding:3cqw;align-items:center">
+      <p style="font-size:5.0cqw;font-weight:900;text-align:center;color:var(--ink);margin:0">Would <em style="color:var(--acc2);font-style:normal">you</em> invest?</p>
+    </div>
+  </div></section>
+
+  <!-- SCENE 2: REVEAL (7s) -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>RAZORPAY · NSE SOON</div>
+    <h2 class="h" data-split="0.35">India's payment giant goes public</h2>
+    <div class="glass card" data-a="pop:0.9:0.8" style="gap:2.4cqw">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:3cqw">
+        <div style="min-width:0;flex:1">
+          <p class="lab">Company</p>
+          <p class="val mid">RAZORPAY</p>
+          <p class="sub" style="margin-top:0.8cqw">Founded 2014 · 8M+ businesses</p>
+        </div>
+        <div style="text-align:right;flex:none">
+          <p class="lab">IPO Size</p>
+          <p class="val big">₹6,000 Cr</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:2.4cqw">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+        <p class="sub" style="flex:1">IIT Roorkee founders · YC-backed · GIC, Peak XV, Tiger Global</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.0:0.7" style="gap:2.6cqw;padding:3.8cqw">
+      <p class="lab">Valuation: then vs now</p>
+      <div style="display:flex;align-items:center;gap:2.4cqw">
+        <span class="lab" style="min-width:16cqw;font-size:3.2cqw">2021 Peak</span>
+        <div style="flex:1;height:4.5cqw;background:rgba(0,100,200,0.2);border-radius:999px;overflow:hidden">
+          <div id="s2-b21" style="height:100%;background:rgba(0,160,200,0.55);border-radius:999px;width:0"></div>
+        </div>
+        <span class="val" style="font-size:4.4cqw;min-width:12cqw;text-align:right">$7.5B</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:2.4cqw">
+        <span class="lab" style="min-width:16cqw;font-size:3.2cqw">IPO Target</span>
+        <div style="flex:1;height:4.5cqw;background:rgba(0,100,200,0.2);border-radius:999px;overflow:hidden">
+          <div id="s2-b26" style="height:100%;background:var(--acc);border-radius:999px;width:0"></div>
+        </div>
+        <span class="val" style="font-size:4.4cqw;min-width:12cqw;text-align:right">$5B</span>
+      </div>
+      <p style="text-align:center;font-size:4.4cqw;font-weight:900;color:#ef4444;margin:0">-33% from 2021 peak</p>
+    </div>
+  </div></section>
+
+  <!-- SCENE 3: WHY NOW (7.5s) -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHY NOW</div>
+    <h2 class="h" data-split="0.35">3 reasons SEBI cleared it</h2>
+    <div class="glass row-chip" data-a="right:1.0:0.65">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-6 7 6v12M9 21v-6h6v6"/></svg></span>
+      <span class="t">Reverse flip done — now a 100% Indian company</span>
+    </div>
+    <div class="glass row-chip" data-a="right:1.55:0.65">
+      <span class="ic"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+      <span class="t">Revenue ↑65% to ₹3,783 Cr in FY25</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.1:0.65">
+      <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V8a5 5 0 0 1 9.9-1M12 15v2"/></svg></span>
+      <span class="t">India's UPI economy needs a listed payment giant</span>
+    </div>
+  </div></section>
+
+  <!-- SCENE 4: WHAT IT MEANS (7.5s) -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHAT IT MEANS</div>
+    <h2 class="h" data-split="0.35">What this changes for you</h2>
+    <div class="glass card" data-a="pop:0.9:0.65" style="flex-direction:row;align-items:center;gap:3cqw;padding:3.4cqw">
+      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20v-1a8 8 0 0 1 16 0v1"/></svg></span>
+      <div style="flex:1;min-width:0">
+        <p class="lab">Retail investor</p>
+        <p class="val" style="font-size:4.6cqw">Watch for GMP + price band</p>
+        <p class="sub">Expected listing · Early 2027</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:1.3:0.65" style="flex-direction:row;align-items:center;gap:3cqw;padding:3.4cqw">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <div style="flex:1;min-width:0">
+        <p class="lab">Small business owner</p>
+        <p class="val" style="font-size:4.6cqw">Your payment gateway goes public</p>
+        <p class="sub">8M+ businesses like yours use Razorpay</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:1.7:0.65" style="flex-direction:row;align-items:center;gap:3cqw;padding:3.4cqw">
+      <span class="ic"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+      <div style="flex:1;min-width:0">
+        <p class="lab">Paytm &amp; Pine Labs holders</p>
+        <p class="val" style="font-size:4.6cqw">Fintech sector valuations shift</p>
+        <p class="sub">PayU + PhonePe also eyeing IPOs</p>
+      </div>
+    </div>
+    <p class="disc" data-a="pop:2.5:0.5">Fin Pulse · Educational content only</p>
+  </div></section>
+
+  <!-- SCENE 5: BY THE NUMBERS (7s) -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>BY THE NUMBERS</div>
+    <h2 class="h" data-split="0.35">Razorpay at a glance</h2>
+    <div class="glass card" data-a="pop:0.9:0.8" style="gap:2.4cqw;padding:3.8cqw">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:3cqw">
+        <div>
+          <p class="lab">FY25 Revenue</p>
+          <p class="val big" id="s5-rev">₹0 Cr</p>
+        </div>
+        <div style="text-align:right">
+          <p class="lab">YoY Growth</p>
+          <p class="val mid" style="color:#16a34a">+65%</p>
+        </div>
+      </div>
+      <svg class="svg" viewBox="0 0 100 36" style="margin-top:0.6cqw">
+        <text x="4" y="10" font-size="3.2">FY25</text>
+        <rect id="s5-bf25" x="22" y="4" width="0" height="8" rx="1.5" fill="var(--acc)"/>
+        <text id="s5-v25" x="24" y="11" font-size="3.0" opacity="0">₹3,783 Cr</text>
+        <text x="4" y="24" font-size="3.2">FY24</text>
+        <rect id="s5-bf24" x="22" y="17" width="0" height="6" rx="1.5" fill="rgba(0,180,210,0.6)"/>
+        <text id="s5-v24" x="24" y="22.5" font-size="3.0" opacity="0">₹2,296 Cr</text>
+        <line x1="20" y1="30" x2="98" y2="30" stroke="rgba(2,16,32,0.3)" stroke-width="0.5"/>
+        <text x="4" y="34.5" font-size="2.6" fill="rgba(2,16,32,0.4)">Source: Razorpay financials FY25</text>
+      </svg>
+    </div>
+    <div class="grid2">
+      <div class="glass card pillar" data-a="pop:1.5:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+        <p class="lab">FY25 Net Loss</p>
+        <p class="val" style="font-size:5.0cqw;color:#dc2626">₹1,209 Cr</p>
+      </div>
+      <div class="glass card pillar" data-a="pop:1.9:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+        <p class="lab">IPO Valuation</p>
+        <p class="val" style="font-size:5.0cqw">$5B</p>
+      </div>
+      <div class="glass card pillar" data-a="pop:2.3:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8M12 3v4"/></svg></span>
+        <p class="lab">Businesses Served</p>
+        <p class="val" style="font-size:5.0cqw">8M+</p>
+      </div>
+      <div class="glass card pillar" data-a="pop:2.7:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+        <p class="lab">Total Capital Raised</p>
+        <p class="val" style="font-size:5.0cqw">$741M+</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- SCENE 6: BOTTOM LINE + CTA — NO EXIT FADE (9s) -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>BOTTOM LINE</div>
+    <h2 class="h" data-split="0.35">Will YOU invest in Razorpay?</h2>
+    <div class="glass card" data-a="pop:0.9:0.7" style="gap:3.0cqw;padding:4.2cqw">
+      <div class="tick-row" data-a="right:1.3:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck-s6" d="M5 12.5l4.5 4.5 9.5-10" pathLength="1" fill="none" stroke="var(--acc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="t">SEBI cleared · listing early 2027</span>
+      </div>
+      <div class="tick-row" data-a="right:1.75:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck-s6" d="M5 12.5l4.5 4.5 9.5-10" pathLength="1" fill="none" stroke="var(--acc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="t">Revenue growing +65% YoY</span>
+      </div>
+      <div class="tick-row" data-a="right:2.2:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck-s6" d="M5 12.5l4.5 4.5 9.5-10" pathLength="1" fill="none" stroke="var(--acc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="t">Still loss-making · -33% from 2021 peak</span>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:3.0:0.6" style="padding:3.4cqw;align-items:center;gap:1.6cqw">
+      <svg style="width:8cqw;height:8cqw;flex:none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="none" stroke="var(--acc2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <p style="font-size:4.8cqw;font-weight:900;text-align:center;color:var(--ink);margin:0">Drop INVEST or SKIP below</p>
+      <p class="lab" style="text-align:center">Your vote shapes our next story</p>
+    </div>
+    <div class="glass card follow-card" data-a="pop:4.5:0.6" style="padding:3.6cqw;align-items:center;gap:2cqw">
+      <p style="font-size:5.0cqw;font-weight:900;color:var(--ink);margin:0;text-align:center">Follow @finpulsemarkets</p>
+      <p style="font-size:3.6cqw;font-weight:700;color:var(--ink-dim);margin:0;text-align:center">Daily market news · Share with fellow investors</p>
+    </div>
+  </div></section>
+
+  <div id="safe" style="display:none;position:absolute;inset:17cqw 11cqw 30cqw 6cqw;border:2px dashed rgba(255,255,255,0.8);z-index:9;pointer-events:none;"></div>
+</div>
+
+<script>
+  var DURS=[7,7,7.5,7.5,7,9];
+  window.COVER_T=2.0;
+  var OUT=0.4;
+  var STARTS=(function(){var a=0,r=[];DURS.forEach(function(d){r.push(a);a+=d;});return r;})();
+  window.TOTAL=DURS.reduce(function(a,b){return a+b;},0);
+
+  var clamp=function(x,lo,hi){lo=lo===undefined?0:lo;hi=hi===undefined?1:hi;return Math.min(hi,Math.max(lo,x));};
+  var E={
+    outCubic:function(x){return 1-Math.pow(1-x,3);},
+    outBack:function(x){var s=1.5,c=s+1;return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2);},
+    inCubic:function(x){return x*x*x;}
+  };
+  var $=function(id){return document.getElementById(id);};
+
+  // Split headlines
+  document.querySelectorAll('.h[data-split]').forEach(function(h){
+    var base=parseFloat(h.getAttribute('data-split'));
+    var words=h.textContent.trim().split(/\s+/);
+    h.textContent='';
+    words.forEach(function(w,i){
+      var s=document.createElement('span');s.className='w';s.textContent=w;
+      s._a={k:'up',s:base+i*0.08,d:0.6};
+      h.appendChild(s);
+      if(i<words.length-1)h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  // Gather animated elements per scene
+  var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function(sc){
+    sc._els=[];
+    sc.querySelectorAll('[data-a]').forEach(function(el){
+      var p=el.getAttribute('data-a').split(':');
+      el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function(el){sc._els.push(el);});
+    sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el,t){
+    var a=el._a,p=clamp((t-a.s)/a.d),e=E.outCubic(p),b=E.outBack(p);
+    var o=clamp(p*2),x=0,y=0,s=1;
+    if(a.k==='pop'){s=0.86+0.14*b;y=(1-e)*6;}
+    else if(a.k==='up'){y=(1-e)*7;}
+    else if(a.k==='drop'){y=-(1-e)*6;s=0.94+0.06*b;}
+    else if(a.k==='left'){x=-(1-e)*18;}
+    else if(a.k==='right'){x=(1-e)*18;}
+    el.style.opacity=o;
+    el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+  }
+
+  // Blobs (Deep Navy palette — blue/cyan/indigo/teal)
+  function blobSet(el,color,size,x,y){
+    el.style.width=size+'cqw';el.style.height=size+'cqw';
+    el.style.left=x+'cqw';el.style.top=y+'cqw';
+    el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+  }
+  blobSet($('b1'),'rgba(0,70,180,1)',130,-40,-40);
+  blobSet($('b2'),'rgba(0,195,215,0.9)',90,50,60);
+  blobSet($('b3'),'rgba(45,0,160,0.9)',115,-25,120);
+  blobSet($('b4'),'rgba(0,150,150,0.85)',68,50,112);
+  function orbs(T){
+    $('b1').style.transform='translate('+(9*Math.sin(T*0.45)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.38)).toFixed(2)+'cqw)';
+    $('b2').style.transform='translate('+(-10*Math.sin(T*0.36+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.41)).toFixed(2)+'cqw)';
+    $('b3').style.transform='translate('+(10*Math.cos(T*0.33)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.4+2)).toFixed(2)+'cqw)';
+    $('b4').style.transform='translate('+(-8*Math.cos(T*0.5+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.47)).toFixed(2)+'cqw)';
+  }
+
+  // ---- Audio system (10 SFX keys, Web Audio API synthesis) ----
+  var SFX_DATA={
+    whoosh:       {t:'n',dur:0.25,f:800,dc:6},
+    tick:         {t:'s',dur:0.06,f:1800,dc:30},
+    beep:         {t:'s',dur:0.12,f:880,dc:12},
+    final_beep:   {t:'s',dur:0.18,f:1100,dc:8},
+    reveal_whoosh:{t:'n',dur:0.3,f:600,dc:4},
+    impact:       {t:'s',dur:0.15,f:220,dc:18},
+    swoosh:       {t:'n',dur:0.2,f:1000,dc:8},
+    glass_pop:    {t:'s',dur:0.1,f:1400,dc:25},
+    ding:         {t:'s',dur:0.4,f:1320,dc:5},
+    pulse:        {t:'s',dur:0.5,f:660,dc:4}
+  };
+  var audioCtx=null,audioReady=false;
+  document.addEventListener('click',function(){
+    if(!audioReady){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();audioReady=true;}catch(e){}}
+  },{once:true});
+  function playSFX(name,vol){
+    if(!audioReady||!audioCtx)return;
+    var d=SFX_DATA[name];if(!d)return;
+    try{
+      var ctx=audioCtx,now=ctx.currentTime;
+      var g=ctx.createGain();g.gain.value=(vol||0.5)*0.45;g.connect(ctx.destination);
+      if(d.t==='s'){
+        var o=ctx.createOscillator();o.type='sine';o.frequency.value=d.f;
+        o.connect(g);
+        g.gain.setValueAtTime((vol||0.5)*0.4,now);
+        g.gain.exponentialRampToValueAtTime(0.0001,now+d.dur);
+        o.start(now);o.stop(now+d.dur);
+      } else {
+        var ns=Math.round(ctx.sampleRate*d.dur);
+        var buf=ctx.createBuffer(1,ns,ctx.sampleRate);
+        var ch=buf.getChannelData(0);
+        for(var i=0;i<ns;i++){
+          var tt=i/ctx.sampleRate,env=Math.exp(-tt*d.dc);
+          ch[i]=(Math.random()*2-1)*env;
+          if(d.f)ch[i]+=Math.sin(2*Math.PI*d.f*tt*Math.exp(-tt*2))*env*0.5;
+        }
+        var src=ctx.createBufferSource();src.buffer=buf;src.connect(g);src.start(now);
+      }
+    }catch(e){}
+  }
+  var CUES=[
+    [0.05,'whoosh',0.5],[0.9,'impact',0.7],[1.4,'glass_pop',0.6],[1.75,'glass_pop',0.5],[2.0,'tick',0.4],
+    [7.05,'whoosh',0.5],[7.9,'glass_pop',0.6],[9.5,'tick',0.4],
+    [14.05,'swoosh',0.5],[15.0,'swoosh',0.4],[15.55,'swoosh',0.4],[16.1,'swoosh',0.4],
+    [21.55,'glass_pop',0.6],[22.3,'glass_pop',0.5],[22.7,'glass_pop',0.5],
+    [29.05,'whoosh',0.5],[29.9,'glass_pop',0.6],[30.5,'tick',0.4],[30.9,'tick',0.4],[31.3,'tick',0.4],[31.7,'tick',0.4],
+    [36.05,'ding',0.6],[37.2,'beep',0.5],[37.65,'beep',0.5],[38.1,'final_beep',0.6],[39.0,'pulse',0.5]
+  ];
+  var cFired={};
+  function fireCues(T){
+    if(!audioReady)return;
+    for(var i=0;i<CUES.length;i++){
+      var c=CUES[i];
+      var k=c[0]+'_'+c[1];
+      if(T>=c[0]&&!cFired[k]){cFired[k]=1;playSFX(c[1],c[2]);}
+    }
+  }
+
+  // Init SEBI badge checkmark
+  var bckEl=$('b-ck');
+  if(bckEl){bckEl.style.strokeDasharray='1';bckEl.style.strokeDashoffset='1';}
+
+  // Init s6 checkmarks
+  var s6cks=Array.prototype.slice.call(document.querySelectorAll('#s6 .ck-s6'));
+  s6cks.forEach(function(c){c.style.strokeDasharray='1';c.style.strokeDashoffset='1';});
+
+  // ---- Per-scene update functions ----
+  function s1(t){
+    // Revenue counter
+    var rev=Math.round(3783*E.outCubic(clamp((t-1.4)/1.0)));
+    if($('s1-rev'))$('s1-rev').textContent='₹'+rev.toLocaleString('en-IN')+' Cr';
+    // SEBI badge checkmark draw
+    if(bckEl)bckEl.style.strokeDashoffset=(1-E.outCubic(clamp((t-1.0)/0.5))).toFixed(3);
+  }
+  function s2(t){
+    var p21=E.outCubic(clamp((t-2.3)/0.7));
+    var p26=E.outCubic(clamp((t-2.6)/0.7));
+    var b21=$('s2-b21'),b26=$('s2-b26');
+    if(b21)b21.style.width=(p21*100)+'%';
+    if(b26)b26.style.width=(p26*66.7)+'%';
+  }
+  function s3(t){}
+  function s4(t){}
+  function s5(t){
+    // Revenue counter
+    var rev=Math.round(3783*E.outCubic(clamp((t-0.9)/1.2)));
+    if($('s5-rev'))$('s5-rev').textContent='₹'+rev+' Cr';
+    // Bar chart
+    var p25=E.outCubic(clamp((t-1.3)/0.9));
+    var p24=E.outCubic(clamp((t-1.6)/0.8));
+    var bf25=$('s5-bf25'),bf24=$('s5-bf24');
+    var v25=$('s5-v25'),v24=$('s5-v24');
+    if(bf25)bf25.setAttribute('width',(p25*76).toFixed(1));
+    if(bf24)bf24.setAttribute('width',(p24*46.1).toFixed(1));
+    if(v25)v25.setAttribute('opacity',(p25>0.5?1:0));
+    if(v24)v24.setAttribute('opacity',(p24>0.5?1:0));
+  }
+  function s6(t){
+    var starts=[1.3,1.75,2.2];
+    s6cks.forEach(function(c,i){
+      c.style.strokeDashoffset=(1-E.outCubic(clamp((t-starts[i])/0.35))).toFixed(3);
+    });
+  }
+  var FX=[s1,s2,s3,s4,s5,s6];
+
+  // ---- Main setT ----
+  window.setT=function(T){
+    orbs(T);
+    fireCues(T);
+    // Find active scene
+    var i=0;
+    for(var k=0;k<STARTS.length;k++)if(T>=STARTS[k]-1e-6)i=k;
+    var t=T-STARTS[i],d=DURS[i];
+    // Show/hide
+    scenes.forEach(function(sc,k){sc.classList.toggle('on',k===i);});
+    var sc=scenes[i];
+    // Apply animations
+    sc._els.forEach(function(el){applyAnim(el,t);});
+    FX[i](t);
+    // Glass shimmer
+    sc._glass.forEach(function(g,gi){
+      var q=((t*0.45+gi*0.27)%1);
+      var sw=(q<0.45?(-130+260*(q/0.45)):160);
+      g.style.setProperty('--sw',sw.toFixed(1)+'%');
+    });
+    // Exit fade — guard on last scene
+    var isLast=(i===scenes.length-1);
+    var inner=sc.querySelector('.inner');
+    if(!isLast){
+      var o=clamp((t-(d-OUT))/OUT);
+      inner.style.opacity=1-E.inCubic(o);
+      inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+    } else {
+      inner.style.opacity=1;
+      inner.style.transform='none';
+    }
+    // Tag pill gentle bob
+    var pill=sc.querySelector('.tag-pill');
+    if(pill&&pill.style.transform){
+      var cur=pill.style.transform;
+      pill.style.transform=cur.replace(/ translateY\([^)]*\)/,'')+' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';
+    }
+  };
+
+  setT(0.5);
+</script>
+</body>
+</html>
