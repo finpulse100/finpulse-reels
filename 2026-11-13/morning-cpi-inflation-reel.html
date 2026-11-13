@@ -1,0 +1,582 @@
+<!doctype html>
+<!--
+  FIN PULSE · 2026-11-13 · Morning · CPI 6.09% inflation story
+  Hook A (Morning): Countdown + Digit Reveal
+  Theme: Deep Purple (#0a0010) + violet/blue/indigo/gold blobs
+  Music: atlasaudio-soft-509813.mp3 (solo piano)
+  DURS = [7, 7, 7.5, 7.5, 7, 9] = 45s
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>India CPI Inflation 6.09% Reel</title>
+<style>
+  :root {
+    --bg: #0a0010;
+    --ink: #0d0820;
+    --ink-dim: rgba(13, 8, 32, 0.80);
+    --chip-bg: #160330;
+    --chip-ink: #d4b8ff;
+    --accent: #c026d3;
+    --accent2: #7c3aed;
+    --red: #ef4444;
+    --red2: #dc2626;
+    --gold: #f59e0b;
+    --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  .frame { position: relative; width: 1080px; height: 1920px; container-type: inline-size; overflow: hidden; background: var(--bg); font-family: var(--font); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .blob { position: absolute; border-radius: 50%; will-change: transform; }
+  .scene { position: absolute; inset: 0; display: none; }
+  .scene.on { display: block; }
+  .inner { position: absolute; inset: 0; padding: 17cqw 11cqw 30cqw 6cqw; display: flex; flex-direction: column; justify-content: center; gap: 3.6cqw; min-width: 0; }
+  .safe { display: none; position: absolute; inset: 17cqw 11cqw 30cqw 6cqw; border: 2px dashed rgba(255,255,255,0.8); z-index: 9; pointer-events: none; }
+  body.dbg .safe { display: block; }
+
+  /* Handle overlay — bottom-right, inside safe zone */
+  .handle-overlay {
+    position: absolute;
+    bottom: 32cqw;
+    right: 11.5cqw;
+    font-size: 3.2cqw;
+    font-weight: 800;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.01em;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* ---------- Tag pill ---------- */
+  .tag-pill {
+    position: relative; align-self: center;
+    display: inline-flex; align-items: center; justify-content: center; gap: 2.6cqw;
+    padding: 2.4cqw 6.4cqw; border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,255,255,0.52));
+    backdrop-filter: blur(40px) saturate(100%);
+    -webkit-backdrop-filter: blur(40px) saturate(100%);
+    border: 1.5px solid rgba(255,255,255,0.92);
+    box-shadow: 0 2cqw 6cqw rgba(0,0,0,0.5), inset 0 0.5cqw 1cqw rgba(255,255,255,0.95), inset 0 -0.7cqw 1.4cqw rgba(13,8,32,0.12);
+    color: var(--ink); font-size: 4.6cqw; font-weight: 800; line-height: 1.2; white-space: nowrap; flex: none;
+  }
+  .tag-pill::before { content: ""; position: absolute; inset: 1cqw; border-radius: 999px; border: 1px solid rgba(255,255,255,0.75); pointer-events: none; }
+  .dot { position: relative; width: 2.6cqw; height: 2.6cqw; border-radius: 50%; background: var(--red); }
+  .dot.gold { background: var(--gold); }
+  .dot.purple { background: var(--accent); }
+
+  .h {
+    margin: 0; text-align: center; color: #fff; font-size: 8.8cqw; font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.1; text-wrap: balance; flex: none;
+    text-shadow: 0 0.6cqw 2.4cqw rgba(0,0,0,0.55);
+  }
+  .h .w { display: inline-block; }
+  .h.sm { font-size: 7.6cqw; }
+
+  /* Glass cards */
+  .frame .glass {
+    position: relative; overflow: hidden;
+    background: rgba(255,255,255,0.88);
+    border: 3px solid rgba(255,255,255,0.95);
+    border-radius: 4cqw;
+    box-shadow: 0 2cqw 7cqw rgba(0,0,0,0.5);
+  }
+  .frame .glass.dim { background: rgba(255,255,255,0.4); }
+  .glass::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.5) 50%, transparent 62%);
+    transform: translateX(var(--sw, -130%));
+  }
+
+  .card { padding: 4.2cqw; display: flex; flex-direction: column; gap: 2.4cqw; min-width: 0; flex: none; }
+  .lab { margin: 0; font-size: 3.6cqw; font-weight: 700; line-height: 1.2; color: var(--ink-dim); }
+  .val { margin: 0; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; color: var(--ink); }
+  .big { font-size: 7.4cqw; }
+  .mid { font-size: 5.6cqw; }
+  .sub { margin: 0; font-size: 3.6cqw; font-weight: 700; line-height: 1.2; color: var(--ink-dim); }
+  .svg { width: 100%; height: auto; display: block; flex: none; }
+  .svg text { font-family: var(--font); font-weight: 700; fill: var(--ink-dim); }
+  .ax { stroke: rgba(13,8,32,0.3); stroke-width: 0.6; fill: none; }
+
+  .row-chip { display: flex; align-items: center; gap: 3cqw; padding: 2.4cqw 3.6cqw; flex: none; }
+  .row-chip .ic { width: 8.6cqw; height: 8.6cqw; }
+  .row-chip span.t { font-size: 4.3cqw; font-weight: 800; line-height: 1.15; color: var(--ink); }
+
+  .ic { flex: none; width: 9cqw; height: 9cqw; border-radius: 50%; background: var(--chip-bg); display: grid; place-items: center; }
+  .ic svg { width: 56%; height: 56%; stroke: var(--chip-ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ic svg .f { fill: var(--chip-ink); stroke: none; }
+  .ic.red-bg { background: rgba(239,68,68,0.15); }
+  .ic.red-bg svg { stroke: var(--red); }
+
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3cqw; flex: none; }
+  .pillar { padding: 3cqw 3.4cqw; align-items: flex-start; gap: 2cqw; }
+  .pillar .val { font-size: 5.4cqw; }
+  .pillar .ic { width: 8.6cqw; height: 8.6cqw; }
+
+  .tick { display: flex; align-items: center; gap: 3cqw; }
+  .tick span.t { font-size: 4.4cqw; font-weight: 800; line-height: 1.15; color: var(--ink); }
+  .tick .ic { width: 8cqw; height: 8cqw; }
+
+  .disc { margin: 0; font-size: 3.4cqw; font-weight: 600; line-height: 1.3; color: var(--ink-dim); text-align: center; flex: none; }
+
+  /* Alert stamp */
+  .alert-stamp {
+    align-self: center; display: inline-flex; align-items: center; justify-content: center;
+    padding: 2.4cqw 7cqw; border-radius: 2cqw;
+    background: var(--red); color: #fff;
+    font-size: 6cqw; font-weight: 900; letter-spacing: 0.08em;
+    box-shadow: 0 0 4cqw rgba(239,68,68,0.9), 0 0 1.2cqw rgba(239,68,68,0.5);
+    flex: none;
+  }
+
+  /* Countdown */
+  .countdown-wrap { align-self: center; position: relative; width: 22cqw; height: 22cqw; flex: none; }
+  .countdown-wrap canvas { position: absolute; inset: 0; }
+  .countdown-num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 12cqw; font-weight: 900; color: var(--ink); line-height: 1; }
+
+  /* Stat cards row */
+  .stat-row { display: flex; gap: 2.6cqw; flex: none; }
+  .stat-row .glass { flex: 1; padding: 3cqw 2.4cqw; display: flex; flex-direction: column; gap: 1.6cqw; min-width: 0; }
+  .stat-row .lab { font-size: 3cqw; }
+  .stat-row .val { font-size: 5.2cqw; }
+  .stat-row .ic-sm { width: 7cqw; height: 7cqw; border-radius: 50%; background: var(--chip-bg); display: grid; place-items: center; }
+  .stat-row .ic-sm svg { width: 56%; height: 56%; stroke: var(--chip-ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Digit reveal */
+  .digit-reveal { align-self: center; font-size: 11cqw; font-weight: 900; color: #fff; letter-spacing: -0.03em; text-shadow: 0 0 3cqw rgba(192,38,211,0.9); flex: none; }
+
+  /* Red line marker */
+  .red-line { stroke: var(--red); stroke-width: 1.5; stroke-dasharray: 3 2; fill: none; }
+
+  /* per-scene adjustments */
+  #s1 .inner { gap: 4.4cqw; }
+  #s2 .inner { gap: 4cqw; }
+  #s3 .inner { gap: 2.8cqw; }
+  #s4 .inner { gap: 3cqw; }
+  #s5 .inner { gap: 4cqw; }
+  #s6 .inner { gap: 5.2cqw; }
+  #s6 .card.tk { padding: 5cqw 4.4cqw; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="b3"></div><div class="blob" id="b4"></div>
+
+  <!-- Handle overlay (all scenes) -->
+  <div class="handle-overlay">@finpulsemarkets</div>
+
+  <!-- Scene 1 · HOOK — Countdown + Digit Reveal -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>INFLATION ALERT</div>
+    <div class="alert-stamp" id="alertStamp">ALERT</div>
+    <div class="stat-row">
+      <div class="glass" data-a="up:1.1:0.6">
+        <span class="ic-sm"><svg viewBox="0 0 24 24"><path d="M3 17l4-8 4 6 3-4 4 6"/></svg></span>
+        <p class="lab">CPI Oct 2026</p>
+        <p class="val" id="cpiCounter">0.00%</p>
+      </div>
+      <div class="glass" data-a="up:1.3:0.6">
+        <span class="ic-sm"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h14M3 18h10"/><circle cx="19" cy="12" r="3"/></svg></span>
+        <p class="lab">Food Inflation</p>
+        <p class="val" id="foodCounter">0.00%</p>
+      </div>
+      <div class="glass" data-a="up:1.5:0.6">
+        <span class="ic-sm"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+        <p class="lab">Onion Price</p>
+        <p class="val" style="color:var(--red)" id="onionCounter">+0%</p>
+      </div>
+    </div>
+    <div class="countdown-wrap"><canvas id="cdCv" width="216" height="216"></canvas><div class="countdown-num" id="cdNum">5</div></div>
+    <div class="digit-reveal" id="digitReveal">6.09%</div>
+    <p class="h sm" data-split="3.3" style="color:rgba(255,255,255,0.88);font-size:5.2cqw">Answer: what this means for your wallet</p>
+  </div></section>
+
+  <!-- Scene 2 · REVEAL — CPI crossed the red line -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>CPI · OCT 2026</div>
+    <h2 class="h" data-split="0.35">India's inflation crossed the RBI red line</h2>
+    <div class="glass card" data-a="pop:0.9:0.8">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:3cqw">
+        <div><p class="lab">India CPI · Consumer Price Index</p><p class="val big" style="color:var(--red)">6.09%</p><p class="sub">↑ from 5.54% in September</p></div>
+        <div style="text-align:center"><p class="lab">RBI Upper Limit</p><p class="val big" style="color:var(--ink)">6.00%</p><p class="sub" style="color:var(--red);font-weight:800">BREACHED ↑</p></div>
+      </div>
+      <svg class="svg" id="cpiChart" viewBox="0 0 100 44">
+        <defs>
+          <linearGradient id="gUp" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ef4444" stop-opacity="0.35"/>
+            <stop offset="1" stop-color="#ef4444" stop-opacity="0"/>
+          </linearGradient>
+          <clipPath id="clChart"><rect id="clrChart" x="0" y="0" width="0" height="44"/></clipPath>
+        </defs>
+        <!-- RBI red line at y=20 (6% mark) -->
+        <line class="red-line" x1="4" y1="20" x2="96" y2="20"/>
+        <text x="97" y="20" font-size="3.5" fill="#ef4444" text-anchor="end" dy="4" font-weight="800">6%</text>
+        <!-- Base axis -->
+        <line class="ax" x1="4" y1="38" x2="96" y2="38"/>
+        <!-- Data bars: months Apr→Oct -->
+        <g id="chartBars"></g>
+        <text x="20" y="42" font-size="3.2" text-anchor="middle" fill="#888">Apr</text>
+        <text x="33" y="42" font-size="3.2" text-anchor="middle" fill="#888">Jun</text>
+        <text x="52" y="42" font-size="3.2" text-anchor="middle" fill="#888">Aug</text>
+        <text x="66" y="42" font-size="3.2" text-anchor="middle" fill="#888">Sep</text>
+        <text x="80" y="42" font-size="3.2" text-anchor="middle" fill="#ef4444" font-weight="800">Oct</text>
+      </svg>
+    </div>
+    <div class="glass card" data-a="pop:3.2:0.7" style="flex-direction:row;align-items:center;gap:3cqw;padding:3cqw 4cqw">
+      <span class="ic red-bg"><svg viewBox="0 0 24 24"><path class="f" d="M12 2 2 19h20L12 2z"/><path d="M12 10v4M12 16.5v.5" stroke="#ef4444" stroke-width="2.5"/></svg></span>
+      <div><p class="lab" style="font-size:3.4cqw">First breach since October 2024</p><p class="val mid">Food at 8.94% · Onion +116%</p></div>
+    </div>
+  </div></section>
+
+  <!-- Scene 3 · WHY — 3 causes -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot gold"></i>WHY IT ROSE</div>
+    <h2 class="h" data-split="0.35">Three things pushed inflation above 6%</h2>
+    <div class="glass row-chip" data-a="right:1.1:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3.1-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+      <span class="t">Weak monsoon → vegetable &amp; grain shortage</span>
+    </div>
+    <div class="glass row-chip" data-a="right:1.55:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 3.5"/></svg></span>
+      <span class="t">Onion +116%, garlic +55%, ginger +63%</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.0:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
+      <span class="t">RBI already hiked repo to 5.50% — not enough</span>
+    </div>
+    <div class="glass card" data-a="pop:2.6:0.7" style="padding:3cqw 4cqw">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><p class="lab">Repo Rate now</p><p class="val mid">5.50%</p></div>
+        <div style="width:0.5cqw;height:8cqw;background:rgba(13,8,32,0.15);border-radius:1px"></div>
+        <div><p class="lab">RBI target band</p><p class="val mid">2% – 6%</p></div>
+        <div style="width:0.5cqw;height:8cqw;background:rgba(13,8,32,0.15);border-radius:1px"></div>
+        <div><p class="lab">CPI today</p><p class="val mid" style="color:var(--red)">6.09%</p></div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- Scene 4 · WHAT IT MEANS FOR YOU -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot purple"></i>WHAT THIS MEANS</div>
+    <h2 class="h" data-split="0.35">What 6.09% means for you</h2>
+    <div class="glass card" data-a="pop:1.0:0.7" style="flex-direction:row;align-items:center;gap:3cqw;padding:3.4cqw 4cqw">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 9h18v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path d="M3 9l3-5h12l3 5"/></svg></span>
+      <div><p class="lab">Home Loans</p><p class="val mid">EMI may rise if RBI hikes Dec 2–4</p></div>
+    </div>
+    <div class="glass card" data-a="pop:1.5:0.7" style="flex-direction:row;align-items:center;gap:3cqw;padding:3.4cqw 4cqw">
+      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></span>
+      <div><p class="lab">Grocery Bills</p><p class="val mid">Food up 8.94% — expect higher bills</p></div>
+    </div>
+    <div class="glass card" data-a="pop:2.0:0.7" style="flex-direction:row;align-items:center;gap:3cqw;padding:3.4cqw 4cqw">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+      <div><p class="lab">Markets &amp; SIPs</p><p class="val mid">Rate-sensitive stocks face pressure</p></div>
+    </div>
+    <div class="glass card" data-a="pop:2.6:0.6" style="padding:2.8cqw 4cqw">
+      <div style="display:flex;align-items:center;gap:2.4cqw">
+        <span class="ic" style="background:rgba(245,158,11,0.15)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l2.5 2.5" stroke="#f59e0b" stroke-width="2.5"/></svg></span>
+        <p class="lab" style="font-size:3.6cqw;line-height:1.4">Crude falling to <strong>$91</strong> &amp; stronger rupee could ease pressure ahead</p>
+      </div>
+    </div>
+    <p class="disc">Educational content, not financial advice.</p>
+  </div></section>
+
+  <!-- Scene 5 · WATCH DATE — Dec 2–4 MPC -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot red"></i>WATCH DATE</div>
+    <h2 class="h" data-split="0.35">December 2–4: RBI decides the next step</h2>
+    <div class="glass card" data-a="pop:0.9:0.8">
+      <p class="lab">Monetary Policy Committee Meeting</p>
+      <p class="val big" style="color:var(--accent2)">Dec 2 – 4</p>
+      <p class="sub">Will repo rate go 5.50% → 5.75%?</p>
+      <svg class="svg" viewBox="0 0 100 36" id="forecastChart">
+        <text x="50" y="8" font-size="4" text-anchor="middle" font-weight="800" fill="var(--ink)">Analyst Forecast: One More 25 bps Hike</text>
+        <!-- Gauge / vote bar -->
+        <rect x="10" y="14" width="80" height="8" rx="4" fill="rgba(13,8,32,0.08)"/>
+        <rect id="hikeBar" x="10" y="14" width="0" height="8" rx="4" fill="url(#gHike)"/>
+        <defs><linearGradient id="gHike" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#c026d3"/></linearGradient></defs>
+        <text x="50" y="30" font-size="3.6" text-anchor="middle" fill="var(--ink-dim)">DBS · ICRA · 360 ONE Asset expect hike</text>
+      </svg>
+    </div>
+    <div class="grid2">
+      <div class="glass card" data-a="pop:3.0:0.6" style="gap:1.4cqw;padding:3.2cqw">
+        <p class="lab">If Hike</p>
+        <p class="val mid" style="color:var(--red)">5.75%</p>
+        <p class="sub">EMI rises again</p>
+      </div>
+      <div class="glass card" data-a="pop:3.3:0.6" style="gap:1.4cqw;padding:3.2cqw">
+        <p class="lab">If Pause</p>
+        <p class="val mid" style="color:#16a34a">5.50%</p>
+        <p class="sub">Crude &amp; ₹ could help</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- Scene 6 · PAYOFF + CTA (no exit fade) -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>KEY TAKEAWAY</div>
+    <h2 class="h" data-split="0.35">Inflation crossed 6%  — watch December</h2>
+    <div class="glass card tk" data-a="pop:0.9:0.7" style="gap:3.4cqw">
+      <div class="tick" data-a="right:1.2:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">CPI at 6.09% — first breach in 2 years</span>
+      </div>
+      <div class="tick" data-a="right:1.65:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Food at 8.94% — onions +116%</span>
+      </div>
+      <div class="tick" data-a="right:2.1:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">MPC meets Dec 2–4 — hike likely</span>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.9:0.7" style="padding:4cqw;gap:2cqw">
+      <p class="lab" style="text-align:center;font-size:4cqw;font-weight:800">Will the RBI hike in December?</p>
+      <p class="val mid" style="text-align:center;font-size:5cqw">Yes or No? Drop it below 👇</p>
+    </div>
+    <div class="glass card" data-a="pop:3.5:0.7" style="flex-direction:row;align-items:center;justify-content:center;gap:3cqw;padding:3.4cqw">
+      <span class="ic" style="background:rgba(192,38,211,0.15)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16v.5" stroke="#c026d3" stroke-width="2.5"/></svg></span>
+      <div>
+        <p class="val" style="font-size:5.2cqw;color:var(--accent)">Follow @finpulsemarkets</p>
+        <p class="sub">Daily finance. No jargon.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <div class="safe"></div>
+</div>
+
+<script>
+  var DURS = [7, 7, 7.5, 7.5, 7, 9];
+  window.COVER_T = 1.5;
+  var OUT = 0.4;
+  var STARTS = []; (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+  window.TOTAL = DURS.reduce(function(a,b){ return a+b; }, 0);
+
+  var clamp = function(x,a,b){ a=a===undefined?0:a; b=b===undefined?1:b; return Math.min(b,Math.max(a,x)); };
+  var E = {
+    outCubic: function(x){ return 1-Math.pow(1-x,3); },
+    outBack: function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+    inCubic: function(x){ return x*x*x; },
+    inOut: function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+  };
+  var $=function(id){ return document.getElementById(id); };
+  var NS='http://www.w3.org/2000/svg';
+
+  // Split headlines
+  document.querySelectorAll('.h[data-split]').forEach(function(h){
+    var base=parseFloat(h.getAttribute('data-split'));
+    var words=h.textContent.trim().split(/\s+/);
+    h.textContent='';
+    words.forEach(function(w,i){
+      var s=document.createElement('span'); s.className='w'; s.textContent=w;
+      s._a={k:'up',s:base+i*0.08,d:0.6};
+      h.appendChild(s);
+      if(i<words.length-1) h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  // Gather animated elements
+  var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function(sc){
+    sc._els=[];
+    sc.querySelectorAll('[data-a]').forEach(function(el){
+      var p=el.getAttribute('data-a').split(':');
+      el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+    sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el,t){
+    var a=el._a,p=clamp((t-a.s)/a.d),e=E.outCubic(p),b=E.outBack(p),o=clamp(p*2),x=0,y=0,s=1;
+    if(a.k==='pop'){ s=0.86+0.14*b; y=(1-e)*6; }
+    else if(a.k==='up'){ y=(1-e)*7; }
+    else if(a.k==='drop'){ y=-(1-e)*6; s=0.94+0.06*b; }
+    else if(a.k==='left'){ x=-(1-e)*18; }
+    else if(a.k==='right'){ x=(1-e)*18; }
+    el.style.opacity=o;
+    el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+  }
+
+  // Background blobs (deep purple theme)
+  function blob(el,color,size,x,y){
+    el.style.width=size+'cqw'; el.style.height=size+'cqw';
+    el.style.left=x+'cqw'; el.style.top=y+'cqw';
+    el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+  }
+  blob($('b1'),'rgba(124,58,237,0.90)',140,-50,-50);   // violet
+  blob($('b2'),'rgba(192,38,211,0.85)',100,55,70);      // magenta/purple
+  blob($('b3'),'rgba(37,99,235,0.90)',120,-20,130);     // indigo/blue
+  blob($('b4'),'rgba(245,158,11,0.75)',80,55,120);      // gold accent
+  function orbs(T){
+    $('b1').style.transform='translate('+(9*Math.sin(T*0.44)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.37)).toFixed(2)+'cqw)';
+    $('b2').style.transform='translate('+(-10*Math.sin(T*0.35+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.40)).toFixed(2)+'cqw)';
+    $('b3').style.transform='translate('+(10*Math.cos(T*0.32)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.39+2)).toFixed(2)+'cqw)';
+    $('b4').style.transform='translate('+(-8*Math.cos(T*0.49+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.46)).toFixed(2)+'cqw)';
+  }
+
+  // ---- AUDIO ENGINE ----
+  var audioCtx=null;
+  var SFX_DATA={
+    whoosh:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    tick:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    beep:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    final_beep:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    reveal_whoosh:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    impact:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    swoosh:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    glass_pop:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    ding:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    pulse:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA='
+  };
+  var sfxFired={};
+  function initAudio(){ if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }
+  function cue(T,name,vol){
+    var key=name+'_'+Math.round(T*10);
+    if(sfxFired[key]) return;
+    sfxFired[key]=1;
+    if(!audioCtx) return;
+    try{
+      var b64=SFX_DATA[name]; if(!b64) return;
+      var bin=atob(b64),buf=new Uint8Array(bin.length);
+      for(var i=0;i<bin.length;i++) buf[i]=bin.charCodeAt(i);
+      audioCtx.decodeAudioData(buf.buffer,function(decoded){
+        var src=audioCtx.createBufferSource(),g=audioCtx.createGain();
+        g.gain.value=vol||1; src.buffer=decoded;
+        src.connect(g); g.connect(audioCtx.destination); src.start();
+      });
+    }catch(e){}
+  }
+  document.addEventListener('click',initAudio,{once:true});
+  document.addEventListener('touchstart',initAudio,{once:true});
+
+  // ---- SCENE 1: Hook A ----
+  var alertVisible=false;
+  function s1(t){
+    // Alert stamp snap-in
+    var sa=$('alertStamp');
+    if(!alertVisible&&t>0.1){
+      var ap=E.outBack(clamp((t-0.1)/0.4));
+      sa.style.transform='scale('+ap.toFixed(3)+')';
+      sa.style.opacity=clamp((t-0.1)/0.2);
+      if(t>0.5) alertVisible=true;
+    }
+    // Stat counters
+    var cp=clamp((t-1.1)/0.8);
+    $('cpiCounter').textContent=( 6.09*E.outCubic(cp)).toFixed(2)+'%';
+    $('foodCounter').textContent=(8.94*E.outCubic(clamp((t-1.3)/0.8))).toFixed(2)+'%';
+    $('onionCounter').textContent='+'+Math.round(116*E.outCubic(clamp((t-1.5)/0.9)))+'%';
+    // SFX cues
+    cue(0.1,'impact',1.2); cue(1.1,'whoosh',1.0); cue(1.3,'tick',0.9); cue(1.5,'tick',0.9);
+    // Countdown canvas
+    var cv=$('cdCv'),ctx2=cv.getContext('2d'),cx=108,cy=108,r=96;
+    var elapsed=clamp((t-2.4)/4.5)*5;
+    var num=Math.max(1,5-Math.floor(elapsed));
+    $('cdNum').textContent=num;
+    var arcP=1-(elapsed%1);
+    var col=num<=2?'#ef4444':'#f59e0b';
+    ctx2.clearRect(0,0,216,216);
+    ctx2.beginPath(); ctx2.arc(cx,cy,r,0,Math.PI*2); ctx2.strokeStyle='rgba(255,255,255,0.15)'; ctx2.lineWidth=10; ctx2.stroke();
+    ctx2.beginPath(); ctx2.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+arcP*Math.PI*2); ctx2.strokeStyle=col; ctx2.lineWidth=10; ctx2.lineCap='round'; ctx2.stroke();
+    cue(2.4,'beep',1.0); cue(3.3,'beep',1.0); cue(4.2,'beep',1.0); cue(5.1,'beep',1.0); cue(6.0,'final_beep',1.3);
+    // Digit reveal
+    var dr=$('digitReveal'),dp=clamp((t-5.5)/0.8);
+    dr.style.opacity=E.outCubic(dp);
+    dr.style.transform='scale('+(0.7+0.3*E.outBack(dp)).toFixed(3)+')';
+    dr.style.textShadow=dp>0.5?'0 0 3cqw rgba(239,68,68,0.9)':'0 0 3cqw rgba(192,38,211,0.9)';
+    cue(5.5,'reveal_whoosh',1.2);
+  }
+
+  // ---- SCENE 2: Reveal ----
+  var chartBuilt=false;
+  var DATA=[{m:'Apr',v:4.83,color:'#7c3aed'},{m:'May',v:4.75,color:'#7c3aed'},{m:'Jun',v:5.08,color:'#7c3aed'},{m:'Jul',v:5.42,color:'#7c3aed'},{m:'Aug',v:5.19,color:'#7c3aed'},{m:'Sep',v:5.54,color:'#7c3aed'},{m:'Oct',v:6.09,color:'#ef4444'}];
+  function buildChart(){
+    if(chartBuilt) return; chartBuilt=true;
+    var g=$('chartBars'), N=DATA.length, W=10, gap=4, x0=12;
+    DATA.forEach(function(d,i){
+      var x=x0+i*(W+gap);
+      var maxV=7, h=(d.v/maxV)*24;
+      var rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x',x); rect.setAttribute('y',38-h); rect.setAttribute('width',W); rect.setAttribute('height',h); rect.setAttribute('rx',1.5);
+      rect.setAttribute('fill',d.color); rect.setAttribute('fill-opacity','0.9');
+      rect.setAttribute('id','bar_'+i);
+      var txt=document.createElementNS(NS,'text');
+      txt.setAttribute('x',x+W/2); txt.setAttribute('y',37-h); txt.setAttribute('font-size','3.4'); txt.setAttribute('text-anchor','middle'); txt.setAttribute('fill',d.color); txt.setAttribute('font-weight','800');
+      txt.textContent=d.v+'%';
+      g.appendChild(rect); g.appendChild(txt);
+    });
+  }
+  function s2(t){
+    buildChart();
+    var bars=DATA.map(function(_,i){ return $('bar_'+i); });
+    bars.forEach(function(b,i){
+      if(!b) return;
+      var p=E.outCubic(clamp((t-1.4-i*0.15)/0.5));
+      var maxV=7, h=(DATA[i].v/maxV)*24*p;
+      b.setAttribute('y',38-h); b.setAttribute('height',h);
+    });
+    cue(1.4,'swoosh',1.0); cue(3.2,'glass_pop',1.0);
+  }
+
+  // ---- SCENE 3: Why ----
+  function s3(t){ cue(1.1,'whoosh',0.8); cue(1.55,'whoosh',0.8); cue(2.0,'whoosh',0.8); cue(2.6,'ding',1.0); }
+
+  // ---- SCENE 4: Impact ----
+  function s4(t){ cue(1.0,'pop',0.9); cue(1.5,'pop',0.9); cue(2.0,'pop',0.9); cue(2.6,'ding',1.0); }
+
+  // ---- SCENE 5: Watch date ----
+  function s5(t){
+    var bar=$('hikeBar');
+    if(bar){
+      var p=E.outCubic(clamp((t-1.5)/1.2));
+      bar.setAttribute('width',(80*p*0.75).toFixed(1)); // 75% analyst expect hike
+    }
+    cue(1.5,'pulse',1.0); cue(3.0,'ding',0.9);
+  }
+
+  // ---- SCENE 6: Payoff (NO exit fade) ----
+  var cks6=Array.prototype.slice.call(document.querySelectorAll('.ck6'));
+  cks6.forEach(function(c){ c.style.strokeDasharray='1'; c.style.strokeDashoffset='1'; });
+  function s6(t){
+    cks6.forEach(function(c,i){ c.style.strokeDashoffset=1-E.outCubic(clamp((t-(1.45+i*0.45))/0.35)); });
+    cue(1.2,'ding',1.0); cue(1.65,'ding',1.0); cue(2.1,'ding',1.0); cue(2.9,'glass_pop',1.0); cue(3.5,'pulse',1.2);
+  }
+
+  var FX=[s1,s2,s3,s4,s5,s6];
+  var lastScene=-1;
+
+  window.setT=function(T){
+    orbs(T);
+    var i=0; for(var k=0;k<STARTS.length;k++) if(T>=STARTS[k]-1e-6) i=k;
+    var t=T-STARTS[i], d=DURS[i];
+    var isLast=(i===DURS.length-1);
+    scenes.forEach(function(sc,k){ sc.classList.toggle('on',k===i); });
+    var sc=scenes[i];
+    sc._els.forEach(function(el){ applyAnim(el,t); });
+    FX[i](t);
+    sc._glass.forEach(function(g,gi){
+      var q=((t*0.45+gi*0.27)%1);
+      g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+    });
+    // Exit fade — SKIP on last scene
+    if(!isLast){
+      var o=clamp((t-(d-OUT))/OUT), inner=sc.querySelector('.inner');
+      inner.style.opacity=1-E.inCubic(o);
+      inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+    } else {
+      var inner6=sc.querySelector('.inner');
+      inner6.style.opacity='1';
+      inner6.style.transform='none';
+    }
+    var pill=sc.querySelector('.tag-pill');
+    if(pill){
+      var base=pill.style.transform||'';
+      if(base.indexOf('translateY')>=0) base=base.replace(/translateY\([^)]*\)/,'');
+      pill.style.transform=base+' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';
+    }
+  };
+  setT(0);
+</script>
+</body>
+</html>
