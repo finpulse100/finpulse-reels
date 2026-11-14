@@ -1,0 +1,614 @@
+<!doctype html>
+<!--
+  FIN PULSE · Evening reel · 2026-11-14
+  Topic: India trade deficit $39.88B (12-month high) — imports hit record $89.35B
+  Hook B (Evening): Contradiction reveal — Exports +45% but deficit at 12-month high
+  Colour: Forest Dark #000f08  Blobs: emerald/green/gold/teal
+  Music: nastelbom-soft-corporate-485896.mp3
+  DURS [7, 7, 7.5, 7.5, 7, 9] = 45s
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>India Trade Deficit Hits 12-Month High</title>
+<style>
+:root {
+  --bg:        #000f08;
+  --ink:       #021a0d;
+  --ink-dim:   rgba(2,26,13,0.80);
+  --chip-bg:   #052e18;
+  --chip-ink:  #6ee7b7;
+  --accent:    #10b981;
+  --accent2:   #064e3b;
+  --warn:      #f59e0b;
+  --warn2:     #b45309;
+  --up-col:    #064e3b;
+  --dn-col:    #78350f;
+  --font: 'Inter','Segoe UI',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#000;}
+.frame{position:relative;width:1080px;height:1920px;container-type:inline-size;overflow:hidden;
+       background:var(--bg);font-family:var(--font);color:var(--ink);font-variant-numeric:tabular-nums;}
+
+.blob{position:absolute;border-radius:50%;will-change:transform;}
+.scene{position:absolute;inset:0;display:none;}
+.scene.on{display:block;}
+
+/* Safe-zone inner column — NEVER change these paddings */
+.inner{position:absolute;inset:0;
+       padding:17cqw 11cqw 30cqw 6cqw;
+       display:flex;flex-direction:column;justify-content:center;gap:3.6cqw;min-width:0;}
+
+/* Debug overlay */
+.safe{display:none;position:absolute;inset:17cqw 11cqw 30cqw 6cqw;
+      border:2px dashed rgba(255,255,255,0.8);z-index:9;pointer-events:none;}
+body.dbg .safe{display:block;}
+
+/* @finpulsemarkets handle — fixed bottom-right overlay */
+.handle{
+  position:absolute;bottom:24cqw;right:11.5cqw;
+  font-size:3.2cqw;font-weight:800;color:rgba(255,255,255,0.72);
+  font-family:var(--font);letter-spacing:0.01em;z-index:10;
+  text-shadow:0 0.3cqw 1.2cqw rgba(0,0,0,0.65);}
+
+/* ---- Tag pill ---- */
+.tag-pill{
+  position:relative;align-self:center;
+  display:inline-flex;align-items:center;justify-content:center;gap:2.6cqw;
+  padding:2.4cqw 6.4cqw;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.84),rgba(255,255,255,0.54));
+  backdrop-filter:blur(40px) saturate(100%);
+  -webkit-backdrop-filter:blur(40px) saturate(100%);
+  border:1.5px solid rgba(255,255,255,0.92);
+  box-shadow:0 2cqw 6cqw rgba(0,0,0,0.45),
+             inset 0 0.5cqw 1cqw rgba(255,255,255,0.95),
+             inset 0 -0.7cqw 1.4cqw rgba(2,26,13,0.14);
+  color:var(--ink);font-size:4.6cqw;font-weight:800;line-height:1.2;
+  white-space:nowrap;flex:none;}
+.tag-pill::before{content:"";position:absolute;inset:1cqw;border-radius:999px;
+  border:1px solid rgba(255,255,255,0.75);pointer-events:none;}
+.dot{position:relative;width:2.6cqw;height:2.6cqw;border-radius:50%;
+     background:var(--accent);flex:none;}
+.dot.w{background:var(--warn);}
+
+/* ---- Headlines ---- */
+.h{margin:0;text-align:center;color:#fff;font-size:8.8cqw;font-weight:800;
+   letter-spacing:-0.02em;line-height:1.1;text-wrap:balance;flex:none;
+   text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.45);}
+.h .ww{display:inline-block;}
+
+/* ---- Glass cards ---- */
+.glass{
+  position:relative;overflow:hidden;
+  background:rgba(255,255,255,0.88);
+  border:3px solid rgba(255,255,255,0.95);
+  border-radius:4cqw;
+  box-shadow:0 2cqw 7cqw rgba(0,0,0,0.5);}
+.glass.dim{background:rgba(255,255,255,0.42);}
+.glass::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.5) 50%,transparent 62%);
+  transform:translateX(var(--sw,-130%));}
+
+.card{padding:4.2cqw;display:flex;flex-direction:column;gap:2.4cqw;min-width:0;flex:none;}
+.lab{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+.val{margin:0;font-weight:800;letter-spacing:-0.02em;line-height:1.05;color:var(--ink);}
+.big{font-size:7.4cqw;}
+.mid{font-size:5.6cqw;}
+.sub{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+
+/* Row chips */
+.ic{flex:none;width:9cqw;height:9cqw;border-radius:50%;background:var(--chip-bg);
+    display:grid;place-items:center;}
+.ic svg{width:56%;height:56%;stroke:var(--chip-ink);fill:none;stroke-width:2;
+        stroke-linecap:round;stroke-linejoin:round;}
+.ic svg .f{fill:var(--chip-ink);stroke:none;}
+.row-chip{display:flex;align-items:center;gap:3cqw;padding:2.4cqw 3.6cqw;flex:none;}
+.row-chip .ic{width:8.6cqw;height:8.6cqw;}
+.row-chip span.t{font-size:4.3cqw;font-weight:800;line-height:1.2;color:var(--ink);}
+
+/* 3-column mini grid */
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.6cqw;flex:none;}
+.mcard{padding:3cqw 2.6cqw;display:flex;flex-direction:column;gap:1.4cqw;align-items:center;}
+.mlab{font-size:3.3cqw;font-weight:700;color:var(--ink-dim);text-align:center;line-height:1.2;}
+.mval{font-size:5.6cqw;font-weight:900;line-height:1.0;letter-spacing:-0.02em;text-align:center;}
+.mval.up{color:var(--up-col);}
+.mval.dn{color:var(--dn-col);}
+
+/* Alert stamp */
+.alert-stamp{
+  align-self:center;
+  font-size:7.2cqw;font-weight:900;letter-spacing:0.07em;
+  color:var(--warn);text-transform:uppercase;
+  text-shadow:0 0 3cqw rgba(245,158,11,0.55),0 0.3cqw 1cqw rgba(0,0,0,0.6);
+  flex:none;line-height:1;}
+
+/* Tick items for scene 6 */
+.tick{display:flex;align-items:center;gap:3cqw;}
+.tick span.t{font-size:4.4cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+.tick .ic{width:8cqw;height:8cqw;}
+
+/* Follow card */
+.follow-card{
+  background:var(--chip-bg);border-radius:4cqw;
+  padding:3.8cqw 4.4cqw;
+  display:flex;flex-direction:column;gap:1.6cqw;flex:none;}
+.follow-card .ftitle{font-size:4.8cqw;font-weight:900;color:#6ee7b7;line-height:1.1;}
+.follow-card .fhandle{font-size:4cqw;font-weight:800;color:rgba(110,231,183,0.7);}
+
+/* CTA question */
+.cta-q{font-size:4.2cqw;font-weight:800;color:#fff;text-align:center;
+       line-height:1.3;opacity:0.9;flex:none;}
+
+/* Bar chart */
+.bars{display:flex;align-items:flex-end;gap:4cqw;height:22cqw;padding:0 2cqw;justify-content:center;}
+.bar-wrap{display:flex;flex-direction:column;align-items:center;gap:1.2cqw;flex:1;min-width:0;}
+.bar{width:100%;border-radius:1.4cqw 1.4cqw 0 0;}
+.blab{font-size:3.3cqw;font-weight:700;color:var(--ink-dim);text-align:center;}
+.bval{font-size:3.6cqw;font-weight:800;color:var(--ink);text-align:center;}
+
+/* Per-scene gap overrides */
+#s1 .inner{gap:4.2cqw;justify-content:flex-start;padding-top:19cqw;}
+#s2 .inner{gap:3.6cqw;}
+#s3 .inner{gap:2.6cqw;}
+#s4 .inner{gap:2.8cqw;}
+#s5 .inner{gap:2.8cqw;}
+#s6 .inner{gap:4.2cqw;}
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- ===== S1: Hook B — Contradiction Reveal ===== -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot w"></i>TRADE ALERT</div>
+    <h2 class="h" data-split="0.55">India's exports surged 45%</h2>
+    <div class="grid3">
+      <div class="glass card mcard" data-a="pop:1.3:0.65">
+        <div class="mlab">Exports</div>
+        <div class="mval up">+45%</div>
+        <div class="mlab">$49.47B</div>
+      </div>
+      <div class="glass card mcard" data-a="pop:1.55:0.65">
+        <div class="mlab">Imports</div>
+        <div class="mval dn">+16.5%</div>
+        <div class="mlab">$89.35B</div>
+      </div>
+      <div class="glass card mcard" data-a="pop:1.8:0.65">
+        <div class="mlab">Deficit</div>
+        <div class="mval dn" id="defCtr">$0B</div>
+        <div class="mlab">12-mo high</div>
+      </div>
+    </div>
+    <div class="alert-stamp" id="alertStamp">&#9888; ALERT</div>
+    <div class="glass card" id="gapReveal" data-a="pop:3.6:0.75" style="padding:3.4cqw 4cqw;">
+      <p class="lab" style="text-align:center;">October 2026 · Ministry of Commerce</p>
+      <p class="val big" style="text-align:center;color:var(--dn-col);">$39.88B gap</p>
+      <p class="sub" style="text-align:center;">Highest in 12 months — imports hit all-time record</p>
+    </div>
+  </div></section>
+
+  <!-- ===== S2: Reveal ===== -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot w"></i>OCT 2026 DATA</div>
+    <h2 class="h" data-split="0.35">Imports nearly doubled exports</h2>
+    <div class="glass card" data-a="pop:0.9:0.75">
+      <p class="lab">Ministry of Commerce · October 2026</p>
+      <p class="val big" style="color:var(--dn-col);" id="bigdef">$39.88B</p>
+      <p class="sub">Merchandise trade deficit · 12-month high</p>
+    </div>
+    <div class="glass card" data-a="pop:1.5:0.8" style="padding:3cqw 3.8cqw;">
+      <div class="bars" id="barC">
+        <div class="bar-wrap">
+          <div class="bval">$49.47B</div>
+          <div class="bar" id="barExp" style="background:linear-gradient(180deg,#10b981,#065f46);height:0;"></div>
+          <div class="blab">Exports</div>
+        </div>
+        <div class="bar-wrap">
+          <div class="bval">$89.35B</div>
+          <div class="bar" id="barImp" style="background:linear-gradient(180deg,#f59e0b,#b45309);height:0;"></div>
+          <div class="blab">Imports</div>
+        </div>
+      </div>
+      <p class="lab" style="text-align:center;margin-top:1cqw;">Record imports outpaced surging exports</p>
+    </div>
+  </div></section>
+
+  <!-- ===== S3: Why ===== -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot w"></i>WHY IMPORTS SURGED</div>
+    <h2 class="h" data-split="0.35">3 reasons the import bill hit a record</h2>
+    <div class="glass row-chip" data-a="right:1.0:0.6">
+      <span class="ic">
+        <svg viewBox="0 0 24 24" stroke-width="2.2">
+          <ellipse cx="12" cy="12" rx="3.5" ry="8"/>
+          <path d="M12 4a8 8 0 0 1 0 16M12 4a8 8 0 0 0 0 16"/>
+          <path d="M4 8h16M4 16h16"/>
+        </svg>
+      </span>
+      <span class="t">Crude oil &amp; energy — India's top import</span>
+    </div>
+    <div class="glass row-chip" data-a="right:1.5:0.6">
+      <span class="ic">
+        <svg viewBox="0 0 24 24" stroke-width="2.2">
+          <circle cx="12" cy="12" r="8"/>
+          <path d="M12 7v5l3 3"/>
+          <path d="M9 3.5A9 9 0 0 0 3 12"/>
+        </svg>
+      </span>
+      <span class="t">Gold &amp; silver — Diwali &amp; wedding-season buying</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.0:0.6">
+      <span class="ic">
+        <svg viewBox="0 0 24 24" stroke-width="2.2">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+          <path d="M12 12v3M9 15h6"/>
+        </svg>
+      </span>
+      <span class="t">Capital goods &amp; electronics — factory expansion</span>
+    </div>
+  </div></section>
+
+  <!-- ===== S4: What it means for YOU ===== -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>YOUR MONEY</div>
+    <h2 class="h" data-split="0.35">What this means for your wallet</h2>
+    <div class="glass card" data-a="pop:1.0:0.7" style="flex-direction:row;align-items:center;gap:3cqw;">
+      <span class="ic" style="width:9.6cqw;height:9.6cqw;">
+        <svg viewBox="0 0 24 24" stroke-width="2.2">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/>
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M2 12h4M18 12h4"/>
+        </svg>
+      </span>
+      <div style="min-width:0;flex:1;">
+        <p class="lab">Rupee under pressure</p>
+        <p class="val mid">Wider gap = more $ demand → ₹ weakens</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:1.55:0.7" style="flex-direction:row;align-items:center;gap:3cqw;">
+      <span class="ic" style="width:9.6cqw;height:9.6cqw;">
+        <svg viewBox="0 0 24 24" stroke-width="2.2">
+          <path d="M3 20l5-8 4 4 4-6 5 10"/>
+          <path d="M3 4h18v16H3z" fill="none"/>
+        </svg>
+      </span>
+      <div style="min-width:0;flex:1;">
+        <p class="lab">Imported inflation</p>
+        <p class="val mid">Costlier oil, gadgets &amp; imported goods</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.1:0.7" style="flex-direction:row;align-items:center;gap:3cqw;">
+      <span class="ic" style="width:9.6cqw;height:9.6cqw;">
+        <svg viewBox="0 0 24 24" stroke-width="2.2">
+          <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      </span>
+      <div style="min-width:0;flex:1;">
+        <p class="lab">BoP surplus cushions impact</p>
+        <p class="val mid">$66.8B overall surplus — RBI has room</p>
+      </div>
+    </div>
+    <p class="lab" style="text-align:center;color:rgba(255,255,255,0.45);font-size:3.1cqw;">For awareness only · DYOR</p>
+  </div></section>
+
+  <!-- ===== S5: Watch for ===== -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WATCH THESE</div>
+    <h2 class="h" data-split="0.35">3 signals to track next</h2>
+    <div class="glass row-chip" data-a="right:1.0:0.6">
+      <span class="ic">
+        <svg viewBox="0 0 24 24" stroke-width="2.2">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <path d="M16 2v4M8 2v4M3 10h18"/>
+        </svg>
+      </span>
+      <span class="t">RBI Dec 4 policy — rate cut or hold?</span>
+    </div>
+    <div class="glass row-chip" data-a="right:1.5:0.6">
+      <span class="ic">
+        <svg viewBox="0 0 24 24" stroke-width="2.2">
+          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+        </svg>
+      </span>
+      <span class="t">Crude oil — IEA expects surplus in Q4 2026</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.0:0.6">
+      <span class="ic">
+        <svg viewBox="0 0 24 24" stroke-width="2.2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </span>
+      <span class="t">India-US trade deal — first tranche by FY27-end</span>
+    </div>
+    <div class="glass card" data-a="pop:2.7:0.7" style="padding:3cqw 4cqw;">
+      <p class="lab">Forex reserves (Nov 6 week)</p>
+      <p class="val mid">$719.5B — rose $2.5B, strong buffer</p>
+    </div>
+  </div></section>
+
+  <!-- ===== S6: Payoff + CTA (isLast — NO exit fade) ===== -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>KEY TAKEAWAY</div>
+    <h2 class="h" data-split="0.35">Exports soar, but the gap widens</h2>
+    <div class="glass card" data-a="pop:0.9:0.7" style="gap:3.4cqw;">
+      <div class="tick" data-a="right:1.3:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Exports +45% to $49.47B — ₹4.1 lakh crore</span>
+      </div>
+      <div class="tick" data-a="right:1.85:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Imports hit record $89.35B — +16.5%</span>
+      </div>
+      <div class="tick" data-a="right:2.4:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Deficit: $39.88B — 12-month high for 2026</span>
+      </div>
+    </div>
+    <p class="cta-q" data-a="pop:3.0:0.6">Will the rupee slip further? Drop your view below!</p>
+    <div class="follow-card" data-a="pop:3.5:0.6">
+      <div class="ftitle">Follow for daily finance updates</div>
+      <div class="fhandle">@finpulsemarkets</div>
+    </div>
+  </div></section>
+
+  <div class="handle">@finpulsemarkets</div>
+  <div class="safe"></div>
+</div><!-- .frame -->
+
+<script>
+// =====================================================================
+//  MASTER TIMELINE
+// =====================================================================
+var DURS   = [7, 7, 7.5, 7.5, 7, 9];   // 45 s total
+window.COVER_T = 1.5;                    // cover-frame time
+var OUT    = 0.4;
+var STARTS = []; (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+window.TOTAL = DURS.reduce(function(a,b){ return a+b; }, 0);  // 45
+
+// =====================================================================
+//  UTILITIES
+// =====================================================================
+var clamp = function(x,a,b){ a=a===undefined?0:a; b=b===undefined?1:b; return Math.min(b,Math.max(a,x)); };
+var E = {
+  outCubic: function(x){ return 1-Math.pow(1-x,3); },
+  outBack:  function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+  inCubic:  function(x){ return x*x*x; },
+  inOut:    function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+};
+var $=function(id){ return document.getElementById(id); };
+
+// =====================================================================
+//  SPLIT HEADLINES
+// =====================================================================
+document.querySelectorAll('.h[data-split]').forEach(function(h){
+  var base=parseFloat(h.getAttribute('data-split'));
+  var words=h.textContent.trim().split(/\s+/);
+  h.textContent='';
+  words.forEach(function(w,i){
+    var s=document.createElement('span'); s.className='ww'; s.textContent=w;
+    s._a={k:'up',s:base+i*0.08,d:0.6};
+    h.appendChild(s);
+    if(i<words.length-1) h.appendChild(document.createTextNode(' '));
+  });
+});
+
+// =====================================================================
+//  GATHER ANIMATED ELEMENTS PER SCENE
+// =====================================================================
+var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+scenes.forEach(function(sc){
+  sc._els=[];
+  sc.querySelectorAll('[data-a]').forEach(function(el){
+    var p=el.getAttribute('data-a').split(':');
+    el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+    sc._els.push(el);
+  });
+  sc.querySelectorAll('.h .ww').forEach(function(el){ sc._els.push(el); });
+  sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+});
+
+// =====================================================================
+//  APPLY ANIMATION
+// =====================================================================
+function applyAnim(el,t){
+  var a=el._a, p=clamp((t-a.s)/a.d), e=E.outCubic(p), b=E.outBack(p);
+  var o=clamp(p*2), x=0, y=0, s=1;
+  if(a.k==='pop'){ s=0.86+0.14*b; y=(1-e)*6; }
+  else if(a.k==='up'){ y=(1-e)*7; }
+  else if(a.k==='drop'){ y=-(1-e)*6; s=0.94+0.06*b; }
+  else if(a.k==='left'){ x=-(1-e)*18; }
+  else if(a.k==='right'){ x=(1-e)*18; }
+  el.style.opacity=o;
+  el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+}
+
+// =====================================================================
+//  BACKGROUND BLOBS
+// =====================================================================
+function blob(el,color,size,x,y){
+  el.style.width=size+'cqw'; el.style.height=size+'cqw';
+  el.style.left=x+'cqw'; el.style.top=y+'cqw';
+  el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+}
+blob($('b1'),'rgba(16,185,129,0.9)',  128,-38,-28);
+blob($('b2'),'rgba(5,150,105,0.82)',   88, 56, 72);
+blob($('b3'),'rgba(234,179,8,0.78)',  108,-22,118);
+blob($('b4'),'rgba(20,184,166,0.72)',  68, 54,105);
+function orbs(T){
+  $('b1').style.transform='translate('+(9*Math.sin(T*0.45)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.38)).toFixed(2)+'cqw)';
+  $('b2').style.transform='translate('+(-10*Math.sin(T*0.36+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.41)).toFixed(2)+'cqw)';
+  $('b3').style.transform='translate('+(10*Math.cos(T*0.33)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.4+2)).toFixed(2)+'cqw)';
+  $('b4').style.transform='translate('+(-8*Math.cos(T*0.5+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.47)).toFixed(2)+'cqw)';
+}
+
+// =====================================================================
+//  SCENE FUNCTIONS
+// =====================================================================
+
+// S1: Hook B — contradiction reveal
+function s1(t){
+  // Alert stamp snap-in (scale 1.9→1 with outBack)
+  var sa=Math.max(0, E.outBack(clamp((t-1.0)/0.4)));
+  var alertEl=$('alertStamp');
+  alertEl.style.transform='scale('+(sa*1.0).toFixed(3)+')';
+  alertEl.style.opacity=clamp((t-0.9)/0.3).toFixed(3);
+
+  // Deficit counter: $0.00B → $39.88B
+  var cv=39.88*E.outCubic(clamp((t-2.0)/1.3));
+  $('defCtr').textContent='$'+cv.toFixed(2)+'B';
+}
+
+// S2: Bar chart animation
+function s2(t){
+  var bp=E.outCubic(clamp((t-1.5)/1.1));
+  var maxH=20; // cqw
+  $('barExp').style.height=(maxH*0.554*bp).toFixed(2)+'cqw';  // 49.47/89.35 = 0.554
+  $('barImp').style.height=(maxH*bp).toFixed(2)+'cqw';
+}
+
+// S3-S5: driven entirely by data-a applyAnim
+function s3(t){}
+function s4(t){}
+function s5(t){}
+
+// S6: checkmark draw
+var cks=Array.prototype.slice.call(document.querySelectorAll('.ck'));
+cks.forEach(function(c){ c.style.strokeDasharray='1'; c.style.strokeDashoffset='1'; });
+function s6(t){
+  cks.forEach(function(c,i){
+    c.style.strokeDashoffset=(1-E.outCubic(clamp((t-(1.5+i*0.55))/0.38))).toFixed(3);
+  });
+}
+
+var FX=[s1,s2,s3,s4,s5,s6];
+
+// =====================================================================
+//  AUDIO ENGINE (Web Audio API, synthetic SFX — fires lazily after tap)
+// =====================================================================
+var CTX=null;
+var SFX_FIRED={};
+function initAudio(){
+  if(!CTX) CTX=new(window.AudioContext||window.webkitAudioContext)();
+}
+function tone(freq,dur,type,vol,ramp){
+  if(!CTX) return;
+  var o=CTX.createOscillator(), g=CTX.createGain();
+  o.connect(g); g.connect(CTX.destination);
+  o.type=type||'sine'; o.frequency.value=freq||440;
+  g.gain.setValueAtTime(vol||0.3, CTX.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, CTX.currentTime+(ramp||dur));
+  o.start(); o.stop(CTX.currentTime+dur);
+}
+// All 10 required SFX names
+var SFX_DATA={
+  whoosh:        function(){ tone(180,0.18,'sawtooth',0.4); tone(90,0.16,'sine',0.28); },
+  tick:          function(){ tone(1300,0.04,'square',0.22); },
+  beep:          function(){ tone(880,0.10,'sine',0.28); },
+  final_beep:    function(){ tone(1047,0.18,'sine',0.32); tone(1319,0.18,'sine',0.28); },
+  reveal_whoosh: function(){ tone(220,0.22,'triangle',0.38); tone(440,0.18,'sine',0.2); },
+  impact:        function(){ tone(55,0.12,'square',0.5); tone(80,0.10,'sawtooth',0.38); },
+  swoosh:        function(){ tone(380,0.16,'sawtooth',0.32); },
+  glass_pop:     function(){ tone(1800,0.06,'sine',0.28); tone(900,0.06,'sine',0.18); },
+  ding:          function(){ tone(1047,0.3,'sine',0.28); },
+  pulse:         function(){ tone(440,0.08,'sine',0.22); }
+};
+function cue(T,name,vol){
+  var key=T.toFixed(3)+'_'+name;
+  if(SFX_FIRED[key]) return;
+  SFX_FIRED[key]=true;
+  if(SFX_DATA[name]) SFX_DATA[name]();
+}
+document.addEventListener('click',initAudio,{once:true});
+
+// =====================================================================
+//  MASTER DRIVER: setT(seconds)
+// =====================================================================
+window.setT=function(T){
+  orbs(T);
+
+  // Find active scene
+  var i=0;
+  for(var k=0; k<STARTS.length; k++) if(T>=STARTS[k]-1e-6) i=k;
+  var t=T-STARTS[i], d=DURS[i];
+  var isLast=(i===scenes.length-1);
+
+  scenes.forEach(function(sc,k){ sc.classList.toggle('on',k===i); });
+  var sc=scenes[i];
+  sc._els.forEach(function(el){ applyAnim(el,t); });
+  FX[i](t);
+
+  // Glass shimmer
+  sc._glass.forEach(function(g,gi){
+    var q=((t*0.45+gi*0.27)%1);
+    g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+  });
+
+  // Sound cues (absolute timestamps)
+  if(i===0){
+    cue(STARTS[0]+0.3, 'whoosh',    0.4);
+    cue(STARTS[0]+1.3, 'impact',    0.5);
+    cue(STARTS[0]+1.55,'swoosh',    0.4);
+    cue(STARTS[0]+1.8, 'swoosh',    0.4);
+    cue(STARTS[0]+3.6, 'reveal_whoosh', 0.5);
+  } else if(i===1){
+    cue(STARTS[1]+0.3, 'whoosh',  0.4);
+    cue(STARTS[1]+1.5, 'beep',    0.3);
+  } else if(i===2){
+    cue(STARTS[2]+1.0, 'tick',    0.3);
+    cue(STARTS[2]+1.5, 'tick',    0.3);
+    cue(STARTS[2]+2.0, 'tick',    0.3);
+  } else if(i===3){
+    cue(STARTS[3]+1.0, 'glass_pop', 0.3);
+    cue(STARTS[3]+1.55,'glass_pop', 0.3);
+    cue(STARTS[3]+2.1, 'glass_pop', 0.3);
+  } else if(i===4){
+    cue(STARTS[4]+1.0, 'tick',    0.3);
+    cue(STARTS[4]+1.5, 'tick',    0.3);
+    cue(STARTS[4]+2.0, 'tick',    0.3);
+    cue(STARTS[4]+2.7, 'pulse',   0.3);
+  } else if(i===5){
+    cue(STARTS[5]+1.3, 'ding',       0.4);
+    cue(STARTS[5]+1.85,'ding',       0.4);
+    cue(STARTS[5]+2.4, 'ding',       0.4);
+    cue(STARTS[5]+3.5, 'final_beep', 0.5);
+  }
+
+  // Exit fade — SKIP on last scene (isLast guard)
+  var inner=sc.querySelector('.inner');
+  if(!isLast){
+    var o=clamp((t-(d-OUT))/OUT);
+    inner.style.opacity=(1-E.inCubic(o)).toFixed(4);
+    inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+  } else {
+    inner.style.opacity='1';
+    inner.style.transform='none';
+  }
+
+  // Tag-pill gentle float
+  var pill=sc.querySelector('.tag-pill');
+  if(pill){
+    var pBase=pill.style.transform||'';
+    // Don't stack transforms from applyAnim - use separate float offset
+    // We track the applyAnim result separately - pill float is cosmetic only
+    // Add float only after anim is done (t > pill._a.s + pill._a.d)
+    if(pill._a && t > pill._a.s + pill._a.d){
+      var floatY=(Math.sin(T*2)*0.5).toFixed(3);
+      pill.style.transform='translate(0cqw,'+(parseFloat(pill.style.transform.match(/translateY\(([^c]+)cqw/)?.[1]||0)).toFixed(3)+'cqw)';
+    }
+  }
+};
+
+setT(0.5);
+</script>
+</body>
+</html>
