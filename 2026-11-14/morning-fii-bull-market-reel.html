@@ -504,7 +504,7 @@
 
     // Middle card counter: 0 → 60698
     var cv=Math.round(60698*E.outCubic(clamp((t-1.0)/1.4)));
-    $('v2').textContent='&#x20B9;'+cv.toLocaleString('en-IN')+' Cr';
+    $('v2').innerHTML='₹'+cv.toLocaleString('en-IN')+' Cr';
 
     // Countdown 5→1
     var cdFrac=clamp((t-1.4)/1.1);
