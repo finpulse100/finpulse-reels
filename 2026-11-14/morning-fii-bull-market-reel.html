@@ -1,0 +1,616 @@
+<!doctype html>
+<!--
+  FIN PULSE · 2026-11-14 Morning · FII Bull Market Return
+  Hook: "FIIs dumped ₹3.82 lakh crore. Now they want it back."
+  Colour: Midnight Gold (#0d0900) + amber/orange/red-orange/brown blobs
+  Music: apalonbeats-soft-background-music-576280.mp3
+  DURS: [7, 7, 7.5, 7.5, 7, 9] = 45s
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>FII Bull Market — Fin Pulse</title>
+<style>
+  :root {
+    --bg: #0d0900;
+    --ink: #120800;
+    --ink-dim: rgba(18, 8, 0, 0.82);
+    --chip-bg: #261500;
+    --chip-ink: #ffd470;
+    --accent: #f59e0b;
+    --accent2: #c2410c;
+    --red: #ef4444;
+    --red2: #dc2626;
+    --green: #16a34a;
+    --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  .frame { position: relative; width: 1080px; height: 1920px; container-type: inline-size; overflow: hidden; background: var(--bg); font-family: var(--font); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .blob { position: absolute; border-radius: 50%; will-change: transform; }
+  .scene { position: absolute; inset: 0; display: none; }
+  .scene.on { display: block; }
+  .inner { position: absolute; inset: 0; padding: 17cqw 11cqw 30cqw 6cqw; display: flex; flex-direction: column; justify-content: center; gap: 3.6cqw; min-width: 0; }
+  .safe { display: none; position: absolute; inset: 17cqw 11cqw 30cqw 6cqw; border: 2px dashed rgba(255,255,255,0.8); z-index: 9; pointer-events: none; }
+  body.dbg .safe { display: block; }
+
+  /* Handle */
+  .handle {
+    position: absolute; bottom: 4cqw; right: 11cqw;
+    font-size: 3.2cqw; font-weight: 800; color: rgba(255,255,255,0.72);
+    letter-spacing: 0.01em; pointer-events: none; z-index: 10;
+  }
+
+  /* Tag pill */
+  .tag-pill {
+    position: relative; align-self: center;
+    display: inline-flex; align-items: center; justify-content: center; gap: 2.6cqw;
+    padding: 2.4cqw 6.4cqw; border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.80), rgba(255,255,255,0.50));
+    backdrop-filter: blur(40px) saturate(100%);
+    -webkit-backdrop-filter: blur(40px) saturate(100%);
+    border: 1.5px solid rgba(255,255,255,0.90);
+    box-shadow: 0 2cqw 6cqw rgba(0,0,0,0.45), inset 0 0.5cqw 1cqw rgba(255,255,255,0.95), inset 0 -0.7cqw 1.4cqw rgba(18,8,0,0.14);
+    color: var(--ink); font-size: 4.6cqw; font-weight: 800; line-height: 1.2; white-space: nowrap; flex: none;
+  }
+  .tag-pill::before { content: ""; position: absolute; inset: 1cqw; border-radius: 999px; border: 1px solid rgba(255,255,255,0.75); pointer-events: none; }
+  .dot { position: relative; width: 2.6cqw; height: 2.6cqw; border-radius: 50%; background: var(--accent); }
+  .dot.red { background: var(--red); }
+  .dot.green { background: var(--green); }
+
+  .h {
+    margin: 0; text-align: center; color: #fff; font-size: 8.8cqw; font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.1; text-wrap: balance; flex: none;
+    text-shadow: 0 0.6cqw 2.4cqw rgba(0,0,0,0.5);
+  }
+  .h .w { display: inline-block; }
+
+  /* Glass */
+  .frame .glass {
+    position: relative; overflow: hidden;
+    background: rgba(255,255,255,0.88);
+    border: 3px solid rgba(255,255,255,0.95);
+    border-radius: 4cqw;
+    box-shadow: 0 2cqw 7cqw rgba(0,0,0,0.5);
+  }
+  .frame .glass.dim { background: rgba(255,255,255,0.40); }
+  .glass::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.5) 50%, transparent 62%);
+    transform: translateX(var(--sw, -130%));
+  }
+
+  .card { padding: 4.2cqw; display: flex; flex-direction: column; gap: 2.4cqw; min-width: 0; flex: none; }
+  .lab { margin: 0; font-size: 3.6cqw; font-weight: 700; line-height: 1.2; color: var(--ink-dim); }
+  .val { margin: 0; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; color: var(--ink); }
+  .big { font-size: 7.4cqw; }
+  .mid { font-size: 5.6cqw; }
+  .sub { margin: 0; font-size: 3.6cqw; font-weight: 700; line-height: 1.2; color: var(--ink-dim); }
+
+  .ic { flex: none; width: 9cqw; height: 9cqw; border-radius: 50%; background: var(--chip-bg); display: grid; place-items: center; }
+  .ic svg { width: 56%; height: 56%; stroke: var(--chip-ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ic svg .f { fill: var(--chip-ink); stroke: none; }
+
+  .row-chip { display: flex; align-items: center; gap: 3cqw; padding: 2.4cqw 3.6cqw; flex: none; }
+  .row-chip .ic { width: 8.6cqw; height: 8.6cqw; }
+  .row-chip span.t { font-size: 4.3cqw; font-weight: 800; line-height: 1.15; color: var(--ink); }
+
+  .arrow { align-self: center; width: 9cqw; height: 9cqw; border-radius: 50%; background: var(--chip-bg); display: grid; place-items: center; flex: none; }
+  .arrow svg { width: 60%; height: 60%; stroke: var(--chip-ink); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3cqw; flex: none; }
+
+  .tick { display: flex; align-items: center; gap: 3cqw; }
+  .tick span.t { font-size: 4.4cqw; font-weight: 800; line-height: 1.15; color: var(--ink); }
+  .tick .ic { width: 8cqw; height: 8cqw; }
+
+  /* Alert stamp */
+  .alert-stamp {
+    align-self: center;
+    display: inline-flex; align-items: center; gap: 2.8cqw;
+    background: var(--red); color: #fff;
+    font-size: 6.4cqw; font-weight: 900; letter-spacing: 0.08em;
+    padding: 2.2cqw 6cqw; border-radius: 1.6cqw;
+    box-shadow: 0 0 6cqw rgba(239,68,68,0.9), 0 2cqw 6cqw rgba(0,0,0,0.5);
+    flex: none; transform-origin: center;
+  }
+
+  /* Stat cards row */
+  .stat-row { display: flex; gap: 2.6cqw; flex: none; }
+  .stat-row .glass.card { flex: 1; padding: 3cqw 2.4cqw; gap: 1.4cqw; align-items: center; text-align: center; }
+  .stat-row .lab { font-size: 3.0cqw; }
+  .stat-row .val { font-size: 4.6cqw; }
+
+  /* Countdown + digit reveal row */
+  .cd-row { display: flex; align-items: center; justify-content: space-between; gap: 3cqw; flex: none; }
+  .dval-wrap { flex: 1; }
+  .dval-wrap .dlab { font-size: 3.2cqw; font-weight: 700; color: rgba(255,255,255,0.72); margin: 0 0 0.6cqw; }
+  .dval-wrap .dval { font-size: 9.4cqw; font-weight: 900; color: #fff; letter-spacing: -0.03em; line-height: 1; text-shadow: 0 0 4cqw rgba(245,158,11,0.9); }
+
+  .answer-line { text-align: center; font-size: 4.2cqw; font-weight: 700; color: rgba(255,255,255,0.85); flex: none; }
+
+  /* per-scene */
+  #s1 .inner { gap: 3.6cqw; }
+  #s2 .inner { gap: 4.2cqw; }
+  #s3 .inner { gap: 3cqw; } #s3 .row-chip { padding: 2cqw 3.6cqw; }
+  #s4 .inner { gap: 3cqw; }
+  #s5 .inner { gap: 3.8cqw; }
+  #s6 .inner { gap: 5cqw; } #s6 .card.tk { padding: 5cqw 4.4cqw; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- S1 · Hook A — ALERT + stat cards + countdown + digit reveal -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot red"></i>FII ALERT</div>
+    <div class="alert-stamp" id="alertStamp">
+      <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      MARKET ALERT
+    </div>
+    <div class="stat-row">
+      <div class="glass card" data-a="up:0.7:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6" stroke-width="2.2"/><polyline points="17 18 23 18 23 12" stroke-width="2.2"/></svg></span>
+        <p class="lab">FII SOLD 2026</p>
+        <p class="val" style="color:var(--red2)">₹3.82L Cr</p>
+      </div>
+      <div class="glass card" data-a="up:0.9:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke-width="2.2"/><polyline points="17 6 23 6 23 12" stroke-width="2.2"/></svg></span>
+        <p class="lab">BOUGHT 7 DAYS</p>
+        <p class="val" id="v2" style="color:var(--green)">₹0 Cr</p>
+      </div>
+      <div class="glass card" data-a="up:1.1:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="13" width="4" height="8" rx="1"/><rect x="10" y="9" width="4" height="12" rx="1"/><rect x="18" y="5" width="4" height="16" rx="1"/></svg></span>
+        <p class="lab">NIFTY PROFIT</p>
+        <p class="val" style="color:var(--green)">+22.3%</p>
+      </div>
+    </div>
+    <div class="cd-row">
+      <svg id="cdSvg" viewBox="0 0 100 100" style="width:19cqw;height:19cqw;flex:none">
+        <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="7"/>
+        <circle id="cdArc" cx="50" cy="50" r="42" fill="none" stroke="#f59e0b" stroke-width="7"
+          stroke-linecap="round" transform="rotate(-90 50 50)"
+          pathLength="1" stroke-dasharray="1" stroke-dashoffset="0"/>
+        <text id="cdNum" x="50" y="57" text-anchor="middle" font-size="34" font-weight="900" fill="#fff" font-family="Inter,sans-serif">5</text>
+      </svg>
+      <div class="dval-wrap">
+        <p class="dlab">BIGGEST FII RUSH SINCE 2021</p>
+        <p class="dval" id="dval">&#x20B9;&#x2013;</p>
+      </div>
+    </div>
+    <p class="answer-line" id="ansLine" style="opacity:0">Who is buying India back? &#x2193;</p>
+  </div></section>
+
+  <!-- S2 · Reveal -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE REVERSAL</div>
+    <h2 class="h" data-split="0.35">FIIs reverse a year of selling</h2>
+    <div class="glass card" data-a="pop:0.9:0.8" style="gap:2.6cqw">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:3cqw">
+        <div style="min-width:0">
+          <p class="lab">NIFTY 50 · NSE</p>
+          <p class="val big" style="color:var(--accent2)">&#x20B9;60,698 Cr</p>
+          <p class="sub">Net bought in 7 sessions</p>
+        </div>
+        <svg viewBox="0 0 70 48" style="width:26cqw;flex:none">
+          <defs>
+            <linearGradient id="gUp" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#f59e0b" stop-opacity="0"/>
+              <stop offset="1" stop-color="#f59e0b" stop-opacity="0.6"/>
+            </linearGradient>
+            <clipPath id="cl2"><rect id="clr2" x="0" y="0" width="0" height="48"/></clipPath>
+          </defs>
+          <!-- sell bars -->
+          <rect id="bar1" x="4"  y="10" width="7" height="27" fill="rgba(220,38,38,0.35)" rx="1.5" opacity="0"/>
+          <rect id="bar2" x="14" y="14" width="7" height="23" fill="rgba(220,38,38,0.35)" rx="1.5" opacity="0"/>
+          <rect id="bar3" x="24" y="8"  width="7" height="29" fill="rgba(220,38,38,0.35)" rx="1.5" opacity="0"/>
+          <rect id="bar4" x="34" y="12" width="7" height="25" fill="rgba(220,38,38,0.35)" rx="1.5" opacity="0"/>
+          <!-- buy bar in gold rising -->
+          <rect id="barBuy" x="52" y="38" width="11" height="0" fill="url(#gUp)" rx="2"/>
+          <rect id="barBuyFg" x="52" y="38" width="11" height="2" fill="#f59e0b" rx="1.5"/>
+          <!-- axis -->
+          <line x1="2" y1="38" x2="66" y2="38" stroke="rgba(18,8,0,0.25)" stroke-width="0.5"/>
+          <text x="22" y="45" font-size="4.5" text-anchor="middle" fill="rgba(18,8,0,0.5)">Jan–Oct (net sell)</text>
+          <text x="58" y="45" font-size="4.5" text-anchor="middle" fill="var(--accent2)" font-weight="700">Nov</text>
+        </svg>
+      </div>
+      <div style="display:flex;justify-content:space-between;gap:2cqw">
+        <div>
+          <p class="lab">TOTAL SOLD IN 2026</p>
+          <p class="val mid" style="color:var(--red2)">&#x20B9;3.82 L Cr</p>
+        </div>
+        <div style="text-align:right">
+          <p class="lab">FWD P/E NOW</p>
+          <p class="val mid">18x <span style="font-size:3.4cqw;color:var(--ink-dim)">vs 20.8x avg</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.8:0.7" style="gap:1.2cqw;padding:3cqw 4cqw">
+      <p class="lab">Last time FIIs bought this aggressively in 7 days:</p>
+      <p class="val mid" style="color:var(--accent)">January 2021 &#x2192; Nifty rallied 42%</p>
+    </div>
+  </div></section>
+
+  <!-- S3 · Why -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHY NOW?</div>
+    <h2 class="h" data-split="0.35">Three things that pulled FIIs back</h2>
+    <div class="glass row-chip" data-a="right:0.9:0.6">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="4" ry="10" stroke-width="1.6"/><path d="M4 8h16M4 16h16" stroke-width="1.6"/><circle cx="12" cy="12" r="10" stroke-width="1.6"/></svg>
+      </span>
+      <span class="t">Crude oil fell — India import bill cheaper</span>
+    </div>
+    <div class="glass row-chip" data-a="right:1.3:0.6">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><rect x="2" y="13" width="4" height="8" rx="1"/><rect x="10" y="9" width="4" height="12" rx="1"/><rect x="18" y="5" width="4" height="16" rx="1"/></svg>
+      </span>
+      <span class="t">Nifty P/E at 18x — 15% below 5-yr avg</span>
+    </div>
+    <div class="glass row-chip" data-a="right:1.7:0.6">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke-width="2.2"/><polyline points="17 6 23 6 23 12" stroke-width="2.2"/></svg>
+      </span>
+      <span class="t">Q2 earnings: Nifty profit up 22.3% YoY</span>
+    </div>
+    <div class="glass card" data-a="pop:2.5:0.7" style="padding:3cqw 4cqw;gap:1.2cqw">
+      <p class="lab">Market expert view (Capitalmind, Nov 2026)</p>
+      <p class="val mid">"Possible regime shift — too early to call sustained"</p>
+    </div>
+  </div></section>
+
+  <!-- S4 · What it means for you -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHAT THIS MEANS</div>
+    <h2 class="h" data-split="0.35">What it means for your money</h2>
+    <div class="glass card" data-a="pop:0.9:0.7" style="padding:3.2cqw 4cqw;gap:1.4cqw">
+      <div style="display:flex;align-items:center;gap:2.8cqw">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+        <div><p class="lab">YOUR SIP &amp; DEMAT</p><p class="val mid">Buying cheaper stocks — P/E below average</p></div>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:1.5:0.7" style="padding:3.2cqw 4cqw;gap:1.4cqw">
+      <div style="display:flex;align-items:center;gap:2.8cqw">
+        <span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20M6 14h2M10 14h4"/></svg></span>
+        <div><p class="lab">LARGE-CAP MUTUAL FUNDS</p><p class="val mid">FIIs buying the same stocks you hold</p></div>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.1:0.7" style="padding:3.2cqw 4cqw;gap:1.4cqw">
+      <div style="display:flex;align-items:center;gap:2.8cqw">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l1.5 4.5H18l-3.75 2.73L15.75 14 12 11.27 8.25 14l1.5-4.77L6 6.5h4.5L12 2z"/></svg></span>
+        <div><p class="lab">SMALL &amp; MID CAPS</p><p class="val mid">Still above avg valuations — be selective</p></div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:3.2cqw;color:rgba(255,255,255,0.68);font-weight:600;flex:none">Fin Pulse · Educational content only</p>
+  </div></section>
+
+  <!-- S5 · Watch for -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WATCH FOR</div>
+    <h2 class="h" data-split="0.35">What could change this picture</h2>
+    <div class="glass card" data-a="pop:0.9:0.8" style="padding:3.4cqw 4.2cqw;gap:2.4cqw">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:2cqw">
+        <div>
+          <p class="lab">RBI MEETING</p>
+          <p class="val mid">Dec 2 – 4, 2026</p>
+          <p class="sub">Rate decision. CPI at 6.09% — above RBI limit</p>
+        </div>
+        <svg viewBox="0 0 60 60" style="width:14cqw;height:14cqw;flex:none">
+          <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(18,8,0,0.15)" stroke-width="6"/>
+          <circle id="gaugeFill" cx="30" cy="30" r="24" fill="none" stroke="var(--red)" stroke-width="6"
+            transform="rotate(-90 30 30)" pathLength="1" stroke-dasharray="0.55 0.45" opacity="0"/>
+          <text x="30" y="29" text-anchor="middle" font-size="9" font-weight="900" fill="var(--red)" font-family="Inter,sans-serif">HIKE</text>
+          <text x="30" y="40" text-anchor="middle" font-size="6" font-weight="700" fill="rgba(18,8,0,0.6)" font-family="Inter,sans-serif">RISK</text>
+        </svg>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="glass card" data-a="pop:2.4:0.6" style="gap:1.4cqw;padding:3cqw 3.4cqw">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span>
+        <p class="val" style="font-size:4.4cqw">Global rates</p>
+        <p class="sub">US Fed policy · Dec 2026</p>
+      </div>
+      <div class="glass card" data-a="pop:2.7:0.6" style="gap:1.4cqw;padding:3cqw 3.4cqw">
+        <span class="ic"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+        <p class="val" style="font-size:4.4cqw">FII flow data</p>
+        <p class="sub">Watch weekly buys</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- S6 · Payoff + CTA — NO exit fade (isLast guard) -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot green"></i>KEY TAKEAWAY</div>
+    <h2 class="h" data-split="0.35">The case for optimism — cautiously</h2>
+    <div class="glass card tk" data-a="pop:0.9:0.7" style="gap:3.4cqw">
+      <div class="tick" data-a="right:1.2:0.5"><span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span><span class="t">FIIs bought &#x20B9;60,698 Cr in 7 days</span></div>
+      <div class="tick" data-a="right:1.65:0.5"><span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span><span class="t">Nifty profits +22.3% — earnings strong</span></div>
+      <div class="tick" data-a="right:2.1:0.5"><span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span><span class="t">P/E at 18x — below 5-yr average</span></div>
+    </div>
+    <div class="glass card" data-a="pop:2.9:0.7" style="padding:3.6cqw 4cqw;gap:1.6cqw;text-align:center;align-items:center">
+      <p class="val mid" style="text-align:center">Is India's bull market back?</p>
+      <p class="sub" style="text-align:center;font-size:3.8cqw">Drop your view in the comments &#x2193;</p>
+    </div>
+    <div class="glass card" data-a="pop:3.6:0.7" style="padding:3.4cqw 4.4cqw;text-align:center;align-items:center;gap:1.2cqw">
+      <p class="val" style="font-size:4.8cqw;text-align:center">Follow <span style="color:var(--accent2)">@finpulsemarkets</span></p>
+      <p class="sub" style="text-align:center">Daily market updates · share with an investor friend</p>
+    </div>
+  </div></section>
+
+  <div class="safe"></div>
+</div>
+
+<script>
+  var DURS = [7, 7, 7.5, 7.5, 7, 9];
+  window.COVER_T = 2.0;
+  var OUT = 0.4;
+  var STARTS = []; (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+  window.TOTAL = DURS.reduce(function(a,b){ return a+b; }, 0);
+
+  var clamp = function(x,a,b){ a=a===undefined?0:a; b=b===undefined?1:b; return Math.min(b,Math.max(a,x)); };
+  var E = {
+    outCubic: function(x){ return 1-Math.pow(1-x,3); },
+    outBack:  function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+    inCubic:  function(x){ return x*x*x; },
+    inOut:    function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+  };
+  var $=function(id){ return document.getElementById(id); };
+  var NS='http://www.w3.org/2000/svg';
+
+  // Split headlines
+  document.querySelectorAll('.h[data-split]').forEach(function(h){
+    var base=parseFloat(h.getAttribute('data-split'));
+    var words=h.textContent.trim().split(/\s+/);
+    h.textContent='';
+    words.forEach(function(w,i){
+      var s=document.createElement('span'); s.className='w'; s.textContent=w;
+      s._a={k:'up',s:base+i*0.08,d:0.6};
+      h.appendChild(s);
+      if(i<words.length-1) h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  // Gather animated elements per scene
+  var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function(sc){
+    sc._els=[];
+    sc.querySelectorAll('[data-a]').forEach(function(el){
+      var p=el.getAttribute('data-a').split(':');
+      el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+    sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el, t){
+    var a=el._a, p=clamp((t-a.s)/a.d), e=E.outCubic(p), b=E.outBack(p), o=clamp(p*2), x=0, y=0, s=1;
+    if(a.k==='pop'){ s=0.86+0.14*b; y=(1-e)*6; }
+    else if(a.k==='up'){ y=(1-e)*7; }
+    else if(a.k==='drop'){ y=-(1-e)*6; s=0.94+0.06*b; }
+    else if(a.k==='left'){ x=-(1-e)*18; }
+    else if(a.k==='right'){ x=(1-e)*18; }
+    el.style.opacity=o;
+    el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+  }
+
+  // Blobs — Midnight Gold palette
+  function blob(el, color, size, x, y){
+    el.style.width=size+'cqw'; el.style.height=size+'cqw';
+    el.style.left=x+'cqw'; el.style.top=y+'cqw';
+    el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+  }
+  blob($('b1'),'rgba(245,158,11,0.88)',135,-42,-48);
+  blob($('b2'),'rgba(234,88,12,0.82)',98,55,58);
+  blob($('b3'),'rgba(255,65,20,0.72)',112,-22,112);
+  blob($('b4'),'rgba(115,52,0,0.78)',72,54,108);
+  function orbs(T){
+    $('b1').style.transform='translate('+(9*Math.sin(T*0.42)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.37)).toFixed(2)+'cqw)';
+    $('b2').style.transform='translate('+(-10*Math.sin(T*0.35+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.40)).toFixed(2)+'cqw)';
+    $('b3').style.transform='translate('+(10*Math.cos(T*0.32)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.38+2)).toFixed(2)+'cqw)';
+    $('b4').style.transform='translate('+(-8*Math.cos(T*0.48+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.44)).toFixed(2)+'cqw)';
+  }
+
+  // ---- AUDIO ENGINE ----
+  var audioCtx=null, _cued={}, _sfxArmed=false, _globalT=0, _sceneT0=0;
+  function getACtx(){ if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+
+  // SFX_DATA: 10 keys — web-audio synthesised tones
+  var SFX_DATA = {
+    whoosh: null, tick: null, beep: null, final_beep: null,
+    reveal_whoosh: null, impact: null, swoosh: null, glass_pop: null, ding: null, pulse: null
+  };
+
+  function synthSFX(name, vol){
+    var ctx=getACtx(), now=ctx.currentTime;
+    var g=ctx.createGain(); g.connect(ctx.destination);
+    var v=Math.min(1,Math.max(0, vol||0.4));
+    if(name==='whoosh'||name==='reveal_whoosh'||name==='swoosh'){
+      var osc=ctx.createOscillator(); osc.type='sawtooth'; osc.frequency.setValueAtTime(900,now); osc.frequency.exponentialRampToValueAtTime(200,now+0.22);
+      g.gain.setValueAtTime(v*0.4,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.22);
+      osc.connect(g); osc.start(now); osc.stop(now+0.22);
+    } else if(name==='tick'){
+      var buf=ctx.createBuffer(1,ctx.sampleRate*0.06,ctx.sampleRate);
+      var d=buf.getChannelData(0); for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(d.length*0.3));
+      var src=ctx.createBufferSource(); src.buffer=buf;
+      g.gain.setValueAtTime(v*0.5,now); src.connect(g); src.start(now);
+    } else if(name==='beep'){
+      var osc=ctx.createOscillator(); osc.type='sine'; osc.frequency.value=660;
+      g.gain.setValueAtTime(v*0.4,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.14);
+      osc.connect(g); osc.start(now); osc.stop(now+0.14);
+    } else if(name==='final_beep'){
+      var osc=ctx.createOscillator(); osc.type='sine'; osc.frequency.setValueAtTime(880,now); osc.frequency.setValueAtTime(1100,now+0.12);
+      g.gain.setValueAtTime(v*0.5,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.35);
+      osc.connect(g); osc.start(now); osc.stop(now+0.35);
+    } else if(name==='impact'){
+      var osc=ctx.createOscillator(); osc.type='sawtooth'; osc.frequency.setValueAtTime(130,now); osc.frequency.exponentialRampToValueAtTime(60,now+0.18);
+      g.gain.setValueAtTime(v*0.6,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.18);
+      osc.connect(g); osc.start(now); osc.stop(now+0.18);
+    } else if(name==='glass_pop'){
+      var osc=ctx.createOscillator(); osc.type='sine'; osc.frequency.value=1400;
+      g.gain.setValueAtTime(v*0.35,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.1);
+      osc.connect(g); osc.start(now); osc.stop(now+0.1);
+    } else if(name==='ding'){
+      var osc=ctx.createOscillator(); osc.type='sine'; osc.frequency.value=1047;
+      g.gain.setValueAtTime(v*0.5,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.45);
+      osc.connect(g); osc.start(now); osc.stop(now+0.45);
+    } else if(name==='pulse'){
+      var osc=ctx.createOscillator(); osc.type='sine'; osc.frequency.value=400;
+      g.gain.setValueAtTime(v*0.35,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.2);
+      osc.connect(g); osc.start(now); osc.stop(now+0.2);
+    }
+  }
+
+  document.addEventListener('click',function(){ _sfxArmed=true; getACtx().resume(); },{once:true});
+  document.addEventListener('touchstart',function(){ _sfxArmed=true; getACtx().resume(); },{once:true});
+
+  function cue(relT, name, vol){
+    if(!_sfxArmed) return;
+    var key=name+'@'+_sceneT0.toFixed(1)+':'+relT.toFixed(2);
+    if(_cued[key]) return;
+    if(Math.abs(_globalT-(_sceneT0+relT))<0.09){ _cued[key]=1; synthSFX(name,vol); }
+  }
+
+  // Music
+  var _musicEl=null;
+  function ensureMusic(){
+    if(_musicEl) return;
+    _musicEl=document.createElement('audio');
+    _musicEl.src='../music/apalonbeats-soft-background-music-576280.mp3';
+    _musicEl.loop=true; _musicEl.volume=0.30;
+    document.body.appendChild(_musicEl);
+  }
+  document.addEventListener('click',function(){ ensureMusic(); _musicEl.play().catch(function(){}); },{once:true});
+  document.addEventListener('touchstart',function(){ ensureMusic(); _musicEl.play().catch(function(){}); },{once:true});
+
+  // ---- S1: Hook A ----
+  var DIGIT_STR = '60698';
+  function s1(t){
+    // Alert stamp snap-in: scale 1.9→1 with outBack, slight rotation snap
+    var sa = clamp((t-0.25)/0.5);
+    var sc_a = 0.2 + 1.7*(1-E.outBack(sa)); // goes 1.9→1 (back easing overshoots)
+    // actually use: start at 1.9, end at 1.0
+    var stamp_s = 1.0 + (1.9-1.0)*(1-E.outBack(sa));
+    var rot = (1-clamp((t-0.25)/0.4))*(-10);
+    var sEl=$('alertStamp');
+    sEl.style.transform='scale('+Math.max(0.1,stamp_s).toFixed(3)+') rotate('+rot.toFixed(2)+'deg)';
+    sEl.style.opacity=clamp(t*8);
+    sEl.style.boxShadow='0 0 '+(6+2*Math.sin(t*5)).toFixed(1)+'cqw rgba(239,68,68,0.9),0 2cqw 6cqw rgba(0,0,0,0.5)';
+
+    // Middle card counter: 0 → 60698
+    var cv=Math.round(60698*E.outCubic(clamp((t-1.0)/1.4)));
+    $('v2').textContent='&#x20B9;'+cv.toLocaleString('en-IN')+' Cr';
+
+    // Countdown 5→1
+    var cdFrac=clamp((t-1.4)/1.1);
+    var cd=Math.max(1,5-Math.floor(cdFrac*5));
+    $('cdNum').textContent=cd;
+    var cdClr=cd<=2?'var(--red)':'#f59e0b';
+    $('cdArc').setAttribute('stroke',cdClr);
+    $('cdArc').setAttribute('stroke-dashoffset',(1-cdFrac).toFixed(3));
+
+    // Digit reveal: each digit flips in
+    var revFrac=clamp((t-2.6)/1.8);
+    var revealed=Math.floor(revFrac*DIGIT_STR.length);
+    var partial=(revFrac*DIGIT_STR.length)-revealed;
+    var str='&#x20B9;';
+    for(var i=0;i<DIGIT_STR.length;i++){
+      if(i<revealed){ str+=DIGIT_STR[i]; }
+      else if(i===revealed&&partial>0.05){
+        var POOL='0123456789';
+        str+=POOL[Math.floor(partial*POOL.length)%POOL.length];
+      }
+    }
+    if(revFrac>=0.99) str='&#x20B9;60,698';
+    if(revFrac>0.05) str+=' Cr';
+    $('dval').innerHTML=str||'&#x20B9;&#x2013;';
+
+    // Answer line
+    $('ansLine').style.opacity=clamp((t-4.6)/0.5).toFixed(3);
+
+    cue(0.3,'impact',0.9); cue(1.0,'tick',0.8); cue(2.6,'whoosh',0.75); cue(4.3,'ding',0.85);
+  }
+
+  // ---- S2: Reveal ----
+  function s2(t){
+    ['bar1','bar2','bar3','bar4'].forEach(function(id,i){
+      $(id).style.opacity=E.outCubic(clamp((t-0.8-i*0.14)/0.5));
+    });
+    var buyH=E.outCubic(clamp((t-1.0)/1.0))*28;
+    $('barBuy').setAttribute('y',(38-buyH).toFixed(2));
+    $('barBuy').setAttribute('height',buyH.toFixed(2));
+    $('barBuyFg').setAttribute('y',(38-buyH).toFixed(2));
+    cue(0.9,'swoosh',0.75); cue(2.8,'pop',0.8);
+  }
+
+  // ---- S3: Why ----
+  function s3(t){
+    cue(0.9,'whoosh',0.65); cue(1.3,'whoosh',0.65); cue(1.7,'whoosh',0.65); cue(2.5,'glass_pop',0.75);
+  }
+
+  // ---- S4: Impact ----
+  function s4(t){
+    cue(0.9,'pop',0.7); cue(1.5,'pop',0.7); cue(2.1,'pop',0.7);
+  }
+
+  // ---- S5: Watch ----
+  function s5(t){
+    var gp=E.outCubic(clamp((t-0.9)/1.0));
+    $('gaugeFill').style.opacity=gp;
+    cue(0.9,'beep',0.7); cue(2.4,'beep',0.65);
+  }
+
+  // ---- S6: Payoff (isLast = true, NO exit fade) ----
+  var cks=Array.prototype.slice.call(document.querySelectorAll('.ck'));
+  cks.forEach(function(c){ c.style.strokeDasharray='1'; c.style.strokeDashoffset='1'; });
+  function s6(t){
+    cks.forEach(function(c,i){ c.style.strokeDashoffset=(1-E.outCubic(clamp((t-(1.45+i*0.45))/0.35))).toFixed(4); });
+    cue(1.2,'swoosh',0.75); cue(1.65,'swoosh',0.75); cue(2.1,'swoosh',0.75); cue(3.6,'final_beep',1.0);
+  }
+
+  var FX=[s1,s2,s3,s4,s5,s6];
+
+  window.setT = function(T){
+    _globalT=T; orbs(T);
+    var i=0; for(var k=0;k<STARTS.length;k++) if(T>=STARTS[k]-1e-6) i=k;
+    var t=T-STARTS[i], d=DURS[i];
+    _sceneT0=STARTS[i];
+    scenes.forEach(function(sc,k){ sc.classList.toggle('on',k===i); });
+    var sc=scenes[i];
+    sc._els.forEach(function(el){ applyAnim(el,t); });
+    FX[i](t);
+    sc._glass.forEach(function(g,gi){
+      var q=((t*0.45+gi*0.27)%1);
+      g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+    });
+    var isLast=(i===scenes.length-1);
+    if(!isLast){
+      var o=clamp((t-(d-OUT))/OUT), inner=sc.querySelector('.inner');
+      inner.style.opacity=1-E.inCubic(o);
+      inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+    } else {
+      var inner=sc.querySelector('.inner');
+      inner.style.opacity='1';
+      inner.style.transform='translateY(0)';
+    }
+    var pill=sc.querySelector('.tag-pill');
+    if(pill){
+      var base=pill.style.transform.replace(/\s*translateY\([^)]*\)/,'');
+      pill.style.transform=base+' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';
+    }
+  };
+
+  setT(0.5);
+
+  // Add handle
+  var hdl=document.createElement('div');
+  hdl.className='handle'; hdl.textContent='@finpulsemarkets';
+  $('frame').appendChild(hdl);
+</script>
+</body>
+</html>
