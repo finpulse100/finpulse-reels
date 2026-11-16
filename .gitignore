@@ -1,6 +1,8 @@
 # ffmpeg 2-pass encode temp files
 ffmpeg2pass-*.log
 ffmpeg2pass-*.log.mbtree
+ffpass-*.log
+ffpass-*.log.mbtree
 
 # Raw PNG covers (converted to JPEG before commit)
 *-cover-raw.png
@@ -11,3 +13,10 @@ __pycache__/
 
 # Scratchpad / frame dumps (kept in /tmp, never committed)
 scratchpad/
+
+# Render intermediates — never committed
+frames/
+contact-sheet*.jpg
+contact-sheet*.png
+ck_s*.png
+thumb_s*.png
