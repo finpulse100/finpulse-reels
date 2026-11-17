@@ -1,0 +1,753 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Fin Pulse · Nifty Bank All-Time High</title>
+<style>
+:root {
+  --bg:       #000a1a;
+  --ink:      #010810;
+  --ink-dim:  rgba(1,8,16,0.72);
+  --chip-bg:  #001833;
+  --chip-ink: #7ecfff;
+  --blue:     #1a90ff;
+  --blue2:    #0070e0;
+  --green:    #00c87a;
+  --red:      #ef4444;
+  --font:     'Inter','Segoe UI',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000;}
+.frame{
+  position:relative;width:1080px;height:1920px;
+  container-type:inline-size;overflow:hidden;
+  background:var(--bg);font-family:var(--font);
+  color:var(--ink);font-variant-numeric:tabular-nums;
+}
+/* Blobs */
+.blob{position:absolute;border-radius:50%;will-change:transform;}
+/* Scenes */
+.scene{position:absolute;inset:0;display:none;}
+.scene.on{display:block;}
+/* Safe zone — matches DURS-based inner padding */
+.inner{
+  position:absolute;inset:0;
+  padding:17cqw 11cqw 30cqw 6cqw;
+  display:flex;flex-direction:column;justify-content:center;
+  gap:3.6cqw;min-width:0;
+}
+.safe{display:none;position:absolute;inset:17cqw 11cqw 30cqw 6cqw;
+  border:2px dashed rgba(255,255,255,0.8);z-index:9;pointer-events:none;}
+body.dbg .safe{display:block;}
+
+/* ---- Tag pill ---- */
+.tag-pill{
+  position:relative;align-self:center;
+  display:inline-flex;align-items:center;justify-content:center;gap:2.6cqw;
+  padding:2.4cqw 6.4cqw;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.80),rgba(255,255,255,0.50));
+  backdrop-filter:blur(40px) saturate(100%);
+  -webkit-backdrop-filter:blur(40px) saturate(100%);
+  border:1.5px solid rgba(255,255,255,0.90);
+  box-shadow:0 2cqw 6cqw rgba(0,0,0,0.45),
+             inset 0 0.5cqw 1cqw rgba(255,255,255,0.95),
+             inset 0 -0.7cqw 1.4cqw rgba(1,8,16,0.14);
+  color:var(--ink);font-size:4.6cqw;font-weight:800;line-height:1.2;
+  white-space:nowrap;flex:none;
+}
+.tag-pill::before{
+  content:"";position:absolute;inset:1cqw;border-radius:999px;
+  border:1px solid rgba(255,255,255,0.75);pointer-events:none;
+}
+.dot{position:relative;width:2.6cqw;height:2.6cqw;border-radius:50%;
+     background:var(--blue);}
+
+/* ---- Headlines ---- */
+.h{
+  margin:0;text-align:center;color:#fff;
+  font-size:8.8cqw;font-weight:800;
+  letter-spacing:-0.02em;line-height:1.1;
+  text-wrap:balance;flex:none;
+  text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.45);
+}
+.h .w{display:inline-block;}
+
+/* ---- Glass ---- */
+.frame .glass{
+  position:relative;overflow:hidden;
+  background:rgba(255,255,255,0.88);
+  border:3px solid rgba(255,255,255,0.95);
+  border-radius:4cqw;
+  box-shadow:0 2cqw 7cqw rgba(0,0,0,0.5);
+}
+.frame .glass.dim{background:rgba(255,255,255,0.40);border-color:rgba(255,255,255,0.60);}
+.glass::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.5) 50%,transparent 62%);
+  transform:translateX(var(--sw,-130%));
+}
+
+/* ---- Cards ---- */
+.card{padding:4.2cqw;display:flex;flex-direction:column;gap:2.4cqw;min-width:0;flex:none;}
+.lab{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+.val{margin:0;font-weight:800;letter-spacing:-0.02em;line-height:1.05;color:var(--ink);}
+.big{font-size:7.4cqw;}
+.mid{font-size:5.6cqw;}
+.sub{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.3;color:var(--ink-dim);}
+
+/* ---- Icon circles ---- */
+.ic{
+  flex:none;width:9cqw;height:9cqw;border-radius:50%;
+  background:var(--chip-bg);display:grid;place-items:center;
+}
+.ic svg{
+  width:54%;height:54%;stroke:var(--chip-ink);fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+}
+.ic svg .f{fill:var(--chip-ink);stroke:none;}
+
+/* ---- Row chips (Why section) ---- */
+.row-chip{display:flex;align-items:center;gap:3cqw;padding:2.4cqw 3.6cqw;flex:none;}
+.row-chip .ic{width:8.6cqw;height:8.6cqw;}
+.row-chip .rct{display:flex;flex-direction:column;gap:0.8cqw;}
+.row-chip span.t{font-size:4.3cqw;font-weight:800;line-height:1.2;color:var(--ink);}
+.row-chip span.d{font-size:3.5cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+
+/* ---- 2-col grid ---- */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3cqw;flex:none;}
+.pillar{padding:3cqw 3.4cqw;align-items:flex-start;gap:1.8cqw;}
+.pillar .ic{width:8cqw;height:8cqw;}
+.pillar .val{font-size:5.4cqw;}
+
+/* ---- Tick rows ---- */
+.tick{display:flex;align-items:flex-start;gap:3cqw;}
+.tick .ic{width:8cqw;height:8cqw;flex:none;margin-top:0.5cqw;}
+.tick span.t{font-size:4.3cqw;font-weight:800;line-height:1.3;color:var(--ink);}
+.ck{stroke:var(--chip-ink);stroke-width:2.4;stroke-dasharray:1;stroke-dashoffset:1;}
+
+/* ---- @finpulsemarkets handle ---- */
+.handle{
+  position:absolute;bottom:31cqw;right:12cqw;
+  font-size:3.4cqw;font-weight:700;
+  color:rgba(255,255,255,0.72);letter-spacing:0.02em;
+  pointer-events:none;z-index:5;
+}
+
+/* Per-scene tweaks */
+#s1 .inner{gap:4cqw;}
+#s1 .h{font-size:9.4cqw;}
+#s2 .inner{gap:3.4cqw;}
+#s3 .inner{gap:2.6cqw;}
+#s4 .inner{gap:2.4cqw;}
+#s4 .card{padding:3cqw 3.6cqw;gap:1.6cqw;}
+#s4 .ic{width:7.4cqw;height:7.4cqw;}
+#s5 .inner{gap:3.2cqw;}
+#s6 .inner{gap:4.8cqw;}
+#s6 .card.tk{padding:4.6cqw;}
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+
+  <!-- Background blobs (Deep Navy #000a1a + blue/cyan/indigo/teal) -->
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- ═══ SCENE 1 — Hook B: Before/After Flip ═══ -->
+  <section class="scene" id="s1">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>MARKETS · ALL-TIME HIGH</div>
+
+      <h2 class="h" data-split="0.35">What just happened to bank stocks?</h2>
+
+      <!-- Flip wrapper: fixed height so layout stays stable during swap -->
+      <div id="flipWrap" style="position:relative;height:27cqw;flex:none;">
+        <!-- BEFORE card (Oct 27) -->
+        <div class="glass card dim" id="bcf"
+             style="position:absolute;inset:0;padding:3cqw 4cqw;gap:1.6cqw;opacity:0;">
+          <p class="lab">OCT 27, 2026</p>
+          <p class="val big" style="color:var(--red)">54,650</p>
+          <div style="display:flex;align-items:center;gap:2cqw;">
+            <svg viewBox="0 0 24 12" style="width:9cqw;height:4.5cqw;flex:none;">
+              <polyline points="1,2 7,4 14,8 21,10" fill="none" stroke="#ef4444" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p class="sub" style="margin:0;">Nifty Bank · 15% below record</p>
+          </div>
+        </div>
+        <!-- AFTER card (Nov 17) -->
+        <div class="glass card" id="acf"
+             style="position:absolute;inset:0;padding:3cqw 4cqw;gap:1.6cqw;opacity:0;">
+          <p class="lab">NOV 17, 2026 · NIFTY BANK · NSE: BANKNIFTY</p>
+          <p class="val big" style="color:var(--blue)">62,324</p>
+          <div style="display:flex;align-items:center;gap:2cqw;flex-wrap:wrap;">
+            <span style="background:var(--blue);color:#fff;font-size:3.3cqw;font-weight:800;
+                         padding:0.7cqw 2.4cqw;border-radius:999px;flex:none;">ALL-TIME HIGH</span>
+            <span style="font-size:3.5cqw;font-weight:700;color:var(--ink-dim);">+1.21% · 13/14 green</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- +14% badge appears after flip -->
+      <div class="glass card" id="pctRow"
+           style="opacity:0;padding:2.6cqw 4cqw;flex-direction:row;
+                  align-items:center;justify-content:space-between;">
+        <p class="lab" style="margin:0;">From Oct 27 → Nov 17</p>
+        <p class="val mid" id="pctNum" style="color:var(--green);margin:0;">+0.0%</p>
+      </div>
+
+      <p id="answerLine"
+         style="margin:0;text-align:center;color:rgba(255,255,255,0.72);
+                font-size:3.8cqw;font-weight:700;opacity:0;">
+        What drove this? Next slide →
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ SCENE 2 — Reveal ═══ -->
+  <section class="scene" id="s2">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>RECORD HIGH</div>
+
+      <h2 class="h" data-split="0.35">Nifty Bank at an all-time high</h2>
+
+      <div class="glass card" data-a="pop:0.9:0.7" style="padding:3.4cqw 4cqw;gap:1.8cqw;">
+        <p class="lab">NIFTY BANK · NSE: BANKNIFTY</p>
+        <p class="val big" style="color:var(--ink);">62,324</p>
+        <!-- Animated bar chart: Apr 2 · Oct 27 · Nov 17 -->
+        <svg id="barChart" viewBox="0 0 100 50" style="width:100%;height:17cqw;display:block;overflow:visible;">
+          <line x1="4" y1="46" x2="96" y2="46" stroke="rgba(1,8,16,0.25)" stroke-width="0.6"/>
+          <!-- Apr 2 bar -->
+          <rect id="bar1" x="10" y="46" width="17" height="0" fill="#1a90ff" fill-opacity="0.45" rx="1"/>
+          <text id="lv1" x="18.5" y="46" font-size="3.3" text-anchor="middle"
+                font-family="Inter,sans-serif" fill="rgba(1,8,16,0.65)" opacity="0">49,954</text>
+          <text x="18.5" y="49.5" font-size="3.3" text-anchor="middle"
+                font-family="Inter,sans-serif" fill="rgba(1,8,16,0.5)">Apr 2</text>
+          <!-- Oct 27 bar -->
+          <rect id="bar2" x="41" y="46" width="17" height="0" fill="#1a90ff" fill-opacity="0.65" rx="1"/>
+          <text id="lv2" x="49.5" y="46" font-size="3.3" text-anchor="middle"
+                font-family="Inter,sans-serif" fill="rgba(1,8,16,0.65)" opacity="0">54,650</text>
+          <text x="49.5" y="49.5" font-size="3.3" text-anchor="middle"
+                font-family="Inter,sans-serif" fill="rgba(1,8,16,0.5)">Oct 27</text>
+          <!-- Nov 17 bar (record) -->
+          <rect id="bar3" x="72" y="46" width="17" height="0" fill="#1a90ff" rx="1"/>
+          <text id="lv3" x="80.5" y="46" font-size="3.3" text-anchor="middle"
+                font-family="Inter,sans-serif" fill="rgba(1,8,16,0.75)"
+                font-weight="700" opacity="0">62,324 ★</text>
+          <text x="80.5" y="49.5" font-size="3.3" text-anchor="middle"
+                font-family="Inter,sans-serif" fill="rgba(1,8,16,0.5)">Nov 17</text>
+        </svg>
+        <p class="sub" data-a="up:2.6:0.5">
+          Previous record: 61,764 (Feb 3) · <b style="color:var(--blue)">Broken today</b>
+        </p>
+      </div>
+
+      <div class="glass card" data-a="pop:3.6:0.6"
+           style="padding:3cqw 4cqw;flex-direction:row;align-items:center;
+                  justify-content:space-between;gap:2cqw;">
+        <div>
+          <p class="lab">Session gain</p>
+          <p class="val mid" style="color:var(--green);">+748 pts · +1.21%</p>
+        </div>
+        <div style="text-align:right;">
+          <p class="lab">Stocks green</p>
+          <p class="val mid" style="color:var(--green);">13 of 14</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SCENE 3 — What drove it ═══ -->
+  <section class="scene" id="s3">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHY IT RALLIED</div>
+
+      <h2 class="h" data-split="0.35">3 forces behind the surge</h2>
+
+      <div class="glass row-chip" data-a="right:1.0:0.6">
+        <span class="ic">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="6" width="20" height="13" rx="2"/>
+            <path d="M2 10h20"/>
+            <circle cx="12" cy="15.5" r="1.5" class="f"/>
+          </svg>
+        </span>
+        <div class="rct">
+          <span class="t">FIIs bought ₹56,771 Cr</span>
+          <span class="d">in 8 consecutive sessions (Oct 27–Nov 17)</span>
+        </div>
+      </div>
+
+      <div class="glass row-chip" data-a="right:1.7:0.6">
+        <span class="ic">
+          <svg viewBox="0 0 24 24">
+            <ellipse cx="12" cy="10" rx="4" ry="6"/>
+            <path d="M12 16c-4.4 0-8 1.3-8 3s3.6 3 8 3 8-1.3 8-3-3.6-3-8-3z"/>
+          </svg>
+        </span>
+        <div class="rct">
+          <span class="t">Crude fell to $91.65/bbl</span>
+          <span class="d">Eases India's import bill and inflation</span>
+        </div>
+      </div>
+
+      <div class="glass row-chip" data-a="right:2.4:0.6">
+        <span class="ic">
+          <svg viewBox="0 0 24 24">
+            <polyline points="3 17 9 11 13 15 21 7"/>
+            <path d="M15 7h6v6"/>
+          </svg>
+        </span>
+        <div class="rct">
+          <span class="t">Credit growth: 19.4% YoY</span>
+          <span class="d">PSU bank NIMs expanding · profits rising</span>
+        </div>
+      </div>
+
+      <div class="glass row-chip" data-a="right:3.1:0.5">
+        <span class="ic">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 7v5l3 3"/>
+          </svg>
+        </span>
+        <div class="rct">
+          <span class="t">Nifty 50 at 9-month high</span>
+          <span class="d">25,501 intraday · broad market participation</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SCENE 4 — What it means for YOU ═══ -->
+  <section class="scene" id="s4">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>YOUR MONEY</div>
+
+      <h2 class="h" data-split="0.35">What this means for you</h2>
+
+      <div class="glass card" data-a="pop:1.0:0.7">
+        <span class="ic">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </span>
+        <p class="val mid">Banking mutual fund NAV</p>
+        <p class="sub">Nifty Bank +15% this month lifts NAV in banking-sector funds</p>
+      </div>
+
+      <div class="glass card" data-a="pop:2.2:0.7">
+        <span class="ic">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <polyline points="8 12 11 15 16 10"/>
+          </svg>
+        </span>
+        <p class="val mid">PSU bank investors</p>
+        <p class="sub">PNB +31%, SBI +15% since Oct 27 · fundamentals backing the move</p>
+      </div>
+
+      <div class="glass card" data-a="pop:3.4:0.7">
+        <span class="ic">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <path d="M16 2v4M8 2v4M3 10h18"/>
+            <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+          </svg>
+        </span>
+        <p class="val mid">Watch Dec 6 — RBI Policy</p>
+        <p class="sub">Rate decision matters for banking margins and deposit costs</p>
+      </div>
+
+      <p data-a="up:4.5:0.5"
+         style="margin:0;font-size:3.3cqw;font-weight:700;
+                color:rgba(255,255,255,0.65);text-align:center;">
+        Educational content only.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ SCENE 5 — Key numbers ═══ -->
+  <section class="scene" id="s5">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE NUMBERS</div>
+
+      <h2 class="h" data-split="0.35">PSU banks leading the charge</h2>
+
+      <div class="glass card" data-a="pop:1.0:0.7"
+           style="padding:3.4cqw 4cqw;gap:1.6cqw;">
+        <p class="lab">Punjab National Bank · NSE: PNB</p>
+        <p class="val big" style="color:var(--ink);">₹151.60</p>
+        <p class="sub">8-year high · +31% in 1 month · +21% in 6 sessions</p>
+      </div>
+
+      <div class="grid2">
+        <div class="glass card pillar" data-a="pop:2.6:0.6">
+          <span class="ic">
+            <svg viewBox="0 0 24 24">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </span>
+          <p class="val" style="font-size:5.4cqw;color:var(--green);">+2.3%</p>
+          <p class="sub">PSU Bank Index · today</p>
+        </div>
+        <div class="glass card pillar" data-a="pop:3.0:0.6">
+          <span class="ic">
+            <svg viewBox="0 0 24 24">
+              <polyline points="3 17 9 11 13 15 21 7"/>
+              <path d="M15 7h6v6"/>
+            </svg>
+          </span>
+          <p class="val" style="font-size:5.4cqw;color:var(--green);">+15%</p>
+          <p class="sub">Nifty Bank · November</p>
+        </div>
+      </div>
+
+      <div class="glass card" data-a="pop:4.0:0.6"
+           style="padding:2.8cqw 4cqw;flex-direction:row;align-items:center;
+                  justify-content:space-between;">
+        <div>
+          <p class="lab">SBI / Canara Bank</p>
+          <p class="val mid" style="color:var(--green);">+5% today</p>
+        </div>
+        <div style="text-align:right;">
+          <p class="lab">FII inflow</p>
+          <p class="val mid" style="color:var(--blue);">₹56,771 Cr</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SCENE 6 — Takeaway + CTA (NO exit fade — isLast guard) ═══ -->
+  <section class="scene" id="s6">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>KEY TAKEAWAY</div>
+
+      <h2 class="h" data-split="0.35">Banks are back</h2>
+
+      <div class="glass card tk" data-a="pop:0.9:0.7" style="gap:3.6cqw;">
+        <div class="tick" data-a="right:1.3:0.5">
+          <span class="ic">
+            <svg viewBox="0 0 24 24">
+              <path class="ck" d="M5 12.5l5 5 9-10"/>
+            </svg>
+          </span>
+          <span class="t">Nifty Bank at 62,324 — first time above 62,000, ever</span>
+        </div>
+        <div class="tick" data-a="right:1.75:0.5">
+          <span class="ic">
+            <svg viewBox="0 0 24 24">
+              <path class="ck" d="M5 12.5l5 5 9-10"/>
+            </svg>
+          </span>
+          <span class="t">PSU banks outperforming — credit growth 19.4% YoY backs the rally</span>
+        </div>
+        <div class="tick" data-a="right:2.2:0.5">
+          <span class="ic">
+            <svg viewBox="0 0 24 24">
+              <path class="ck" d="M5 12.5l5 5 9-10"/>
+            </svg>
+          </span>
+          <span class="t">FIIs bought ₹56,771 Cr in 8 sessions — confidence returning</span>
+        </div>
+      </div>
+
+      <div class="glass card" data-a="pop:3.2:0.6"
+           style="padding:3.4cqw 4cqw;text-align:center;gap:1.6cqw;">
+        <p class="val mid">Follow for daily market insights</p>
+        <p class="val mid" style="color:var(--blue);">@finpulsemarkets</p>
+        <p class="sub" style="text-align:center;">
+          Share this with someone watching bank stocks
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="safe"></div>
+  <div class="handle">@finpulsemarkets</div>
+</div><!-- .frame -->
+
+<script>
+// ─── Timing ───────────────────────────────────────────────────────────────
+var DURS   = [7, 7, 7.5, 7.5, 7, 9];    // = 45s
+window.COVER_T = 3.5;                    // after flip reveals 62,324
+var OUT    = 0.4;                        // exit-fade duration
+var STARTS = [];
+(function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+window.TOTAL = DURS.reduce(function(a,b){ return a+b; },0);
+
+// ─── Helpers ──────────────────────────────────────────────────────────────
+var clamp = function(x,lo,hi){
+  lo = lo===undefined ? 0 : lo;
+  hi = hi===undefined ? 1 : hi;
+  return Math.min(hi, Math.max(lo, x));
+};
+var E = {
+  outCubic: function(x){ return 1-Math.pow(1-x,3); },
+  outBack:  function(x){ var s=1.5; return 1+(s+1)*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+  inCubic:  function(x){ return x*x*x; }
+};
+var $ = function(id){ return document.getElementById(id); };
+
+// ─── Split headlines into word spans ─────────────────────────────────────
+document.querySelectorAll('.h[data-split]').forEach(function(h){
+  var base  = parseFloat(h.getAttribute('data-split'));
+  var words = h.textContent.trim().split(/\s+/);
+  h.textContent = '';
+  words.forEach(function(w, i){
+    var s = document.createElement('span');
+    s.className = 'w';
+    s.textContent = w;
+    s._a = { k:'up', s: base + i*0.08, d: 0.6 };
+    h.appendChild(s);
+    if(i < words.length-1) h.appendChild(document.createTextNode(' '));
+  });
+});
+
+// ─── Gather animated elements per scene ───────────────────────────────────
+var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+scenes.forEach(function(sc){
+  sc._els = [];
+  sc.querySelectorAll('[data-a]').forEach(function(el){
+    var p = el.getAttribute('data-a').split(':');
+    el._a = { k: p[0], s: parseFloat(p[1]), d: parseFloat(p[2]) };
+    sc._els.push(el);
+  });
+  sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+  sc._glass = Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+});
+
+// ─── applyAnim ─────────────────────────────────────────────────────────────
+function applyAnim(el, t){
+  var a = el._a;
+  var p = clamp((t - a.s) / a.d);
+  var e = E.outCubic(p);
+  var b = E.outBack(p);
+  var o = clamp(p * 2);
+  var x = 0, y = 0, s = 1;
+  if(a.k === 'pop')  { s = 0.86 + 0.14 * b; y = (1-e)*6; }
+  else if(a.k === 'up')    { y = (1-e)*7; }
+  else if(a.k === 'drop')  { y = -(1-e)*6; s = 0.94 + 0.06*b; }
+  else if(a.k === 'left')  { x = -(1-e)*18; }
+  else if(a.k === 'right') { x = (1-e)*18; }
+  el.style.opacity   = o.toFixed(4);
+  el.style.transform = 'translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+}
+
+// ─── Blobs (Deep Navy + blue / cyan / indigo / teal) ──────────────────────
+function blobInit(el, color, sizeCqw, lCqw, tCqw){
+  el.style.width  = sizeCqw+'cqw';
+  el.style.height = sizeCqw+'cqw';
+  el.style.left   = lCqw+'cqw';
+  el.style.top    = tCqw+'cqw';
+  el.style.background =
+    'radial-gradient(closest-side,'+color+' 0%,'+color+' 36%,rgba(0,0,0,0) 100%)';
+}
+blobInit($('b1'), 'rgba(10,80,200,1)',         148, -55, -60);
+blobInit($('b2'), 'rgba(0,160,220,0.90)',        95,  50,  55);
+blobInit($('b3'), 'rgba(55,25,215,0.95)',        125, -35, 110);
+blobInit($('b4'), 'rgba(0,185,175,0.85)',         70,  52, 112);
+
+function orbs(T){
+  $('b1').style.transform='translate('+(9*Math.sin(T*0.44)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.37)).toFixed(2)+'cqw)';
+  $('b2').style.transform='translate('+((-10)*Math.sin(T*0.35+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.40)).toFixed(2)+'cqw)';
+  $('b3').style.transform='translate('+(10*Math.cos(T*0.32)).toFixed(2)+'cqw,'+((-9)*Math.sin(T*0.39+2)).toFixed(2)+'cqw)';
+  $('b4').style.transform='translate('+((-8)*Math.cos(T*0.49+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.46)).toFixed(2)+'cqw)';
+}
+
+// ─── SFX Audio engine (10 keys, fires after first user tap) ──────────────
+var _AC = null, _FIRED = {};
+var _SFX = {
+  whoosh:        function(){ _tone(1200,160,0.28,'sawtooth',0.015,0.30); },
+  tick:          function(){ _tone(1600,1600,0.05,'square', 0.001,0.40); },
+  beep:          function(){ _tone(900,900,  0.12,'sine',   0.005,0.45); },
+  final_beep:    function(){ _tone(1320,1320,0.25,'sine',   0.010,0.60); },
+  reveal_whoosh: function(){ _tone(200,1500, 0.38,'sawtooth',0.015,0.28); },
+  impact:        function(){ _tone(100,55,   0.18,'sawtooth',0.001,0.50); },
+  swoosh:        function(){ _tone(850,350,  0.24,'sawtooth',0.015,0.33); },
+  glass_pop:     function(){ _tone(2200,900, 0.07,'sine',   0.001,0.38); },
+  ding:          function(){ _tone(1760,1760,0.42,'sine',   0.010,0.60); },
+  pulse:         function(){ _tone(620,620,  0.14,'sine',   0.015,0.38); }
+};
+function _tone(f1,f2,dur,type,att,vol){
+  if(!_AC) return;
+  var now=_AC.currentTime,
+      osc=_AC.createOscillator(), g=_AC.createGain();
+  osc.type = type||'sine';
+  osc.frequency.setValueAtTime(f1, now);
+  if(f2!==f1) osc.frequency.exponentialRampToValueAtTime(Math.max(f2,10), now+dur);
+  g.gain.setValueAtTime(0, now);
+  g.gain.linearRampToValueAtTime(vol||0.5, now+(att||0.01));
+  g.gain.exponentialRampToValueAtTime(0.001, now+dur);
+  osc.connect(g); g.connect(_AC.destination);
+  osc.start(now); osc.stop(now+dur+0.06);
+}
+function cue(T, name){
+  var key = T.toFixed(2)+name;
+  if(_FIRED[key]) return;
+  _FIRED[key] = 1;
+  if(_SFX[name]) _SFX[name]();
+}
+document.addEventListener('click', function(){
+  if(!_AC){
+    _AC = new(window.AudioContext||window.webkitAudioContext)();
+    _FIRED = {};   // reset so sounds play fresh
+  }
+}, {once:true});
+
+// ─── Scene FX functions ───────────────────────────────────────────────────
+
+/* S1 — Before/After flip */
+function s1(t){
+  // bcf entrance (T=0.9→1.5) then exit flip (T=2.4→2.9)
+  var bp = clamp((t-2.4)/0.45);
+  if(bp < 0.001){
+    var cp = clamp((t-0.9)/0.5);
+    var eIn = E.outBack(cp);
+    $('bcf').style.opacity   = E.outCubic(clamp(cp*2)).toFixed(4);
+    $('bcf').style.transform = 'translateY('+((1-eIn)*6).toFixed(2)+'cqw) scale('+(0.86+0.14*eIn).toFixed(4)+')';
+  } else {
+    var eo = E.outCubic(bp);
+    $('bcf').style.opacity   = (1-eo).toFixed(4);
+    $('bcf').style.transform = 'translateY('+((-8)*eo).toFixed(2)+'cqw)';
+  }
+  // acf entrance (T=2.5→3.1)
+  var ap = clamp((t-2.5)/0.5);
+  var ea = E.outCubic(ap);
+  $('acf').style.opacity   = ea.toFixed(4);
+  $('acf').style.transform = 'translateY('+((1-ea)*6).toFixed(2)+'cqw)';
+  // +14% counter
+  var pp = clamp((t-3.1)/0.9);
+  $('pctNum').textContent = '+' + (14.08*E.outCubic(pp)).toFixed(1) + '%';
+  $('pctRow').style.opacity = E.outCubic(clamp((t-3.0)/0.5)).toFixed(4);
+  // "answer" teaser
+  $('answerLine').style.opacity = E.outCubic(clamp((t-5.0)/0.6)).toFixed(4);
+  // SFX
+  cue(0.9,'whoosh');
+  cue(2.5,'impact');
+  cue(2.6,'reveal_whoosh');
+  cue(3.1,'ding');
+}
+
+/* S2 — Animated bar chart */
+var BAR = [
+  {id:'bar1',lv:'lv1', val:49954, h:0},
+  {id:'bar2',lv:'lv2', val:54650, h:0},
+  {id:'bar3',lv:'lv3', val:62324, h:0}
+];
+BAR.forEach(function(b){ b.h = b.val / 65000 * 40; });  // 40 SVG units max
+var barDels = [0.9, 1.5, 2.1];
+function s2(t){
+  BAR.forEach(function(b,i){
+    var p  = E.outCubic(clamp((t-barDels[i])/0.7));
+    var h  = b.h * p;
+    var y  = 46 - h;
+    var el = $(b.id), lv = $(b.lv);
+    el.setAttribute('y',      y.toFixed(2));
+    el.setAttribute('height', h.toFixed(2));
+    lv.setAttribute('y',      (y-1).toFixed(2));
+    lv.style.opacity = (p > 0.5 ? (p-0.5)*2 : 0).toFixed(3);
+  });
+  cue(0.9,'beep');
+  cue(1.5,'beep');
+  cue(2.1,'final_beep');
+}
+
+/* S3 */
+function s3(t){
+  cue(1.0,'whoosh');
+  cue(1.7,'swoosh');
+  cue(2.4,'swoosh');
+  cue(3.1,'tick');
+}
+
+/* S4 */
+function s4(t){
+  cue(1.0,'glass_pop');
+  cue(2.2,'glass_pop');
+  cue(3.4,'glass_pop');
+}
+
+/* S5 */
+function s5(t){
+  cue(1.0,'reveal_whoosh');
+  cue(2.6,'tick');
+  cue(3.0,'tick');
+}
+
+/* S6 — checkmark draw-ons */
+var cks = Array.prototype.slice.call(document.querySelectorAll('.ck'));
+cks.forEach(function(c){ c.style.strokeDashoffset = '1'; });
+var ckDels = [1.3, 1.75, 2.2];
+function s6(t){
+  cks.forEach(function(c,i){
+    var p = E.outCubic(clamp((t - ckDels[i]) / 0.4));
+    c.style.strokeDashoffset = (1 - p).toFixed(4);
+  });
+  cue(0.5,'ding');
+  cue(1.3,'glass_pop');
+  cue(1.75,'glass_pop');
+  cue(2.2,'glass_pop');
+  cue(3.2,'pulse');
+}
+
+var FX = [s1, s2, s3, s4, s5, s6];
+
+// ─── Master setT ─────────────────────────────────────────────────────────
+window.setT = function(T){
+  orbs(T);
+
+  // Find active scene index
+  var i = 0;
+  for(var k = 0; k < STARTS.length; k++){
+    if(T >= STARTS[k] - 1e-6) i = k;
+  }
+  var t      = T - STARTS[i];
+  var d      = DURS[i];
+  var isLast = (i === scenes.length - 1);
+
+  // Switch scenes
+  scenes.forEach(function(sc, k){ sc.classList.toggle('on', k===i); });
+
+  var sc = scenes[i];
+
+  // Run data-a animations
+  sc._els.forEach(function(el){ applyAnim(el, t); });
+
+  // Scene-specific FX
+  FX[i](t);
+
+  // Glass shimmer sweep
+  sc._glass.forEach(function(g, gi){
+    var q = ((t * 0.44 + gi * 0.28) % 1);
+    var sw = q < 0.45 ? (-130 + 290 * (q/0.45)) : 160;
+    g.style.setProperty('--sw', sw.toFixed(1)+'%');
+  });
+
+  // Exit fade — SKIP on last scene (isLast guard)
+  if(!isLast){
+    var fo     = clamp((t - (d - OUT)) / OUT);
+    var inner  = sc.querySelector('.inner');
+    inner.style.opacity   = (1 - E.inCubic(fo)).toFixed(4);
+    inner.style.transform = 'translateY('+((-2)*E.inCubic(fo)).toFixed(3)+'cqw)';
+  }
+
+  // Tag-pill subtle float
+  var pill = sc.querySelector('.tag-pill');
+  if(pill){
+    var existTr = pill.style.transform || '';
+    // append float without erasing applyAnim transform
+    // pill has its own data-a, so style.transform is set by applyAnim
+    // just tweak the y with a secondary local var
+    pill._float = (Math.sin(T*2)*0.5).toFixed(3);
+    // We'll apply float in the pill's own applyAnim by checking _float
+  }
+};
+
+setT(0.5);  // thumbnail frame — shows tag-pill + partial headline
+</script>
+</body>
+</html>
