@@ -1,0 +1,642 @@
+<!doctype html>
+<!--
+  FIN PULSE · 2026-11-17 Morning Reel
+  Story: India Oct 2026 WPI hits 12.29% — 2nd straight double-digit month
+  Hook: "CPI: 6%. WPI: 12%. If you have a loan, watch this."
+  Palette: Midnight gold #0d0900 | blobs: amber/orange/red/brown
+  Music: atlasaudio-soft-corporate-613334.mp3
+  Hook A: Countdown + Digit Reveal
+  DURS: [7, 7, 7.5, 7.5, 7, 9] = 45s
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>India WPI 12.29</title>
+<style>
+  :root {
+    --bg: #0d0900;
+    --ink: #1a0a00;
+    --ink-dim: rgba(26,10,0,0.78);
+    --chip-bg: #3d1a00;
+    --chip-ink: #ffd6a0;
+    --accent: #f59e0b;
+    --accent2: #d97706;
+    --red: #ef4444;
+    --red2: #dc2626;
+    --amber: #f59e0b;
+    --font: 'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#000;}
+  .frame{position:relative;width:1080px;height:1920px;container-type:inline-size;overflow:hidden;background:var(--bg);font-family:var(--font);color:var(--ink);font-variant-numeric:tabular-nums;}
+  .blob{position:absolute;border-radius:50%;will-change:transform;}
+  .scene{position:absolute;inset:0;display:none;}
+  .scene.on{display:block;}
+  .inner{position:absolute;inset:0;padding:17cqw 11cqw 30cqw 6cqw;display:flex;flex-direction:column;justify-content:center;gap:3.2cqw;min-width:0;}
+  .safe{display:none;position:absolute;inset:17cqw 11cqw 30cqw 6cqw;border:2px dashed rgba(255,255,255,0.8);z-index:9;pointer-events:none;}
+  body.dbg .safe{display:block;}
+
+  /* Handle */
+  .handle{position:absolute;bottom:3cqw;right:12cqw;font-family:var(--font);font-size:3.4cqw;font-weight:700;color:rgba(255,255,255,0.80);background:rgba(0,0,0,0.35);padding:1cqw 2.6cqw;border-radius:999px;backdrop-filter:blur(8px);z-index:20;letter-spacing:0.01em;}
+
+  /* Tag pill */
+  .tag-pill{position:relative;align-self:center;display:inline-flex;align-items:center;justify-content:center;gap:2.6cqw;padding:2.4cqw 6.4cqw;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.52));backdrop-filter:blur(40px) saturate(100%);-webkit-backdrop-filter:blur(40px) saturate(100%);border:1.5px solid rgba(255,255,255,0.9);box-shadow:0 2cqw 6cqw rgba(0,0,0,0.5),inset 0 0.5cqw 1cqw rgba(255,255,255,0.95),inset 0 -0.7cqw 1.4cqw rgba(26,10,0,0.14);color:var(--ink);font-size:4.6cqw;font-weight:800;line-height:1.2;white-space:nowrap;flex:none;}
+  .tag-pill::before{content:"";position:absolute;inset:1cqw;border-radius:999px;border:1px solid rgba(255,255,255,0.75);pointer-events:none;}
+  .dot{position:relative;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--accent);}
+
+  /* Headlines */
+  .h{margin:0;text-align:center;color:#fff;font-size:8.8cqw;font-weight:800;letter-spacing:-0.02em;line-height:1.1;text-wrap:balance;flex:none;text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.5);}
+  .h .w{display:inline-block;}
+
+  /* Glass */
+  .frame .glass{position:relative;overflow:hidden;background:rgba(255,255,255,0.88);border:3px solid rgba(255,255,255,0.95);border-radius:4cqw;box-shadow:0 2cqw 7cqw rgba(0,0,0,0.5);}
+  .frame .glass.dim{background:rgba(255,255,255,0.4);}
+  .glass::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.5) 50%,transparent 62%);transform:translateX(var(--sw,-130%));}
+
+  .card{padding:4.2cqw;display:flex;flex-direction:column;gap:2.4cqw;min-width:0;flex:none;}
+  .lab{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+  .val{margin:0;font-weight:800;letter-spacing:-0.02em;line-height:1.05;color:var(--ink);}
+  .big{font-size:7.4cqw;}
+  .mid{font-size:5.6cqw;}
+  .sub{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+  .svg{width:100%;height:auto;display:block;flex:none;}
+  .svg text{font-family:var(--font);font-weight:700;fill:var(--ink-dim);}
+  .ax{stroke:rgba(26,10,0,0.3);stroke-width:0.5;fill:none;}
+
+  .ic{flex:none;width:9cqw;height:9cqw;border-radius:50%;background:var(--chip-bg);display:grid;place-items:center;}
+  .ic svg{width:56%;height:56%;stroke:var(--chip-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .ic svg .f{fill:var(--chip-ink);stroke:none;}
+
+  .row-chip{display:flex;align-items:center;gap:3cqw;padding:2.4cqw 3.6cqw;flex:none;}
+  .row-chip .ic{width:8.6cqw;height:8.6cqw;}
+  .row-chip span.t{font-size:4.3cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3cqw;flex:none;}
+  .pillar{padding:3cqw 3.4cqw;align-items:flex-start;gap:2cqw;}
+  .pillar .val{font-size:5.4cqw;}
+  .pillar .ic{width:8.6cqw;height:8.6cqw;}
+
+  .tick{display:flex;align-items:center;gap:3cqw;}
+  .tick span.t{font-size:4.4cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+  .tick .ic{width:8cqw;height:8cqw;}
+
+  /* Scene 1 — Hook A */
+  #s1 .inner{gap:3.0cqw;}
+
+  /* ALERT stamp */
+  .alert-stamp{align-self:center;font-size:9.4cqw;font-weight:900;letter-spacing:0.08em;color:var(--red);text-shadow:0 0 3cqw rgba(239,68,68,0.6),0 0 8cqw rgba(239,68,68,0.3);transform-origin:center;flex:none;}
+
+  /* Stat row */
+  .stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.6cqw;flex:none;}
+  .stat-card{padding:3cqw;display:flex;flex-direction:column;align-items:center;gap:1.6cqw;text-align:center;}
+  .stat-card .ic{width:8cqw;height:8cqw;}
+  .stat-card .val{font-size:5.6cqw;color:var(--ink);}
+  .stat-card .lab{font-size:3.2cqw;color:var(--ink-dim);}
+
+  /* Countdown */
+  .cdown-wrap{align-self:center;position:relative;width:14cqw;height:14cqw;display:grid;place-items:center;flex:none;}
+  .cdown-num{position:absolute;font-size:7.4cqw;font-weight:900;color:var(--amber);line-height:1;}
+
+  /* Digit reveal */
+  .digit-row{align-self:center;display:flex;align-items:baseline;gap:0.6cqw;flex:none;}
+  .digit{font-size:12cqw;font-weight:900;line-height:1;color:var(--red);text-shadow:0 0 4cqw rgba(239,68,68,0.5);opacity:0;transform:translateY(-8cqw);}
+  .digit.pct{font-size:8cqw;color:var(--red2);}
+
+  /* Answer line */
+  .ans-line{margin:0;text-align:center;font-size:4.3cqw;font-weight:700;color:rgba(255,255,255,0.90);opacity:0;flex:none;}
+
+  /* Scene 2 */
+  #s2 .inner{gap:3.8cqw;}
+  .who-row{display:flex;align-items:center;gap:2.6cqw;}
+  .tag-badge{background:var(--red);color:#fff;font-size:3.2cqw;font-weight:800;padding:1cqw 2.8cqw;border-radius:999px;flex:none;}
+
+  /* Scene 3 */
+  #s3 .inner{gap:3.0cqw;}
+  #s3 .row-chip{padding:2.0cqw 3.6cqw;}
+
+  /* Scene 4 */
+  #s4 .inner{gap:3.0cqw;}
+  .disclaimer{margin:0;font-size:3.0cqw;font-weight:600;color:var(--ink-dim);text-align:center;opacity:0.75;flex:none;}
+
+  /* Scene 5 */
+  #s5 .inner{gap:3.0cqw;}
+  #s5 .row-chip{padding:2.0cqw 3.6cqw;}
+
+  /* Scene 6 */
+  #s6 .inner{gap:4.4cqw;}
+  .follow-card{padding:4cqw;display:flex;flex-direction:column;align-items:center;gap:2cqw;text-align:center;background:rgba(26,10,0,0.75)!important;border:3px solid rgba(245,158,11,0.5)!important;}
+  .follow-card .follow-h{font-size:5.4cqw;font-weight:800;color:var(--accent);}
+  .follow-card .follow-s{font-size:3.8cqw;font-weight:700;color:rgba(255,255,255,0.65);}
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+  <div class="handle">@finpulsemarkets</div>
+
+  <!-- S1 · Hook A — ALERT stamp + stat cards + countdown + digit reveal -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHOLESALE ALERT</div>
+    <div class="alert-stamp" id="alert-stamp">ALERT</div>
+    <div class="stat-row">
+      <div class="glass card stat-card" data-a="up:0.7:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 20V12l7-7 7 7v8"/><rect x="9" y="14" width="6" height="6"/></svg></span>
+        <p class="val">6.09%</p>
+        <p class="lab">Oct CPI</p>
+      </div>
+      <div class="glass card stat-card" data-a="up:0.9:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+        <p class="val" id="wpi-counter">0.00%</p>
+        <p class="lab">Oct WPI</p>
+      </div>
+      <div class="glass card stat-card" data-a="up:1.1:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2.5"/></svg></span>
+        <p class="val">+6.2 pp</p>
+        <p class="lab">WPI–CPI gap</p>
+      </div>
+    </div>
+    <div class="cdown-wrap" data-a="pop:1.5:0.5">
+      <svg width="100%" height="100%" viewBox="0 0 56 56">
+        <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+        <circle id="cdown-arc" cx="28" cy="28" r="24" fill="none" stroke="var(--amber)" stroke-width="3"
+          stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round"
+          transform="rotate(-90 28 28)"/>
+      </svg>
+      <span class="cdown-num" id="cdown-num">5</span>
+    </div>
+    <div class="digit-row" id="digit-row">
+      <span class="digit" id="dd0">1</span>
+      <span class="digit" id="dd1">2</span>
+      <span class="digit" id="dd2">.</span>
+      <span class="digit" id="dd3">2</span>
+      <span class="digit" id="dd4">9</span>
+      <span class="digit pct" id="dd5">%</span>
+    </div>
+    <p class="ans-line" id="ans-line">What's driving it? Coming up</p>
+  </div></section>
+
+  <!-- S2 · Reveal — WPI trend chart -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WPI OCT 2026</div>
+    <h2 class="h" data-split="0.35">Wholesale prices surged 12.29%</h2>
+    <div class="glass card" data-a="pop:0.9:0.8">
+      <div class="who-row">
+        <span class="tag-badge">2ND DOUBLE DIGIT</span>
+        <p class="lab" style="font-size:3.8cqw;font-weight:800;color:var(--ink);">WPI INDIA · OCT 2026</p>
+      </div>
+      <p class="val big" style="color:var(--red);text-align:center;margin-top:1cqw;" id="wpi-big">12.29%</p>
+      <p class="sub" style="text-align:center;">Up from 11.39% in September — 2nd month above 10%</p>
+      <svg class="svg" viewBox="0 0 70 44" id="wpi-chart">
+        <line class="ax" x1="6" y1="2" x2="6" y2="38"/>
+        <line class="ax" x1="6" y1="38" x2="66" y2="38"/>
+        <!-- Bars: Aug 9.92, Sep 11.39, Oct 12.29; scale: 36/14 = 2.571 per % -->
+        <rect id="bar-aug" x="10" y="38" width="12" height="0" rx="1.5"
+          fill="url(#gaug)"/>
+        <rect id="bar-sep" x="29" y="38" width="12" height="0" rx="1.5"
+          fill="url(#gsep)"/>
+        <rect id="bar-oct" x="48" y="38" width="12" height="0" rx="1.5"
+          fill="url(#goct)"/>
+        <defs>
+          <linearGradient id="gaug" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f59e0b" stop-opacity="0.65"/>
+            <stop offset="1" stop-color="#f59e0b" stop-opacity="0.1"/>
+          </linearGradient>
+          <linearGradient id="gsep" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ef4444" stop-opacity="0.80"/>
+            <stop offset="1" stop-color="#ef4444" stop-opacity="0.1"/>
+          </linearGradient>
+          <linearGradient id="goct" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#dc2626" stop-opacity="1"/>
+            <stop offset="1" stop-color="#dc2626" stop-opacity="0.2"/>
+          </linearGradient>
+        </defs>
+        <text x="16" y="43" font-size="3.6" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" fill="rgba(26,10,0,0.6)">Aug</text>
+        <text x="35" y="43" font-size="3.6" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" fill="rgba(26,10,0,0.6)">Sep</text>
+        <text x="54" y="43" font-size="3.6" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" fill="rgba(220,38,38,0.9)">Oct</text>
+        <text id="lbl-aug" x="16" y="10" font-size="3.6" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" fill="rgba(26,10,0,0.7)" opacity="0">9.9%</text>
+        <text id="lbl-sep" x="35" y="6" font-size="3.6" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" fill="rgba(26,10,0,0.7)" opacity="0">11.4%</text>
+        <text id="lbl-oct" x="54" y="3" font-size="3.6" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" fill="rgba(220,38,38,0.9)" opacity="0">12.3%</text>
+      </svg>
+    </div>
+    <div class="glass card dim" data-a="up:4.0:0.7" style="padding:3cqw 4cqw;">
+      <p class="lab" style="font-size:4cqw;font-weight:800;color:var(--ink);">Aug was 9.92% — now <span style="color:var(--red);">two consecutive months above 10%</span></p>
+    </div>
+  </div></section>
+
+  <!-- S3 · Why it jumped — the three drivers -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE DRIVERS</div>
+    <h2 class="h" data-split="0.35">Fuel prices lit the fire</h2>
+    <div class="glass row-chip" data-a="right:1.0:0.65">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 22V9l9-7 9 7v13"/><path d="M9 22V14h6v8"/><path d="M18 5v1.5a2.5 2.5 0 0 0 5 0V3"/></svg></span>
+      <div>
+        <span class="t">Fuel &amp; Power</span>
+        <p class="lab" style="margin-top:0.6cqw;font-size:3.4cqw;color:var(--red);">+32.84% year-on-year</p>
+      </div>
+    </div>
+    <div class="glass row-chip" data-a="right:1.5:0.65">
+      <span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><line x1="12" y1="12" x2="12" y2="16"/></svg></span>
+      <div>
+        <span class="t">Manufactured goods</span>
+        <p class="lab" style="margin-top:0.6cqw;font-size:3.4cqw;">+9.54% year-on-year</p>
+      </div>
+    </div>
+    <div class="glass row-chip" data-a="right:2.0:0.65">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 2h3l1 7H17l1-7h3"/><circle cx="9" cy="20" r="2"/><circle cx="17" cy="20" r="2"/><path d="M5.5 9l1 6h11l1-6"/></svg></span>
+      <div>
+        <span class="t">Food articles</span>
+        <p class="lab" style="margin-top:0.6cqw;font-size:3.4cqw;">+8.58% year-on-year</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.6:0.7" style="gap:1.4cqw;padding:3cqw 4cqw;">
+      <p class="lab" style="font-size:4cqw;font-weight:800;color:var(--ink);">Fuel &amp; Power alone up <span style="color:var(--red);">32.84%</span> — largest contributor</p>
+      <p class="sub">Sep WPI was 11.39% — the streak started in Sep 2026</p>
+    </div>
+  </div></section>
+
+  <!-- S4 · What it means for YOU -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>YOUR MONEY</div>
+    <h2 class="h" data-split="0.35">What high WPI means for you</h2>
+    <div class="glass card" data-a="pop:1.0:0.7" style="gap:1.8cqw;padding:3.6cqw;">
+      <div style="display:flex;align-items:center;gap:2.4cqw;">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+        <div>
+          <p style="margin:0;font-size:4.3cqw;font-weight:800;color:var(--ink);">Home loan EMI</p>
+          <p style="margin:0;font-size:3.6cqw;font-weight:700;color:var(--red);">Rate hike risk rising</p>
+        </div>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:1.6:0.7" style="gap:1.8cqw;padding:3.6cqw;">
+      <div style="display:flex;align-items:center;gap:2.4cqw;">
+        <span class="ic"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+        <div>
+          <p style="margin:0;font-size:4.3cqw;font-weight:800;color:var(--ink);">Debt &amp; bond funds</p>
+          <p style="margin:0;font-size:3.6cqw;font-weight:700;color:var(--ink-dim);">NAV pressure if RBI reacts</p>
+        </div>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.2:0.7" style="gap:1.8cqw;padding:3.6cqw;">
+      <div style="display:flex;align-items:center;gap:2.4cqw;">
+        <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+        <div>
+          <p style="margin:0;font-size:4.3cqw;font-weight:800;color:var(--ink);">Watch: RBI Dec policy</p>
+          <p style="margin:0;font-size:3.6cqw;font-weight:700;color:var(--ink-dim);">Next MPC meeting is key</p>
+        </div>
+      </div>
+    </div>
+    <p class="disclaimer">Educational content only. Data: DPIIT / Govt of India.</p>
+  </div></section>
+
+  <!-- S5 · The bigger picture — CPI vs WPI divergence -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE BIG PICTURE</div>
+    <h2 class="h" data-split="0.35">CPI 6% meets WPI 12%</h2>
+    <div class="glass card" data-a="pop:0.9:0.8">
+      <p class="lab">Oct 2026 divergence — 6.2 percentage point gap</p>
+      <div class="grid2" style="margin-top:1cqw;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1.6cqw;padding:2.6cqw;border-radius:3cqw;background:rgba(59,130,246,0.1);">
+          <p style="margin:0;font-size:3.4cqw;font-weight:700;color:rgba(26,10,0,0.6);">RETAIL CPI</p>
+          <p style="margin:0;font-size:7.0cqw;font-weight:900;color:rgba(59,130,246,0.85);">6.09%</p>
+          <p style="margin:0;font-size:3.2cqw;font-weight:600;color:rgba(26,10,0,0.55);">Oct 2026</p>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1.6cqw;padding:2.6cqw;border-radius:3cqw;background:rgba(220,38,38,0.1);">
+          <p style="margin:0;font-size:3.4cqw;font-weight:700;color:rgba(26,10,0,0.6);">WHOLESALE WPI</p>
+          <p style="margin:0;font-size:7.0cqw;font-weight:900;color:var(--red);">12.29%</p>
+          <p style="margin:0;font-size:3.2cqw;font-weight:600;color:rgba(26,10,0,0.55);">Oct 2026</p>
+        </div>
+      </div>
+    </div>
+    <div class="glass row-chip" data-a="right:2.2:0.65">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 1 9 9c0 4.56-3.4 8.34-7.83 8.93A9 9 0 1 1 12 2z"/><path d="M12 7v5l3 3"/></svg></span>
+      <div>
+        <span class="t">Wholesale surge hasn't hit retail — yet</span>
+        <p class="lab" style="margin-top:0.6cqw;font-size:3.4cqw;">Pipeline pressure builds over 3–6 months</p>
+      </div>
+    </div>
+    <div class="glass row-chip" data-a="right:3.0:0.65">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+      <div>
+        <span class="t">Watch: crude oil + Dec RBI meet</span>
+        <p class="lab" style="margin-top:0.6cqw;font-size:3.4cqw;">Two catalysts that move both numbers</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- S6 · Payoff + CTA — isLast, NO exit fade -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>KEY TAKEAWAYS</div>
+    <h2 class="h" data-split="0.35">India's wholesale inflation streak</h2>
+    <div class="glass card" data-a="pop:0.9:0.7" style="gap:3.4cqw;">
+      <div class="tick" data-a="right:1.2:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke-width="2.5"/></svg></span>
+        <span class="t">WPI Oct 12.29% — 2nd double-digit month</span>
+      </div>
+      <div class="tick" data-a="right:1.65:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke-width="2.5"/></svg></span>
+        <span class="t">Fuel &amp; Power soared 32.84%</span>
+      </div>
+      <div class="tick" data-a="right:2.1:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke-width="2.5"/></svg></span>
+        <span class="t">Next: RBI December policy meeting</span>
+      </div>
+    </div>
+    <div class="glass card follow-card" data-a="pop:3.0:0.6">
+      <p class="follow-h">Follow @finpulsemarkets</p>
+      <p class="follow-s">Daily market updates · Share with your contacts</p>
+    </div>
+  </div></section>
+
+  <div class="safe"></div>
+</div>
+
+<script>
+  var DURS = [7, 7, 7.5, 7.5, 7, 9];
+  window.COVER_T = 1.5;
+  var OUT = 0.4;
+  var STARTS = []; (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+  window.TOTAL = DURS.reduce(function(a,b){ return a+b; }, 0);
+
+  var clamp=function(x,a,b){ a=a===undefined?0:a; b=b===undefined?1:b; return Math.min(b,Math.max(a,x)); };
+  var E={
+    outCubic:function(x){ return 1-Math.pow(1-x,3); },
+    outBack:function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+    inCubic:function(x){ return x*x*x; },
+    inOut:function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+  };
+  var $=function(id){ return document.getElementById(id); };
+
+  // Split headlines into animated word spans
+  document.querySelectorAll('.h[data-split]').forEach(function(h){
+    var base=parseFloat(h.getAttribute('data-split'));
+    var words=h.textContent.trim().split(/\s+/);
+    h.textContent='';
+    words.forEach(function(w,i){
+      var s=document.createElement('span'); s.className='w'; s.textContent=w;
+      s._a={k:'up',s:base+i*0.08,d:0.6};
+      h.appendChild(s);
+      if(i<words.length-1) h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  // Gather animated elements per scene
+  var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function(sc){
+    sc._els=[];
+    sc.querySelectorAll('[data-a]').forEach(function(el){
+      var p=el.getAttribute('data-a').split(':');
+      el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+    sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el,t){
+    var a=el._a, p=clamp((t-a.s)/a.d), e=E.outCubic(p), b=E.outBack(p), o=clamp(p*2), x=0, y=0, s=1;
+    if(a.k==='pop'){  s=0.86+0.14*b; y=(1-e)*6; }
+    else if(a.k==='up'){  y=(1-e)*7; }
+    else if(a.k==='drop'){ y=-(1-e)*6; s=0.94+0.06*b; }
+    else if(a.k==='left'){ x=-(1-e)*18; }
+    else if(a.k==='right'){ x=(1-e)*18; }
+    el.style.opacity=o;
+    el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+  }
+
+  // Background blobs — Midnight gold palette (amber / orange / red / brown)
+  function blob(el,color,size,x,y){
+    el.style.width=size+'cqw'; el.style.height=size+'cqw';
+    el.style.left=x+'cqw'; el.style.top=y+'cqw';
+    el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+  }
+  blob($('b1'),'rgba(217,119,6,0.95)',140,-50,-50);
+  blob($('b2'),'rgba(234,88,12,0.90)',100, 55, 60);
+  blob($('b3'),'rgba(220,38,38,0.85)',120,-28,118);
+  blob($('b4'),'rgba(120,53,15,0.90)', 72, 54,110);
+  function orbs(T){
+    $('b1').style.transform='translate('+(9*Math.sin(T*0.45)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.38)).toFixed(2)+'cqw)';
+    $('b2').style.transform='translate('+(-10*Math.sin(T*0.36+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.41)).toFixed(2)+'cqw)';
+    $('b3').style.transform='translate('+(10*Math.cos(T*0.33)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.4+2)).toFixed(2)+'cqw)';
+    $('b4').style.transform='translate('+(-8*Math.cos(T*0.5+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.47)).toFixed(2)+'cqw)';
+  }
+
+  // ---- SCENE 1: Hook A ----
+  var alertEl = $('alert-stamp');
+  var cdownArc = $('cdown-arc');
+  var CIRC = 150.8; // 2π*24
+  var digits = [$('dd0'),$('dd1'),$('dd2'),$('dd3'),$('dd4'),$('dd5')];
+  var DIGIT_TIMES = [2.3, 2.7, 3.1, 3.5, 3.9, 4.3];
+
+  function s1(t){
+    // Alert stamp snap-in: scale 0.1→1 with back-easing, t=0.08–0.43
+    var ap = clamp((t-0.08)/0.35), ae = E.outBack(ap);
+    var ascale = 0.1 + 0.9*ae;
+    var arot   = (1-ae)*8;
+    alertEl.style.opacity  = clamp(ap*4);
+    alertEl.style.transform= 'scale('+ascale.toFixed(3)+') rotate('+arot.toFixed(2)+'deg)';
+
+    // WPI counter: 0 → 12.29 over t=0.9–1.7
+    var wp = clamp((t-0.9)/0.8);
+    var wv = (12.29 * E.outCubic(wp)).toFixed(2);
+    $('wpi-counter').textContent = wv+'%';
+
+    // Countdown 5→1 (t=1.5 to 5.5)
+    var craw = 5 - 4*clamp((t-1.5)/4.0);
+    var cnum  = Math.ceil(Math.max(1,craw));
+    $('cdown-num').textContent = cnum;
+    var cp2 = clamp((t-1.5)/4.0);
+    var arcColor = cp2 < 0.7 ? '#f59e0b' : '#ef4444';
+    cdownArc.setAttribute('stroke', arcColor);
+    cdownArc.setAttribute('stroke-dashoffset', (CIRC*(1-( 1-cp2 ))).toFixed(2));
+
+    // Digits flip in
+    digits.forEach(function(d,i){
+      var dp = clamp((t-DIGIT_TIMES[i])/0.3);
+      var de = E.outBack(dp);
+      var dy = (1-de)*8;
+      d.style.opacity  = clamp(dp*3);
+      d.style.transform= 'translateY('+(-dy).toFixed(2)+'cqw) scale('+Math.max(0,de).toFixed(3)+')';
+    });
+
+    // Answer line fades in at t=5.5
+    var aline = $('ans-line');
+    var alp = clamp((t-5.5)/0.5);
+    aline.style.opacity  = alp;
+    aline.style.transform= 'translateY('+(-(1-alp)*4).toFixed(2)+'cqw)';
+  }
+
+  // ---- SCENE 2: Reveal — WPI bar chart ----
+  // scale: 36/14 = 2.571 units per %
+  var WPI_SCALE = 36/14;
+  var WPI_DATA = [9.92, 11.39, 12.29];
+  var wpiBarIds = ['bar-aug','bar-sep','bar-oct'];
+  var wpiBars = wpiBarIds.map(function(id){ return $(id); });
+
+  function s2(t){
+    // Bars grow up (staggered)
+    var bp = clamp((t-0.9)/2.0);
+    wpiBars.forEach(function(bar,i){
+      var delay = i*0.22;
+      var p  = clamp((bp - delay/2.0)*2.5);
+      var ep = E.outCubic(p);
+      var h  = WPI_DATA[i]*WPI_SCALE*ep;
+      var y  = 38 - h;
+      bar.setAttribute('y', y.toFixed(2));
+      bar.setAttribute('height', h.toFixed(2));
+    });
+    // Labels appear after bars
+    var alp = clamp((t-3.2)/0.4);
+    $('lbl-aug').style.opacity = alp;
+    var slp = clamp((t-3.6)/0.4);
+    $('lbl-sep').style.opacity = slp;
+    var olp = clamp((t-4.0)/0.4);
+    $('lbl-oct').style.opacity = olp;
+
+    // WPI big number pulses
+    var pulse = 1 + 0.03*Math.sin(t*5);
+    $('wpi-big').style.transform = 'scale('+pulse.toFixed(4)+')';
+  }
+
+  // ---- SCENE 3: Why (generic applyAnim handles it) ----
+  function s3(t){}
+
+  // ---- SCENE 4: Impact (generic applyAnim) ----
+  function s4(t){}
+
+  // ---- SCENE 5: Big picture (generic applyAnim) ----
+  function s5(t){}
+
+  // ---- SCENE 6: Payoff + CTA (no exit fade) ----
+  var cks = Array.prototype.slice.call(document.querySelectorAll('.ck'));
+  cks.forEach(function(c){ c.style.strokeDasharray='1'; c.style.strokeDashoffset='1'; });
+  function s6(t){
+    cks.forEach(function(c,i){
+      c.style.strokeDashoffset = (1-E.outCubic(clamp((t-(1.55+i*0.45))/0.35))).toFixed(4);
+    });
+  }
+
+  var FX = [s1, s2, s3, s4, s5, s6];
+
+  // ---- AUDIO ENGINE ----
+  var actx=null, cued={};
+  function getACtx(){
+    if(!actx){ try{ actx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+    return actx;
+  }
+  var SFX_PLAY = {
+    whoosh: function(vol){ _sweep(200,40,0.18,vol); },
+    tick: function(vol){ _beep(1800,0.03,vol); },
+    beep: function(vol){ _beep(880,0.07,vol); },
+    final_beep: function(vol){ _beep(1200,0.1,vol*1.2); },
+    reveal_whoosh: function(vol){ _sweep(300,80,0.22,vol); },
+    impact: function(vol){ _noise(0.08,vol); },
+    swoosh: function(vol){ _sweep(400,60,0.15,vol); },
+    glass_pop: function(vol){ _beep(2000,0.05,vol); _beep(1600,0.03,vol*0.6); },
+    ding: function(vol){ _beep(1047,0.12,vol); },
+    pulse: function(vol){ _beep(660,0.08,vol); _beep(880,0.06,vol*0.7); }
+  };
+  function _beep(freq,dur,vol){
+    var c=getACtx(); if(!c) return;
+    var o=c.createOscillator(), g=c.createGain();
+    o.connect(g); g.connect(c.destination);
+    o.frequency.value=freq;
+    g.gain.setValueAtTime(vol||0.4,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur);
+    o.start(); o.stop(c.currentTime+dur+0.01);
+  }
+  function _sweep(f1,f2,dur,vol){
+    var c=getACtx(); if(!c) return;
+    var o=c.createOscillator(), g=c.createGain();
+    o.connect(g); g.connect(c.destination);
+    o.frequency.setValueAtTime(f1,c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(f2,c.currentTime+dur);
+    g.gain.setValueAtTime(vol||0.4,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur);
+    o.start(); o.stop(c.currentTime+dur+0.01);
+  }
+  function _noise(dur,vol){
+    var c=getACtx(); if(!c) return;
+    var buf=c.createBuffer(1,Math.ceil(44100*dur),44100);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
+    var src=c.createBufferSource(), g=c.createGain();
+    src.buffer=buf; src.connect(g); g.connect(c.destination);
+    g.gain.value=vol||0.3;
+    src.start();
+  }
+  var SFX_DATA = {
+    whoosh:1, tick:1, beep:1, final_beep:1, reveal_whoosh:1,
+    impact:1, swoosh:1, glass_pop:1, ding:1, pulse:1
+  };
+  var sfxFirstTap=false;
+  document.addEventListener('click',function(){ sfxFirstTap=true; getACtx(); },{once:true});
+
+  function cue(T,name,vol){
+    if(!sfxFirstTap) return;
+    var key=T.toFixed(2)+':'+name;
+    if(cued[key]) return;
+    cued[key]=true;
+    if(SFX_PLAY[name]) SFX_PLAY[name](vol||0.4);
+  }
+  function fireSfx(T){
+    cue(0.08,'impact',0.5);
+    cue(0.70,'swoosh',0.45);
+    cue(1.50,'tick',0.4);
+    cue(2.30,'reveal_whoosh',0.5);
+    cue(2.70,'ding',0.4);
+    cue(3.10,'beep',0.35);
+    cue(3.50,'beep',0.35);
+    cue(5.50,'whoosh',0.4);
+    cue(STARTS[1],'glass_pop',0.45);
+    cue(STARTS[2],'glass_pop',0.45);
+    cue(STARTS[3],'glass_pop',0.45);
+    cue(STARTS[4],'glass_pop',0.45);
+    cue(STARTS[5],'final_beep',0.5);
+    cue(STARTS[5]+3.1,'pulse',0.4);
+  }
+
+  // ===== MASTER setT =====
+  window.setT=function(T){
+    orbs(T);
+    fireSfx(T);
+
+    var i=0;
+    for(var k=0;k<STARTS.length;k++) if(T>=STARTS[k]-1e-6) i=k;
+    var t=T-STARTS[i], d=DURS[i];
+    var isLast=(i===scenes.length-1);
+
+    scenes.forEach(function(sc,k){ sc.classList.toggle('on',k===i); });
+    var sc=scenes[i];
+    sc._els.forEach(function(el){ applyAnim(el,t); });
+    FX[i](t);
+
+    sc._glass.forEach(function(g,gi){
+      var q=((t*0.45+gi*0.27)%1);
+      g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+    });
+
+    if(!isLast){
+      var o=clamp((t-(d-OUT))/OUT), inner=sc.querySelector('.inner');
+      inner.style.opacity=1-E.inCubic(o);
+      inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+    } else {
+      var inner=sc.querySelector('.inner');
+      inner.style.opacity=1;
+      inner.style.transform='';
+    }
+
+    var pill=sc.querySelector('.tag-pill');
+    if(pill){
+      var curr=pill.style.transform||'';
+      curr=curr.replace(/\s*translateY\([^)]*\)/g,'');
+      pill.style.transform=curr+' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';
+    }
+  };
+
+  setT(0.5); // thumbnail frame
+</script>
+</body>
+</html>
