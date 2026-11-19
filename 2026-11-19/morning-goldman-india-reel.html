@@ -1,0 +1,638 @@
+<!doctype html>
+<!--
+  FIN PULSE · 2026-11-19 morning · Goldman Sachs upgrades India to Overweight
+  Palette: Slate #080810 · blobs violet/blue/indigo/pink
+  Hook A (Morning): ALERT stamp + 3 stat cards + countdown 5→1 + digit reveal 28,500
+  DURS: [7, 7, 7.5, 7.5, 7, 9] = 45s
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Goldman Sachs India Upgrade</title>
+<style>
+  :root {
+    --bg: #080810;
+    --ink: #0a0a24;
+    --ink-dim: rgba(10,10,36,0.78);
+    --chip-bg: #1e1540;
+    --chip-ink: #c4b5fd;
+    --acc: #7c3aed;
+    --acc2: #a78bfa;
+    --gold: #f59e0b;
+    --green-up: #22c55e;
+    --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#000;}
+  .frame{position:relative;width:1080px;height:1920px;container-type:inline-size;overflow:hidden;background:var(--bg);font-family:var(--font);color:var(--ink);font-variant-numeric:tabular-nums;}
+  .blob{position:absolute;border-radius:50%;will-change:transform;}
+  .scene{position:absolute;inset:0;display:none;}
+  .scene.on{display:block;}
+  .inner{position:absolute;inset:0;padding:17cqw 11cqw 30cqw 6cqw;display:flex;flex-direction:column;justify-content:center;gap:3.6cqw;min-width:0;}
+  .safe{display:none;position:absolute;inset:17cqw 11cqw 30cqw 6cqw;border:2px dashed rgba(255,255,255,0.8);z-index:9;pointer-events:none;}
+  body.dbg .safe{display:block;}
+
+  /* Handle overlay */
+  #handle{position:absolute;bottom:31cqw;right:12cqw;z-index:10;color:rgba(255,255,255,0.82);font-size:3.4cqw;font-weight:700;letter-spacing:0.01em;font-family:var(--font);text-shadow:0 1px 4px rgba(0,0,0,0.6);}
+
+  /* Tag pill */
+  .tag-pill{position:relative;align-self:center;display:inline-flex;align-items:center;justify-content:center;gap:2.6cqw;padding:2.2cqw 5.8cqw;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.52));backdrop-filter:blur(40px) saturate(100%);-webkit-backdrop-filter:blur(40px) saturate(100%);border:1.5px solid rgba(255,255,255,0.9);box-shadow:0 2cqw 6cqw rgba(0,0,0,0.5),inset 0 0.5cqw 1cqw rgba(255,255,255,0.95),inset 0 -0.7cqw 1.4cqw rgba(10,10,36,0.14);color:var(--ink);font-size:4.6cqw;font-weight:800;line-height:1.2;white-space:nowrap;flex:none;}
+  .tag-pill::before{content:"";position:absolute;inset:1cqw;border-radius:999px;border:1px solid rgba(255,255,255,0.75);pointer-events:none;}
+  .dot{position:relative;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--acc);}
+  .dot-green{position:relative;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--green-up);}
+  .dot-gold{position:relative;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--gold);}
+
+  /* Headline */
+  .h{margin:0;text-align:center;color:#fff;font-size:8.8cqw;font-weight:800;letter-spacing:-0.02em;line-height:1.1;text-wrap:balance;flex:none;text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.5);}
+  .h .w{display:inline-block;}
+
+  /* Glass cards */
+  .frame .glass{position:relative;overflow:hidden;background:rgba(255,255,255,0.88);border:3px solid rgba(255,255,255,0.95);border-radius:4cqw;box-shadow:0 2cqw 7cqw rgba(0,0,0,0.55);}
+  .frame .glass.dim{background:rgba(255,255,255,0.42);}
+  .glass::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.5) 50%,transparent 62%);transform:translateX(var(--sw,-130%));}
+  .card{padding:4.2cqw;display:flex;flex-direction:column;gap:2.4cqw;min-width:0;flex:none;}
+  .lab{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+  .val{margin:0;font-weight:800;letter-spacing:-0.02em;line-height:1.05;color:var(--ink);}
+  .big{font-size:7.4cqw;}
+  .mid{font-size:5.6cqw;}
+  .sub{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+  .svg{width:100%;height:auto;display:block;flex:none;}
+  .svg text{font-family:var(--font);font-weight:700;fill:var(--ink-dim);}
+
+  /* Row chips */
+  .row-chip{display:flex;align-items:center;gap:3cqw;padding:2.4cqw 3.6cqw;flex:none;}
+  .row-chip .ic{width:8.6cqw;height:8.6cqw;flex:none;}
+  .row-chip span.t{font-size:4.3cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+  .ic{flex:none;width:9cqw;height:9cqw;border-radius:50%;background:var(--chip-bg);display:grid;place-items:center;}
+  .ic svg{width:56%;height:56%;stroke:var(--chip-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .ic svg .f{fill:var(--chip-ink);stroke:none;}
+
+  /* Grid 2 */
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3cqw;flex:none;}
+  .pillar{padding:3cqw 3.4cqw;align-items:flex-start;gap:2cqw;}
+  .pillar .val{font-size:5.4cqw;}
+  .pillar .ic{width:8.6cqw;height:8.6cqw;}
+
+  /* Tick (checkmarks) */
+  .tick{display:flex;align-items:center;gap:3cqw;}
+  .tick span.t{font-size:4.4cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+  .tick .ic{width:8cqw;height:8cqw;}
+
+  /* Scene-specific overrides */
+  #s1 .inner{gap:4.8cqw;}
+  #s2 .inner{gap:3.8cqw;}
+  #s3 .inner{gap:2.8cqw;} #s3 .row-chip{padding:2cqw 3.6cqw;}
+  #s4 .inner{gap:3cqw;}
+  #s5 .inner{gap:3.6cqw;}
+  #s6 .inner{gap:5cqw;} #s6 .card.tk{padding:5cqw 4.4cqw;}
+
+  /* S1 specific */
+  .alert-stamp{align-self:center;display:inline-flex;align-items:center;justify-content:center;padding:2.6cqw 7cqw;border-radius:2cqw;background:linear-gradient(135deg,var(--acc),#5b21b6);box-shadow:0 0 4cqw rgba(124,58,237,0.7),0 2cqw 8cqw rgba(0,0,0,0.5);color:#fff;font-size:7.4cqw;font-weight:900;letter-spacing:0.08em;flex:none;text-shadow:0 0 1.5cqw rgba(196,181,253,0.8);}
+  .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.4cqw;flex:none;}
+  .stat-card{padding:3cqw;display:flex;flex-direction:column;align-items:center;gap:1.4cqw;text-align:center;}
+  .stat-ic{width:7.5cqw;height:7.5cqw;border-radius:50%;background:var(--chip-bg);display:grid;place-items:center;flex:none;}
+  .stat-ic svg{width:55%;height:55%;stroke:var(--chip-ink);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+  .stat-ic svg .f{fill:var(--chip-ink);stroke:none;}
+  .cnt-wrap{display:flex;flex-direction:column;align-items:center;gap:0.5cqw;}
+  .cnt-val{font-size:5.6cqw;font-weight:800;color:var(--ink);line-height:1;}
+  .cnt-label{font-size:3.2cqw;font-weight:700;color:var(--ink-dim);line-height:1.1;}
+
+  /* Countdown + digit reveal row */
+  .cd-row{display:flex;align-items:center;justify-content:space-between;gap:3cqw;flex:none;}
+  .cd-wrap{position:relative;width:22cqw;height:22cqw;flex:none;}
+  .cd-wrap svg{position:absolute;inset:0;}
+  .cd-num{position:absolute;inset:0;display:grid;place-items:center;font-size:9.4cqw;font-weight:900;color:#fff;text-shadow:0 0 2cqw rgba(196,181,253,0.9);}
+  .dr-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:1.6cqw;}
+  .dr-label{font-size:3.2cqw;font-weight:700;color:rgba(255,255,255,0.65);letter-spacing:0.08em;}
+  .dr-num{font-size:11cqw;font-weight:900;color:#fff;letter-spacing:-0.01em;text-shadow:0 0 3cqw rgba(167,139,250,0.7);}
+
+  /* S2 specific: rating badge */
+  .rating-badge{align-self:center;display:inline-flex;align-items:center;gap:2.6cqw;padding:2cqw 5cqw;border-radius:999px;background:rgba(34,197,94,0.15);border:2px solid rgba(34,197,94,0.6);color:#166534;font-size:5cqw;font-weight:900;}
+  .rating-arr{font-size:4.2cqw;color:var(--ink-dim);}
+
+  /* Follow card */
+  .follow-card{background:rgba(10,10,36,0.88)!important;border:3px solid rgba(124,58,237,0.6)!important;border-radius:4cqw;}
+  .follow-card .who b{color:#fff;}
+  .follow-card .who span.s{color:rgba(196,181,253,0.8);}
+  .avatar{flex:none;width:9.6cqw;height:9.6cqw;border-radius:50%;background:var(--chip-bg);color:var(--chip-ink);display:grid;place-items:center;font-size:3.6cqw;font-weight:800;}
+  .who{display:flex;align-items:center;gap:2.2cqw;}
+  .who b{display:block;font-size:4cqw;line-height:1.1;color:var(--ink);font-weight:800;}
+  .who span.s{display:block;font-size:3.2cqw;font-weight:700;color:var(--ink-dim);}
+
+  /* before-after arrow */
+  .ba-arrow{align-self:center;width:9cqw;height:9cqw;border-radius:50%;background:var(--chip-bg);display:grid;place-items:center;flex:none;}
+  .ba-arrow svg{width:60%;height:60%;stroke:var(--chip-ink);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;}
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- HANDLE -->
+  <div id="handle">@finpulsemarkets</div>
+
+  <!-- ═══ S1 · HOOK A ═══ -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>GS UPDATE · 19 NOV</div>
+
+    <div class="alert-stamp" id="alertstamp">ALERT</div>
+
+    <h2 class="h" data-split="0.55">FIIs Sold ₹2L Cr. Goldman Says: BUY.</h2>
+
+    <div class="grid3">
+      <div class="glass stat-card" data-a="up:0.9:0.6">
+        <span class="stat-ic"><svg viewBox="0 0 24 24"><path d="M3 17l4-4 4 4 4-6 4-4"/></svg></span>
+        <div class="cnt-wrap"><p class="cnt-val">25,220</p><p class="cnt-label">NIFTY NOW</p></div>
+      </div>
+      <div class="glass stat-card" data-a="up:1.1:0.6">
+        <span class="stat-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+        <div class="cnt-wrap"><p class="cnt-val" id="cnt-tgt">0</p><p class="cnt-label">GS TARGET</p></div>
+      </div>
+      <div class="glass stat-card" data-a="up:1.3:0.6">
+        <span class="stat-ic"><svg viewBox="0 0 24 24"><path class="f" d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg></span>
+        <div class="cnt-wrap"><p class="cnt-val" id="cnt-up">+0%</p><p class="cnt-label">UPSIDE</p></div>
+      </div>
+    </div>
+
+    <!-- Countdown + digit reveal -->
+    <div class="cd-row">
+      <div class="cd-wrap">
+        <svg viewBox="0 0 100 100" width="100%" height="100%">
+          <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(196,181,253,0.18)" stroke-width="8"/>
+          <circle id="cd-arc" cx="50" cy="50" r="44" fill="none" stroke="url(#cdg)" stroke-width="8"
+            stroke-linecap="round" stroke-dasharray="276.46" stroke-dashoffset="0"
+            transform="rotate(-90 50 50)"/>
+          <defs>
+            <linearGradient id="cdg" x1="0" y1="0" x2="1" y2="1">
+              <stop id="cdg0" offset="0" stop-color="#f59e0b"/>
+              <stop id="cdg1" offset="1" stop-color="#ef4444"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="cd-num" id="cd-num">5</div>
+      </div>
+      <div class="dr-wrap">
+        <p class="dr-label">NIFTY TARGET 2027</p>
+        <p class="dr-num" id="dr-num">28,500</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- ═══ S2 · GOLDMAN SACHS REVEAL ═══ -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot-green"></i>OVERWEIGHT UPGRADE</div>
+
+    <h2 class="h" data-split="0.35">India: Upgraded to Overweight</h2>
+
+    <!-- Company reveal card -->
+    <div class="glass card" data-a="pop:0.9:0.8">
+      <p class="lab">GOLDMAN SACHS · India Equities (NSE)</p>
+      <div style="display:flex;align-items:center;gap:2.4cqw;flex-wrap:wrap;">
+        <span style="font-size:4.4cqw;font-weight:700;color:var(--ink-dim);text-decoration:line-through;">NEUTRAL</span>
+        <span class="ba-arrow" data-a="drop:1.3:0.4"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        <span style="font-size:5.6cqw;font-weight:900;color:#15803d;">OVERWEIGHT ✓</span>
+      </div>
+      <p class="sub">Nifty 50 target: <strong style="color:var(--acc);font-size:4.4cqw;">28,500 by end-2027</strong> · +13% upside</p>
+    </div>
+
+    <!-- Bar chart: EPS growth -->
+    <div class="glass card" data-a="pop:1.5:0.8" style="padding:3.2cqw;">
+      <p class="lab" style="margin-bottom:2cqw;">EARNINGS GROWTH (India MSCI)</p>
+      <svg class="svg" id="bchart" viewBox="0 0 100 50">
+        <defs>
+          <linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7c3aed" stop-opacity="0.9"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0.3"/></linearGradient>
+          <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6d28d9" stop-opacity="0.9"/><stop offset="1" stop-color="#6d28d9" stop-opacity="0.3"/></linearGradient>
+          <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22c55e" stop-opacity="0.95"/><stop offset="1" stop-color="#22c55e" stop-opacity="0.3"/></linearGradient>
+        </defs>
+        <!-- Y baseline -->
+        <line x1="8" y1="43" x2="96" y2="43" stroke="rgba(10,10,36,0.25)" stroke-width="0.5"/>
+        <!-- Bars (animated via JS) -->
+        <rect id="bar1" x="16" y="43" width="16" height="0" rx="1.5" fill="url(#bg1)"/>
+        <rect id="bar2" x="42" y="43" width="16" height="0" rx="1.5" fill="url(#bg2)"/>
+        <rect id="bar3" x="68" y="43" width="16" height="0" rx="1.5" fill="url(#bg3)"/>
+        <!-- Labels -->
+        <text id="bt1" x="24" y="47.5" font-size="3.4" text-anchor="middle">2024</text>
+        <text id="bt2" x="50" y="47.5" font-size="3.4" text-anchor="middle">2025</text>
+        <text id="bt3" x="76" y="47.5" font-size="3.4" text-anchor="middle">2026E</text>
+        <text id="bv1" x="24" y="43" font-size="3.6" text-anchor="middle" fill="#7c3aed" font-weight="800" opacity="0">9%</text>
+        <text id="bv2" x="50" y="43" font-size="3.6" text-anchor="middle" fill="#6d28d9" font-weight="800" opacity="0">11%</text>
+        <text id="bv3" x="76" y="43" font-size="3.6" text-anchor="middle" fill="#15803d" font-weight="800" opacity="0">15%</text>
+      </svg>
+    </div>
+  </div></section>
+
+  <!-- ═══ S3 · WHY GS UPGRADED ═══ -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHY THE UPGRADE</div>
+
+    <h2 class="h" data-split="0.35">3 Reasons GS Turned Bullish</h2>
+
+    <div class="glass row-chip" data-a="right:0.9:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 20l5-8 4 5 4-9 5 12"/></svg></span>
+      <span class="t">FPI positioning at <strong>decade-low</strong> — massive room to buy in</span>
+    </div>
+
+    <div class="glass row-chip" data-a="right:1.3:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2l1.9 5.9H20l-5 3.6 1.9 5.9-5-3.6-5 3.6L8.1 11.5 3 7.9h6.1z"/><path class="f" d="M12 2l1.9 5.9H20l-5 3.6 1.9 5.9-5-3.6-5 3.6L8.1 11.5 3 7.9h6.1z" opacity="0.3"/></svg></span>
+      <span class="t">Earnings beaten for <strong>5 consecutive quarters</strong></span>
+    </div>
+
+    <div class="glass row-chip" data-a="right:1.7:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9v6"/></svg></span>
+      <span class="t">India GDP: <strong>7.9%</strong> in 2026 — fastest major economy</span>
+    </div>
+
+    <div class="glass row-chip" data-a="right:2.1:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-5"/></svg></span>
+      <span class="t">Revenue growth <strong>21% YoY</strong> — 4pp above consensus</span>
+    </div>
+  </div></section>
+
+  <!-- ═══ S4 · WHAT IT MEANS FOR YOU ═══ -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot-gold"></i>WHAT THIS MEANS FOR YOU</div>
+
+    <h2 class="h" data-split="0.35">If You Hold Nifty Funds</h2>
+
+    <div class="glass card" data-a="pop:0.9:0.7">
+      <span class="ic" style="margin-bottom:1cqw;"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20M6 6V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2"/></svg></span>
+      <p class="val mid">+13% more by end-2027</p>
+      <p class="sub">If GS target holds — Nifty 25,220 → 28,500</p>
+    </div>
+
+    <div class="glass card" data-a="pop:1.4:0.7">
+      <span class="ic" style="margin-bottom:1cqw;"><svg viewBox="0 0 24 24"><path d="M12 2v20M6 7l6-5 6 5M6 17l6 5 6-5"/></svg></span>
+      <p class="val mid">₹94,963 Cr FPI inflow</p>
+      <p class="sub">Already flowing into India in Nov 2026 alone</p>
+    </div>
+
+    <div class="glass card" data-a="pop:1.9:0.7">
+      <span class="ic" style="margin-bottom:1cqw;"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+      <p class="val mid">Watch: Dec 6 RBI</p>
+      <p class="sub">Next rate hike expected — 3 more hikes to 6.25% total</p>
+    </div>
+
+    <p style="font-size:3.2cqw;font-weight:700;color:rgba(255,255,255,0.55);text-align:center;margin:0;flex:none;">Educational content only.</p>
+  </div></section>
+
+  <!-- ═══ S5 · THE NUMBERS ═══ -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE NUMBERS</div>
+
+    <h2 class="h" data-split="0.35">India's Upgrade in Numbers</h2>
+
+    <!-- Before/after Nifty -->
+    <div class="glass dim card" id="ba-bef" data-a="left:0.9:0.7" style="flex-direction:row;align-items:center;justify-content:space-between;gap:3cqw;">
+      <div style="min-width:0;"><p class="lab">Nifty Now (Nov 2026)</p><p class="val mid">~25,220</p></div>
+      <svg viewBox="0 0 60 24" style="width:22cqw;flex:none;"><path id="p5a" pathLength="1" d="M2 16 L18 15 L34 16.5 L58 14" fill="none" stroke="rgba(10,10,36,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+
+    <div class="ba-arrow" data-a="drop:1.9:0.5"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+
+    <div class="glass card" data-a="pop:2.2:0.8" style="flex-direction:row;align-items:center;justify-content:space-between;gap:3cqw;">
+      <div style="min-width:0;"><p class="lab">GS Target (end-2027)</p><p class="val big" style="color:var(--acc);">28,500</p></div>
+      <svg viewBox="0 0 60 24" style="width:22cqw;flex:none;">
+        <defs><linearGradient id="a5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7c3aed" stop-opacity="0.5"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/></linearGradient></defs>
+        <path id="ar5" d="M2 21 C14 20, 22 14, 32 11 S48 4, 58 2 L58 23 L2 23 Z" fill="url(#a5)" opacity="0"/>
+        <path id="p5b" pathLength="1" d="M2 21 C14 20, 22 14, 32 11 S48 4, 58 2" fill="none" stroke="#7c3aed" stroke-width="2.2" stroke-linecap="round"/>
+        <circle id="e5" cx="58" cy="2" r="2.4" fill="#f59e0b" stroke="#fff" stroke-width="0.8" transform="scale(0)"/>
+      </svg>
+    </div>
+
+    <div class="grid2">
+      <div class="glass card" data-a="pop:3.0:0.6" style="gap:1.4cqw;padding:3cqw;">
+        <p class="val mid" style="font-size:5cqw;">15% EPS</p>
+        <p class="sub">Earnings growth 2027E</p>
+      </div>
+      <div class="glass card" data-a="pop:3.3:0.6" style="gap:1.4cqw;padding:3cqw;">
+        <p class="val mid" style="font-size:5cqw;">6.25%</p>
+        <p class="sub">Terminal repo rate target</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- ═══ S6 · TAKEAWAY + CTA ═══ -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot-green"></i>KEY TAKEAWAY</div>
+
+    <h2 class="h" data-split="0.35">India Back on Global Radar</h2>
+
+    <div class="glass card tk" data-a="pop:0.9:0.7" style="gap:3.4cqw;">
+      <div class="tick" data-a="right:1.2:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">World's biggest bank turned BULLISH</span>
+      </div>
+      <div class="tick" data-a="right:1.65:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Earnings beating for 5 straight quarters</span>
+      </div>
+      <div class="tick" data-a="right:2.1:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Nov FPI: biggest inflow of 2026</span>
+      </div>
+    </div>
+
+    <div class="glass follow-card card" data-a="pop:2.9:0.6" style="gap:2.6cqw;padding:3.6cqw;">
+      <div class="who">
+        <span class="avatar">FP</span>
+        <div><b style="color:#fff;font-size:4.4cqw;">@finpulsemarkets</b><span class="s" style="color:rgba(196,181,253,0.9);">Follow for daily market insights</span></div>
+      </div>
+      <p style="margin:0;font-size:3.8cqw;font-weight:700;color:rgba(196,181,253,0.85);">💡 Share this if you hold Nifty funds →</p>
+    </div>
+  </div></section>
+
+  <div class="safe"></div>
+</div>
+
+<script>
+var DURS=[7,7,7.5,7.5,7,9];
+window.COVER_T=0.5;
+var OUT=0.4;
+var STARTS=[];(function(){var a=0;DURS.forEach(function(d){STARTS.push(a);a+=d;});})();
+window.TOTAL=DURS.reduce(function(a,b){return a+b;},0);
+
+var clamp=function(x,a,b){a=a===undefined?0:a;b=b===undefined?1:b;return Math.min(b,Math.max(a,x));};
+var E={
+  outCubic:function(x){return 1-Math.pow(1-x,3);},
+  outBack:function(x){var s=1.5,c=s+1;return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2);},
+  inCubic:function(x){return x*x*x;},
+  inOut:function(x){return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;}
+};
+var $=function(id){return document.getElementById(id);};
+
+// Split headlines
+document.querySelectorAll('.h[data-split]').forEach(function(h){
+  var base=parseFloat(h.getAttribute('data-split'));
+  var words=h.textContent.trim().split(/\s+/);
+  h.textContent='';
+  words.forEach(function(w,i){
+    var s=document.createElement('span');s.className='w';s.textContent=w;
+    s._a={k:'up',s:base+i*0.08,d:0.6};
+    h.appendChild(s);
+    if(i<words.length-1)h.appendChild(document.createTextNode(' '));
+  });
+});
+
+// Gather animated elements
+var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+scenes.forEach(function(sc){
+  sc._els=[];
+  sc.querySelectorAll('[data-a]').forEach(function(el){
+    var p=el.getAttribute('data-a').split(':');
+    el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+    sc._els.push(el);
+  });
+  sc.querySelectorAll('.h .w').forEach(function(el){sc._els.push(el);});
+  sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+});
+
+function applyAnim(el,t){
+  var a=el._a,p=clamp((t-a.s)/a.d),e=E.outCubic(p),b=E.outBack(p),o=clamp(p*2),x=0,y=0,s=1;
+  if(a.k==='pop'){s=0.86+0.14*b;y=(1-e)*6;}
+  else if(a.k==='up'){y=(1-e)*7;}
+  else if(a.k==='drop'){y=-(1-e)*6;s=0.94+0.06*b;}
+  else if(a.k==='left'){x=-(1-e)*18;}
+  else if(a.k==='right'){x=(1-e)*18;}
+  else if(a.k==='zoom'){s=Math.max(0,b);o=clamp(p*3);}
+  el.style.opacity=o;
+  el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+}
+
+// Blobs
+function blob(el,color,size,x,y){
+  el.style.width=size+'cqw';el.style.height=size+'cqw';
+  el.style.left=x+'cqw';el.style.top=y+'cqw';
+  el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+}
+blob($('b1'),'rgba(130,50,220,0.9)',135,-45,-35);
+blob($('b2'),'rgba(50,100,255,0.88)',95,55,55);
+blob($('b3'),'rgba(85,25,210,0.95)',120,-30,115);
+blob($('b4'),'rgba(190,50,185,0.82)',72,55,108);
+function orbs(T){
+  $('b1').style.transform='translate('+(9*Math.sin(T*0.44)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.37)).toFixed(2)+'cqw)';
+  $('b2').style.transform='translate('+(-10*Math.sin(T*0.35+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.40)).toFixed(2)+'cqw)';
+  $('b3').style.transform='translate('+(10*Math.cos(T*0.32)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.39+2)).toFixed(2)+'cqw)';
+  $('b4').style.transform='translate('+(-8*Math.cos(T*0.49+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.46)).toFixed(2)+'cqw)';
+}
+
+// ══ SCENE 1: Hook A ══
+var alertSnapped=false;
+function s1(t){
+  // ALERT stamp snap-in: scale 1.9→1 with rotation, starts at t=0.3
+  var as=$('alertstamp');
+  if(t<0.3){
+    as.style.opacity='0';as.style.transform='scale(1.9) rotate(-8deg)';as.style.boxShadow='0 0 0 rgba(124,58,237,0)';
+  } else {
+    var ap=clamp((t-0.3)/0.3),ae=E.outBack(ap);
+    var sc=1.9-(1.9-1)*ae,rot=(-8+8*E.outCubic(ap));
+    as.style.opacity=String(clamp(ap*4));
+    as.style.transform='scale('+sc.toFixed(3)+') rotate('+rot.toFixed(2)+'deg)';
+    var glow=Math.min(1,ap)*0.7;
+    as.style.boxShadow='0 0 '+(4*glow).toFixed(1)+'cqw rgba(124,58,237,'+glow.toFixed(2)+'),0 2cqw 8cqw rgba(0,0,0,0.5)';
+  }
+
+  // Middle stat card counter: 0→28500 from t=1.4 to t=2.0
+  var cp=clamp((t-1.4)/0.6);
+  $('cnt-tgt').textContent=(Math.round(28500*E.outCubic(cp))).toLocaleString('en-IN');
+
+  // Upside counter: 0→13 from t=1.6 to t=2.2
+  var up=clamp((t-1.6)/0.6);
+  $('cnt-up').textContent='+'+Math.round(13*E.outCubic(up))+'%';
+
+  // Countdown: 5→1 from t=2.3 to t=5.6
+  var arcLen=276.46;
+  if(t<2.3){
+    $('cd-arc').style.strokeDashoffset='0';
+    $('cd-num').textContent='5';
+    $('cd-num').style.color='#f59e0b';
+  } else {
+    var cdt=clamp((t-2.3)/3.3); // 0→1 over 3.3s
+    var cdval=5-Math.floor(cdt*4.999); // 5,4,3,2,1
+    $('cd-num').textContent=String(cdval);
+    $('cd-arc').style.strokeDashoffset=String(arcLen*cdt);
+    // color: gold→red
+    var rc=clamp((t-5.0)/0.6);
+    var gr=Math.round(245-(245-239)*rc);
+    var gg=Math.round(158-(158-68)*rc);
+    var gb=Math.round(11+(68-11)*rc);
+    $('cd-num').style.color='rgb('+gr+','+gg+','+gb+')';
+  }
+
+  // Digit reveal: fade in at t=4.6
+  var drp=clamp((t-4.6)/0.5);
+  $('dr-num').style.opacity=String(E.outCubic(drp));
+  $('dr-num').style.transform='scale('+(0.85+0.15*E.outBack(drp)).toFixed(3)+')';
+  $('dr-num').style.textShadow='0 0 '+(3*E.outCubic(drp)).toFixed(1)+'cqw rgba(167,139,250,'+(0.7*E.outCubic(drp)).toFixed(2)+')';
+}
+
+// ══ SCENE 2: Goldman reveal ══
+function s2(t){
+  // Bar chart animation: bars grow from t=1.8
+  var BAR_H=[9*0.36,11*0.36,15*0.36]; // max height in SVG units (max ~36*0.36=12.96)
+  var BAR_IDS=['bar1','bar2','bar3'];
+  var VAL_IDS=['bv1','bv2','bv3'];
+  var DELAYS=[1.8,2.1,2.4];
+  BAR_IDS.forEach(function(id,i){
+    var bp=clamp((t-DELAYS[i])/0.6);
+    var bh=BAR_H[i]*E.outBack(bp);
+    var bar=$(id);
+    bar.setAttribute('y',String(43-bh));
+    bar.setAttribute('height',String(bh));
+    $(VAL_IDS[i]).setAttribute('y',String(43-bh-1.5));
+    $(VAL_IDS[i]).setAttribute('opacity',String(clamp((t-DELAYS[i]-0.3)/0.3)));
+  });
+
+  // p5a path draw
+  $('p5a') && ($('p5a').style.strokeDasharray='1',$('p5a').style.strokeDashoffset=String(1-E.inOut(clamp((t-1.0)/0.8))));
+}
+
+// ══ SCENE 3: Why ══
+function s3(t){
+  // nothing beyond applyAnim
+}
+
+// ══ SCENE 4: What it means ══
+function s4(t){
+  // nothing beyond applyAnim
+}
+
+// ══ SCENE 5: Numbers ══
+function s5(t){
+  if(!$('p5a'))return;
+  var pa=$('p5a');
+  pa.style.strokeDasharray='1';
+  pa.style.strokeDashoffset=String(1-E.inOut(clamp((t-1.0)/0.7)));
+
+  var pb=$('p5b'),ar5=$('ar5'),e5=$('e5');
+  if(pb){
+    var q=E.inOut(clamp((t-2.3)/0.9));
+    pb.style.strokeDasharray='1';pb.style.strokeDashoffset=String(1-q);
+    ar5.style.opacity=String(clamp((t-2.8)/0.5));
+    var es=Math.max(0,E.outBack(clamp((t-3.1)/0.4)));
+    e5.setAttribute('transform','scale('+es.toFixed(3)+') translate('+(58*(1-1/es)||0)+' '+(2*(1-1/es)||0)+')');
+    if(es>0)e5.setAttribute('transform','translate(58 2) scale('+es.toFixed(3)+') translate(-58 -2)');
+  }
+}
+
+// ══ SCENE 6: Takeaway ══
+var cks6=Array.prototype.slice.call(document.querySelectorAll('.ck6'));
+cks6.forEach(function(c){c.style.strokeDasharray='1';});
+function s6(t){
+  cks6.forEach(function(c,i){c.style.strokeDashoffset=String(1-E.outCubic(clamp((t-(1.45+i*0.45))/0.35)));});
+}
+
+var FX=[s1,s2,s3,s4,s5,s6];
+
+// ══ AUDIO ENGINE ══
+var AudioCtx=window.AudioContext||window.webkitAudioContext;
+var _actx=null,_cued={};
+function _getCtx(){if(!_actx&&AudioCtx)_actx=new AudioCtx();return _actx;}
+function _mkBuf(ctx,dur,fn){var buf=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*dur),ctx.sampleRate);fn(buf.getChannelData(0),ctx.sampleRate);return buf;}
+var SFX={};
+var SFX_READY=false;
+function initSFX(){
+  var ctx=_getCtx();if(!ctx)return;
+  var sr=ctx.sampleRate;
+  function play(buf,vol,when){
+    var src=ctx.createBufferSource(),g=ctx.createGain();
+    src.buffer=buf;g.gain.value=vol||1;
+    src.connect(g);g.connect(ctx.destination);
+    src.start(when||ctx.currentTime);
+  }
+  SFX.whoosh=function(v){var b=_mkBuf(ctx,0.3,function(d,sr){for(var i=0;i<d.length;i++){var env=Math.pow(1-i/d.length,2);d[i]=(Math.random()*2-1)*env*0.6;}});play(b,v||1);};
+  SFX.tick=function(v){var b=_mkBuf(ctx,0.05,function(d,sr){for(var i=0;i<d.length;i++){var env=Math.exp(-i/(sr*0.015));d[i]=Math.sin(2*Math.PI*1200*i/sr)*env*0.4;}});play(b,v||1);};
+  SFX.beep=function(v){var b=_mkBuf(ctx,0.12,function(d,sr){for(var i=0;i<d.length;i++){var env=Math.pow(1-i/d.length,1.5);d[i]=Math.sin(2*Math.PI*880*i/sr)*env*0.5;}});play(b,v||1);};
+  SFX.final_beep=function(v){var b=_mkBuf(ctx,0.2,function(d,sr){for(var i=0;i<d.length;i++){var env=Math.pow(1-i/d.length,1.2);d[i]=(Math.sin(2*Math.PI*1047*i/sr)+0.5*Math.sin(2*Math.PI*1319*i/sr))*env*0.4;}});play(b,v||1);};
+  SFX.reveal_whoosh=function(v){var b=_mkBuf(ctx,0.35,function(d,sr){for(var i=0;i<d.length;i++){var env=Math.pow(1-i/d.length,1.8);var f=800+i/d.length*600;d[i]=Math.sin(2*Math.PI*f*i/sr)*env*0.45+(Math.random()*2-1)*env*0.15;}});play(b,v||1);};
+  SFX.impact=function(v){var b=_mkBuf(ctx,0.15,function(d,sr){for(var i=0;i<d.length;i++){var env=Math.exp(-i/(sr*0.04));d[i]=(Math.random()*2-1)*env*0.7+Math.sin(2*Math.PI*80*i/sr)*env*0.3;}});play(b,v||1);};
+  SFX.swoosh=function(v){var b=_mkBuf(ctx,0.25,function(d,sr){for(var i=0;i<d.length;i++){var p=i/d.length;var env=p<0.1?p*10:Math.pow(1-p,2);d[i]=(Math.random()*2-1)*env*0.5;}});play(b,v||1);};
+  SFX.glass_pop=function(v){var b=_mkBuf(ctx,0.1,function(d,sr){for(var i=0;i<d.length;i++){var env=Math.exp(-i/(sr*0.03));d[i]=Math.sin(2*Math.PI*1800*i/sr)*env*0.3+(Math.random()*2-1)*env*0.1;}});play(b,v||1);};
+  SFX.ding=function(v){var b=_mkBuf(ctx,0.5,function(d,sr){for(var i=0;i<d.length;i++){var env=Math.exp(-i/(sr*0.3));d[i]=Math.sin(2*Math.PI*1047*i/sr)*env*0.4+Math.sin(2*Math.PI*2093*i/sr)*env*0.15;}});play(b,v||1);};
+  SFX.pulse=function(v){var b=_mkBuf(ctx,0.15,function(d,sr){for(var i=0;i<d.length;i++){var env=Math.pow(1-i/d.length,1.5);d[i]=Math.sin(2*Math.PI*120*i/sr)*env*0.5;}});play(b,v||1);};
+  SFX_READY=true;
+}
+document.addEventListener('click',function(){if(!SFX_READY)initSFX();},{once:true});
+
+// cue(T, name, vol) — fires once per absolute T
+function cue(T,name,vol){
+  var k=name+'@'+T.toFixed(2);
+  if(_cued[k])return;
+  _cued[k]=1;
+  if(SFX_READY&&SFX[name])SFX[name](vol);
+}
+
+// ══ MASTER DRIVER ══
+window.setT=function(T){
+  orbs(T);
+  var i=0;for(var k=0;k<STARTS.length;k++)if(T>=STARTS[k]-1e-6)i=k;
+  var t=T-STARTS[i],d=DURS[i];
+  var isLast=(i===DURS.length-1);
+
+  scenes.forEach(function(sc,k){sc.classList.toggle('on',k===i);});
+  var sc=scenes[i];
+  sc._els.forEach(function(el){applyAnim(el,t);});
+  FX[i](t);
+  sc._glass.forEach(function(g,gi){
+    var q=((t*0.45+gi*0.27)%1);
+    g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+  });
+
+  // Audio cues
+  if(i===0){
+    cue(T,'impact',0.9);
+    cue(STARTS[0]+0.3,'whoosh',0.8);
+    cue(STARTS[0]+0.9,'glass_pop',1.0);
+    cue(STARTS[0]+1.1,'tick',0.9);
+    cue(STARTS[0]+1.3,'tick',0.9);
+    cue(STARTS[0]+2.3,'beep',0.7);
+    cue(STARTS[0]+3.6,'tick',0.6);
+    cue(STARTS[0]+4.6,'reveal_whoosh',1.0);
+    cue(STARTS[0]+5.5,'final_beep',1.1);
+  } else if(i===1){
+    cue(STARTS[1]+0.05,'swoosh',0.8);
+    cue(STARTS[1]+0.9,'glass_pop',0.9);
+    cue(STARTS[1]+1.8,'beep',0.7);
+    cue(STARTS[1]+2.1,'beep',0.7);
+    cue(STARTS[1]+2.4,'ding',1.0);
+  } else if(i===2){
+    cue(STARTS[2]+0.9,'swoosh',0.7);
+    cue(STARTS[2]+1.3,'swoosh',0.7);
+    cue(STARTS[2]+1.7,'swoosh',0.7);
+    cue(STARTS[2]+2.1,'swoosh',0.7);
+  } else if(i===3){
+    cue(STARTS[3]+0.9,'glass_pop',0.8);
+    cue(STARTS[3]+1.4,'glass_pop',0.8);
+    cue(STARTS[3]+1.9,'glass_pop',0.8);
+  } else if(i===5){
+    cue(STARTS[5]+1.2,'tick',0.8);
+    cue(STARTS[5]+1.65,'tick',0.8);
+    cue(STARTS[5]+2.1,'ding',1.0);
+    cue(STARTS[5]+2.9,'pulse',0.8);
+  }
+
+  // Exit fade (skip on last scene)
+  if(!isLast){
+    var o=clamp((t-(d-OUT))/OUT);
+    var inner=sc.querySelector('.inner');
+    inner.style.opacity=String(1-E.inCubic(o));
+    inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+  } else {
+    var inner=sc.querySelector('.inner');
+    inner.style.opacity='1';
+    inner.style.transform='translateY(0)';
+  }
+
+  // Tag-pill float
+  var pill=sc.querySelector('.tag-pill');
+  if(pill){
+    var fo=pill.style.opacity;
+    pill.style.transform=(pill.style.transform||'').replace(/ translateY\([^)]*\)/,'')+' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';
+  }
+};
+setT(0.5);
+</script>
+</body>
+</html>
