@@ -1,0 +1,504 @@
+<!doctype html>
+<!--
+  FIN PULSE · Evening Reel · 2026-11-19
+  Story: PSU banks record H1 FY27 profit ₹1.10L Cr — historic low NPAs — stocks still flat
+  Hook: Contradiction (record profit + low NPA + flat stock) → warning trigger → shares
+  Palette: Midnight gold — #0d0900 bg, amber/orange/red/brown blobs
+  Music: atlasaudio-soft-corporate-613334.mp3 (Track 5 — corporate, suits numbers-heavy story)
+  Duration: 45s (6 scenes × DURS)
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>PSU Bank Profit Reel</title>
+<style>
+  :root {
+    --bg: #0d0900;
+    --ink: #1a0e00;
+    --ink-dim: rgba(26, 14, 0, 0.82);
+    --chip-bg: #2a1800;
+    --chip-ink: #ffd580;
+    --green: #c47c00;
+    --saffron: #f59e0b;
+    --red: #e53e3e;
+    --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  .frame { position: relative; width: 1080px; height: 1920px; container-type: inline-size; overflow: hidden; background: var(--bg); font-family: var(--font); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .blob { position: absolute; border-radius: 50%; will-change: transform; }
+  .scene { position: absolute; inset: 0; display: none; }
+  .scene.on { display: block; }
+  .inner { position: absolute; inset: 0; padding: 17cqw 11cqw 30cqw 6cqw; display: flex; flex-direction: column; justify-content: center; gap: 3.6cqw; min-width: 0; }
+
+  .tag-pill {
+    position: relative; align-self: center;
+    display: inline-flex; align-items: center; justify-content: center; gap: 2.6cqw;
+    padding: 2.4cqw 6.4cqw; border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.55));
+    backdrop-filter: blur(40px) saturate(100%);
+    -webkit-backdrop-filter: blur(40px) saturate(100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2cqw 6cqw rgba(0,0,0,0.5), inset 0 0.5cqw 1cqw rgba(255,255,255,0.95), inset 0 -0.7cqw 1.4cqw rgba(26,14,0,0.14);
+    color: var(--ink); font-size: 4.6cqw; font-weight: 800; line-height: 1.2; white-space: nowrap; flex: none;
+  }
+  .tag-pill::before { content: ""; position: absolute; inset: 1cqw; border-radius: 999px; border: 1px solid rgba(255,255,255,0.75); pointer-events: none; }
+  .dot { position: relative; width: 2.6cqw; height: 2.6cqw; border-radius: 50%; background: var(--green); }
+
+  .h {
+    margin: 0; text-align: center; color: #fff; font-size: 8.8cqw; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; text-wrap: balance; flex: none;
+    text-shadow: 0 0.6cqw 2.4cqw rgba(0,0,0,0.5);
+  }
+  .h .w { display: inline-block; }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.37);
+    backdrop-filter: blur(40px) saturate(100%);
+    -webkit-backdrop-filter: blur(40px) saturate(100%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .frame .glass {
+    position: relative; overflow: hidden;
+    background: rgba(255, 255, 255, 0.90);
+    border: 3px solid rgba(255, 255, 255, 0.95);
+    border-radius: 4cqw;
+    box-shadow: 0 2cqw 7cqw rgba(0,0,0,0.5);
+  }
+  .frame .glass.dim { background: rgba(255, 255, 255, 0.45); }
+  .glass::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.5) 50%, transparent 62%);
+    transform: translateX(var(--sw, -130%));
+  }
+
+  .card { padding: 4.2cqw; display: flex; flex-direction: column; gap: 2.4cqw; min-width: 0; flex: none; }
+  .lab { margin: 0; font-size: 3.6cqw; font-weight: 700; line-height: 1.2; color: var(--ink-dim); }
+  .val { margin: 0; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; color: var(--ink); }
+  .huge { font-size: 22cqw; letter-spacing: -0.04em; text-align: center; line-height: 1; }
+  .big { font-size: 7.4cqw; }
+  .mid { font-size: 5.6cqw; }
+  .sub { margin: 0; font-size: 3.6cqw; font-weight: 700; line-height: 1.2; color: var(--ink-dim); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 2cqw; }
+  .chip { background: var(--chip-bg); color: var(--chip-ink); font-size: 4cqw; font-weight: 700; line-height: 1.1; padding: 1.6cqw 3.6cqw; border-radius: 999px; }
+  .chip.red { background: #3a0000; color: #ff8080; }
+  .chip.green { background: #001a08; color: #80ffb0; }
+
+  .ic { flex: none; width: 9cqw; height: 9cqw; border-radius: 50%; background: var(--chip-bg); display: grid; place-items: center; }
+  .ic svg { width: 56%; height: 56%; stroke: var(--chip-ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ic svg .f { fill: var(--chip-ink); stroke: none; }
+
+  .row-chip { display: flex; align-items: center; gap: 3cqw; padding: 2.4cqw 3.6cqw; flex: none; }
+  .row-chip .ic { width: 8.6cqw; height: 8.6cqw; }
+  .row-chip span.t { font-size: 4.3cqw; font-weight: 800; line-height: 1.15; color: var(--ink); }
+
+  .arrow { align-self: center; width: 9cqw; height: 9cqw; border-radius: 50%; background: var(--chip-bg); display: grid; place-items: center; flex: none; }
+  .arrow svg { width: 60%; height: 60%; stroke: var(--chip-ink); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3cqw; flex: none; }
+  .pillar { padding: 3cqw 3.4cqw; align-items: flex-start; gap: 2cqw; }
+  .pillar .val { font-size: 5.4cqw; }
+  .pillar .ic { width: 8.6cqw; height: 8.6cqw; }
+
+  .tick { display: flex; align-items: center; gap: 3cqw; }
+  .tick span.t { font-size: 4.4cqw; font-weight: 800; line-height: 1.15; color: var(--ink); }
+  .tick .ic { width: 8cqw; height: 8cqw; }
+
+  /* handle tag */
+  .handle {
+    position: absolute; bottom: 24cqw; right: 11cqw;
+    font-size: 3.2cqw; font-weight: 800; color: rgba(255,255,255,0.7);
+    letter-spacing: 0.01em;
+  }
+
+  /* scene overrides */
+  #s1 .inner { gap: 5cqw; justify-content: center; }
+  #s1 .h { font-size: 9.4cqw; }
+  #s2 .inner { gap: 3.8cqw; }
+  #s3 .inner { gap: 3.2cqw; }
+  #s4 .inner { gap: 3.4cqw; }
+  #s5 .inner { gap: 4cqw; }
+  #s6 .inner { gap: 4.4cqw; }
+
+  /* big number hook */
+  .hook-num { font-size: 28cqw; font-weight: 900; letter-spacing: -0.05em; line-height: 1; text-align: center; color: #fff; text-shadow: 0 0 8cqw rgba(245,158,11,0.9), 0 2cqw 4cqw rgba(0,0,0,0.6); flex: none; }
+  .hook-label { text-align: center; color: rgba(255,255,255,0.9); font-size: 5.2cqw; font-weight: 700; line-height: 1.3; flex: none; }
+
+  /* bar chart */
+  .bar-wrap { display: flex; align-items: flex-end; gap: 3cqw; padding: 3cqw; height: 28cqw; }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1.5cqw; }
+  .bar { width: 100%; border-radius: 1.6cqw 1.6cqw 0 0; }
+  .bar-lbl { font-size: 3cqw; font-weight: 800; color: var(--ink-dim); text-align: center; }
+  .bar-val { font-size: 3.4cqw; font-weight: 900; color: var(--ink); text-align: center; }
+
+  /* NPA meter */
+  .meter-wrap { padding: 3.6cqw; display: flex; flex-direction: column; gap: 2.4cqw; }
+  .meter-track { width: 100%; height: 3.6cqw; background: rgba(26,14,0,0.15); border-radius: 999px; overflow: hidden; }
+  .meter-fill { height: 100%; border-radius: 999px; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- SCENE 1 · Hook — contradiction -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>PSU Banks FY27</div>
+    <h2 class="h" data-split="0.3">Record profits. Historic clean books.</h2>
+    <div class="glass card" data-a="pop:0.85:0.75" style="align-items:center; gap:1.6cqw; padding:3.6cqw 4.2cqw;">
+      <p class="lab" style="text-align:center;">H1 FY27 Net Profit</p>
+      <p class="val" style="font-size:13cqw; letter-spacing:-0.04em; line-height:1; text-align:center; color:#c47c00;" id="ctr1">₹0</p>
+      <p class="sub" style="text-align:center;">Lakh Crore — All 12 PSU banks combined</p>
+    </div>
+    <div class="glass card dim" data-a="pop:1.9:0.7" style="flex-direction:row; align-items:center; justify-content:space-between; padding:3cqw 4cqw;">
+      <div>
+        <p class="lab">But the stocks?</p>
+        <p class="val mid" style="color:#e53e3e;">Still flat</p>
+      </div>
+      <div style="text-align:right;">
+        <p class="lab">vs Private Banks</p>
+        <p class="val mid" style="color:#c47c00;">+2–3× returns</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- SCENE 2 · The numbers — profit + NPA -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>The Numbers</div>
+    <h2 class="h" data-split="0.3">4th straight year of record profit</h2>
+    <div class="glass card" data-a="pop:0.85:0.75" style="padding:2.8cqw 3.6cqw;">
+      <div class="bar-wrap" id="bars2">
+        <!-- bars filled by JS -->
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="glass card" data-a="pop:2.6:0.6" style="gap:1.4cqw; padding:3.2cqw;">
+        <p class="lab">Gross NPA</p>
+        <p class="val big" style="color:#c47c00;" id="npa2">3.3%</p>
+        <p class="sub">Historic low</p>
+      </div>
+      <div class="glass card" data-a="pop:2.9:0.6" style="gap:1.4cqw; padding:3.2cqw;">
+        <p class="lab">Net NPA</p>
+        <p class="val big" style="color:#c47c00;" id="nnpa2">0.7%</p>
+        <p class="sub">Near zero</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- SCENE 3 · Why profits — 3 reasons -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Why The Turnaround</div>
+    <h2 class="h" data-split="0.3">From bailouts to best-ever books</h2>
+    <div class="glass row-chip" data-a="right:1.0:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 17l4-8 4 6 3-4 4 6"/></svg></span>
+      <span class="t">IBC + bad bank cleanup wiped old loans</span>
+    </div>
+    <div class="glass row-chip" data-a="right:1.5:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M6 11h4M14 11h4"/></svg></span>
+      <span class="t">₹3.5L Cr govt recapitalisation 2017–22</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.0:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+      <span class="t">Rising interest rates boosted net interest margin</span>
+    </div>
+  </div></section>
+
+  <!-- SCENE 4 · Why stocks don't move -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>The Real Problem</div>
+    <h2 class="h" data-split="0.3">So why are the stocks flat?</h2>
+    <div class="glass row-chip" data-a="left:0.9:0.65">
+      <span class="ic" style="background:#3a0000;"><svg viewBox="0 0 24 24"><path d="M3 17l4-8 4 6 3-4 4 6" stroke="#ff8080"/></svg></span>
+      <span class="t">Government owns 60–90% — float is thin</span>
+    </div>
+    <div class="glass row-chip" data-a="left:1.4:0.65">
+      <span class="ic" style="background:#3a0000;"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="#ff8080"/></svg></span>
+      <span class="t">Market values private banks at 3–4× book; PSUs at 1×</span>
+    </div>
+    <div class="glass row-chip" data-a="left:1.9:0.65">
+      <span class="ic" style="background:#3a0000;"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" stroke="#ff8080"/><line x1="6" y1="1" x2="6" y2="4" stroke="#ff8080"/><line x1="10" y1="1" x2="10" y2="4" stroke="#ff8080"/><line x1="14" y1="1" x2="14" y2="4" stroke="#ff8080"/></svg></span>
+      <span class="t">PSBs lend to priority sectors at lower margins</span>
+    </div>
+    <div class="glass card" data-a="pop:2.8:0.7" style="padding:3.2cqw 4cqw; gap:1.6cqw;">
+      <p class="lab">The market's verdict</p>
+      <p class="val mid">Profits are real. Growth potential — still a question mark.</p>
+    </div>
+  </div></section>
+
+  <!-- SCENE 5 · What it means for you -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>What This Means For You</div>
+    <h2 class="h" data-split="0.3">If you hold SBI, PNB or Bank of Baroda</h2>
+    <div class="glass card" data-a="pop:0.9:0.75" style="gap:3cqw;">
+      <div class="tick" data-a="right:1.3:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck1" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Dividends are real — PSU banks pay them</span>
+      </div>
+      <div class="tick" data-a="right:1.8:0.5">
+        <span class="ic" style="background:#3a0000;"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" stroke="#ff8080" stroke-width="2.5"/><line x1="6" y1="6" x2="18" y2="18" stroke="#ff8080" stroke-width="2.5"/></svg></span>
+        <span class="t">Capital appreciation: private banks win on ROE</span>
+      </div>
+      <div class="tick" data-a="right:2.3:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path class="ck2" pathLength="1" d="M8 12.5l3 3 5-6"/></svg></span>
+        <span class="t">Valuation gap vs private banks is widening</span>
+      </div>
+    </div>
+    <div class="glass card dim" data-a="pop:3.1:0.6" style="padding:3cqw 4cqw;">
+      <p class="lab" style="font-size:3.2cqw;">Not investment advice. Do your own research.</p>
+    </div>
+  </div></section>
+
+  <!-- SCENE 6 · Payoff + CTA — no exit fade -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Key Takeaway</div>
+    <h2 class="h" data-split="0.3">Record profit doesn't equal stock returns</h2>
+    <div class="glass card" data-a="pop:0.9:0.75" style="gap:3.4cqw; padding:4.4cqw;">
+      <div class="tick" data-a="right:1.2:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck3" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">PSU banks: best books in a decade</span>
+      </div>
+      <div class="tick" data-a="right:1.65:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck4" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Still trading at heavy discount to private peers</span>
+      </div>
+      <div class="tick" data-a="right:2.1:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck5" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Profit ≠ valuation re-rating (yet)</span>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.9:0.7" style="padding:3.6cqw 4cqw; align-items:center; text-align:center; gap:2cqw;">
+      <p class="val mid">Send this to whoever holds bank stocks</p>
+      <p class="sub">Follow @finpulsemarkets for daily market insights</p>
+    </div>
+  </div></section>
+
+  <div class="handle">@finpulsemarkets</div>
+</div>
+
+<script>
+  /* ── timing ── */
+  var DURS = [7.5, 7.5, 7.5, 7.5, 7.5, 8.0];
+  window.COVER_T = 2.5;
+  var OUT = 0.4;
+  var STARTS = []; (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+  window.TOTAL = DURS.reduce(function(a,b){ return a+b; }, 0);
+
+  /* ── easing ── */
+  var clamp = function(x,a,b){ a=a===undefined?0:a; b=b===undefined?1:b; return Math.min(b,Math.max(a,x)); };
+  var E = {
+    outCubic: function(x){ return 1-Math.pow(1-x,3); },
+    outBack:  function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+    inCubic:  function(x){ return x*x*x; },
+    inOut:    function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+  };
+  var $=function(id){ return document.getElementById(id); };
+  var NS='http://www.w3.org/2000/svg';
+
+  /* ── split headlines ── */
+  document.querySelectorAll('.h[data-split]').forEach(function(h){
+    var base=parseFloat(h.getAttribute('data-split'));
+    var words=h.textContent.trim().split(/\s+/);
+    h.textContent='';
+    words.forEach(function(w,i){
+      var s=document.createElement('span'); s.className='w'; s.textContent=w;
+      s._a={k:'up',s:base+i*0.08,d:0.6};
+      h.appendChild(s);
+      if(i<words.length-1) h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  /* ── gather animated elements ── */
+  var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function(sc){
+    sc._els=[];
+    sc.querySelectorAll('[data-a]').forEach(function(el){
+      var p=el.getAttribute('data-a').split(':');
+      el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+    sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el,t){
+    var a=el._a,p=clamp((t-a.s)/a.d),e=E.outCubic(p),b=E.outBack(p),o=clamp(p*2),x=0,y=0,s=1;
+    if(a.k==='pop'){  s=0.86+0.14*b; y=(1-e)*6; }
+    else if(a.k==='up'){   y=(1-e)*7; }
+    else if(a.k==='drop'){ y=-(1-e)*6; s=0.94+0.06*b; }
+    else if(a.k==='left'){ x=-(1-e)*18; }
+    else if(a.k==='right'){ x=(1-e)*18; }
+    el.style.opacity=o;
+    el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+  }
+
+  /* ── blobs ── */
+  function blob(el,color,size,x,y){
+    el.style.width=size+'cqw'; el.style.height=size+'cqw';
+    el.style.left=x+'cqw'; el.style.top=y+'cqw';
+    el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+  }
+  blob($('b1'),'rgba(196,124,0,0.95)',128,-38,-35);
+  blob($('b2'),'rgba(220,80,20,0.9)',88,54,55);
+  blob($('b3'),'rgba(160,80,0,0.9)',110,-20,115);
+  blob($('b4'),'rgba(100,40,0,0.85)',72,54,108);
+  function orbs(T){
+    $('b1').style.transform='translate('+(9*Math.sin(T*0.44)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.37)).toFixed(2)+'cqw)';
+    $('b2').style.transform='translate('+(-10*Math.sin(T*0.35+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.40)).toFixed(2)+'cqw)';
+    $('b3').style.transform='translate('+(10*Math.cos(T*0.32)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.39+2)).toFixed(2)+'cqw)';
+    $('b4').style.transform='translate('+(-8*Math.cos(T*0.49+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.46)).toFixed(2)+'cqw)';
+  }
+
+  /* ── Scene 1: counter animate ₹0 → ₹1.10 ── */
+  function s1(t){
+    var p=E.outCubic(clamp((t-0.6)/1.4));
+    var v=1.10*p;
+    $('ctr1').textContent='₹'+v.toFixed(2)+'L Cr';
+  }
+
+  /* ── Scene 2: bar chart profit YoY ── */
+  var PROFIT_BARS = [
+    {yr:'FY23',val:1.05,color:'rgba(196,124,0,0.6)'},
+    {yr:'FY24',val:1.41,color:'rgba(196,124,0,0.75)'},
+    {yr:'FY25',val:1.74,color:'rgba(196,124,0,0.9)'},
+    {yr:'H1FY27',val:1.10,color:'rgba(245,158,11,1)'}
+  ];
+  var maxBar=1.74;
+  var barsBuilt=false;
+  function buildBars(){
+    var wrap=$('bars2');
+    if(!wrap||barsBuilt) return; barsBuilt=true;
+    PROFIT_BARS.forEach(function(b){
+      var col=document.createElement('div'); col.className='bar-col';
+      var bar=document.createElement('div'); bar.className='bar';
+      bar.style.background=b.color; bar.style.maxHeight='100%';
+      bar.style.height='0'; bar.style.transition='none';
+      bar._targetH=(b.val/maxBar*100)+'%';
+      var lbl=document.createElement('div'); lbl.className='bar-lbl'; lbl.textContent=b.yr;
+      var val=document.createElement('div'); val.className='bar-val'; val.textContent='₹'+b.val+'L Cr';
+      col.appendChild(val); col.appendChild(bar); col.appendChild(lbl);
+      wrap.appendChild(col);
+      col._bar=bar;
+    });
+    wrap._cols=Array.prototype.slice.call(wrap.children);
+  }
+  function s2(t){
+    buildBars();
+    var wrap=$('bars2'); if(!wrap) return;
+    var cols=wrap.querySelectorAll('.bar-col');
+    cols.forEach(function(col,i){
+      var bar=col.querySelector('.bar');
+      if(!bar) return;
+      var p=E.outCubic(clamp((t-0.9-i*0.3)/0.8));
+      bar.style.height=(p*(parseFloat(bar._targetH||'60'))).toFixed(1)+'%';
+    });
+  }
+
+  /* ── Scene 3–5: checkmarks ── */
+  ['ck1','ck2','ck3','ck4','ck5'].forEach(function(id){
+    var el=document.querySelector('.'+id);
+    if(el) el.style.strokeDasharray='1';
+  });
+  function s3(t){}
+  function s4(t){}
+  function s5(t){
+    var cks=['.ck1','.ck2'];
+    cks.forEach(function(cls,i){
+      var el=document.querySelector(cls); if(!el) return;
+      el.style.strokeDashoffset=1-E.outCubic(clamp((t-1.5-i*0.5)/0.4));
+    });
+  }
+  function s6(t){
+    var cks=['.ck3','.ck4','.ck5'];
+    cks.forEach(function(cls,i){
+      var el=document.querySelector(cls); if(!el) return;
+      el.style.strokeDashoffset=1-E.outCubic(clamp((t-(1.4+i*0.45))/0.35));
+    });
+  }
+
+  var FX=[s1,s2,s3,s4,s5,s6];
+
+  /* ── Audio engine ── */
+  var AC=null, SFX_FIRED={};
+  var SFX_DATA={
+    whoosh:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    tick:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    beep:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    final_beep:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    reveal_whoosh:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    impact:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    swoosh:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    glass_pop:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    ding:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=',
+    pulse:'UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA='
+  };
+  function initAC(){
+    if(AC) return;
+    try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){}
+  }
+  document.addEventListener('click',initAC,{once:true});
+  function cue(T,name,vol){
+    var key=name+'_'+Math.round(T*10);
+    if(SFX_FIRED[key]) return; SFX_FIRED[key]=true;
+    if(!AC) return;
+    try{
+      var b64=SFX_DATA[name]; if(!b64) return;
+      var bin=atob(b64), buf=new ArrayBuffer(bin.length), v=new Uint8Array(buf);
+      for(var i=0;i<bin.length;i++) v[i]=bin.charCodeAt(i);
+      AC.decodeAudioData(buf,function(ab){
+        var src=AC.createBufferSource(), g=AC.createGain();
+        src.buffer=ab; g.gain.value=vol||1;
+        src.connect(g); g.connect(AC.destination);
+        src.start();
+      });
+    }catch(e){}
+  }
+
+  /* ── master setT ── */
+  window.setT=function(T){
+    orbs(T);
+    var i=0; for(var k=0;k<STARTS.length;k++) if(T>=STARTS[k]-1e-6) i=k;
+    var t=T-STARTS[i], d=DURS[i], isLast=(i===scenes.length-1);
+    scenes.forEach(function(sc,k){ sc.classList.toggle('on',k===i); });
+    var sc=scenes[i];
+    sc._els.forEach(function(el){ applyAnim(el,t); });
+    FX[i](t);
+    sc._glass.forEach(function(g,gi){
+      var q=((t*0.45+gi*0.27)%1);
+      g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+    });
+
+    /* cue SFX */
+    cue(STARTS[i]+0.05,'whoosh',0.5);
+    if(i===0 && t<0.7) cue(T,'beep',0.6);
+    if(i===1 && t<0.1) cue(T,'reveal_whoosh',0.5);
+    if(i===5 && t<0.1) cue(T,'ding',0.7);
+
+    /* exit fade — skip on last scene */
+    if(!isLast){
+      var o=clamp((t-(d-OUT))/OUT), inner=sc.querySelector('.inner');
+      inner.style.opacity=1-E.inCubic(o);
+      inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+    } else {
+      var inner=sc.querySelector('.inner');
+      inner.style.opacity='1';
+      inner.style.transform='none';
+    }
+
+    var pill=sc.querySelector('.tag-pill');
+    if(pill){
+      var curT=pill.style.transform||'';
+      var base=curT.replace(/\s*translateY\([^)]*\)/,'');
+      pill.style.transform=base+' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';
+    }
+  };
+
+  setT(window.COVER_T);
+</script>
+</body>
+</html>
