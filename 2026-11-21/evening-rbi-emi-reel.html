@@ -1,0 +1,367 @@
+<!doctype html>
+<!--
+  FIN PULSE · Evening reel 2026-11-21
+  Story: RBI Dec 6 decision — rate hike or cut? Your EMI fate.
+  Hook: "Dec 6 ke baad aapki EMI badh sakti hai. Yeh date save karo."
+  Palette: deep charcoal #060b14 · blue/indigo accent
+  DURS: [7, 7, 8, 7.5, 7, 8.5] = 45 s
+  SEO_TITLE: RBI December 6 — Aapki EMI Badh Sakti Hai
+  SEO_CAPTION: December 6 ko RBI ka bada faisla aane wala hai. CPI 6.09% — RBI ki limit cross ho gayi. Home loan hai? Aapki EMI is decision pe depend karti hai. Yeh video apne ghar wale ko ya dost ko bhejo jinka home loan chal raha hai. 👇
+  SEO_HASHTAGS: #RBIPolicy #HomeLoan #PersonalFinance
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Fin Pulse RBI EMI Reel</title>
+<style>
+  :root {
+    --bg: #060b14;
+    --ink: #0a1535;
+    --ink-dim: rgba(10,21,53,0.72);
+    --chip-bg: #0f1f4a;
+    --chip-ink: #93c5fd;
+    --red: #ef4444;
+    --red2: #f97316;
+    --grn: #22c55e;
+    --blue: #3b82f6;
+    --indigo: #6366f1;
+    --font: 'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; padding:0; width:1080px; height:1920px; overflow:hidden; background:#000; }
+  .frame { position:relative; width:1080px; height:1920px; container-type:inline-size; overflow:hidden; background:var(--bg); font-family:var(--font); color:var(--ink); font-variant-numeric:tabular-nums; }
+
+  .blob { position:absolute; border-radius:50%; will-change:transform; }
+  .scene { position:absolute; inset:0; display:none; }
+  .scene.on { display:block; }
+  .inner { position:absolute; inset:0; padding:17cqw 10cqw 28cqw 6cqw; display:flex; flex-direction:column; justify-content:center; gap:3.6cqw; min-width:0; }
+
+  /* ---- Tag pill ---- */
+  .tag-pill {
+    position:relative; align-self:center;
+    display:inline-flex; align-items:center; justify-content:center; gap:2.6cqw;
+    padding:2.4cqw 6.4cqw; border-radius:999px;
+    background:linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.52));
+    backdrop-filter:blur(40px) saturate(100%);
+    -webkit-backdrop-filter:blur(40px) saturate(100%);
+    border:1.5px solid rgba(255,255,255,0.9);
+    box-shadow:0 2cqw 6cqw rgba(0,0,0,0.45),inset 0 0.5cqw 1cqw rgba(255,255,255,0.95);
+    color:var(--ink); font-size:4.6cqw; font-weight:800; line-height:1.2; white-space:nowrap; flex:none;
+  }
+  .tag-pill::before { content:""; position:absolute; inset:1cqw; border-radius:999px; border:1px solid rgba(255,255,255,0.75); pointer-events:none; }
+  .dot { width:2.6cqw; height:2.6cqw; border-radius:50%; background:var(--blue); }
+  .dot-red { background:var(--red); }
+
+  /* ---- Headlines ---- */
+  .h { margin:0; text-align:center; color:#fff; font-size:8.8cqw; font-weight:800; letter-spacing:-0.02em; line-height:1.1; text-wrap:balance; flex:none; text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.45); }
+  .h .accent { color:#fbbf24; }
+  .h .blue { color:#93c5fd; }
+  .h .red { color:#fca5a5; }
+
+  /* ---- Glass cards ---- */
+  .glass {
+    position:relative; overflow:hidden;
+    background:rgba(255,255,255,0.88);
+    border:3px solid rgba(255,255,255,0.95);
+    border-radius:4cqw;
+    box-shadow:0 2cqw 7cqw rgba(0,0,0,0.55);
+  }
+  .glass.dim { background:rgba(255,255,255,0.42); }
+  .card { padding:4.2cqw; display:flex; flex-direction:column; gap:2.4cqw; min-width:0; flex:none; }
+  .lab { margin:0; font-size:3.6cqw; font-weight:700; line-height:1.2; color:var(--ink-dim); }
+  .val { margin:0; font-weight:800; letter-spacing:-0.02em; line-height:1.05; color:var(--ink); }
+  .big { font-size:8cqw; }
+  .mid { font-size:5.6cqw; }
+  .sub { margin:0; font-size:3.4cqw; font-weight:700; line-height:1.2; color:var(--ink-dim); }
+
+  /* ---- Icon circles ---- */
+  .ic { flex:none; width:9cqw; height:9cqw; border-radius:50%; background:var(--chip-bg); display:grid; place-items:center; }
+  .ic svg { width:56%; height:56%; stroke:var(--chip-ink); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* ---- Row chips ---- */
+  .row-chip { display:flex; align-items:center; gap:3cqw; padding:2.4cqw 3.6cqw; flex:none; }
+  .rc-text { flex:1; min-width:0; }
+  .rc-title { margin:0; font-size:4.2cqw; font-weight:800; line-height:1.2; color:var(--ink); }
+  .rc-sub { margin:0; font-size:3.2cqw; font-weight:600; color:var(--ink-dim); }
+
+  /* ---- Stat row ---- */
+  .stat-row { display:flex; gap:2.8cqw; align-items:stretch; flex:none; }
+  .stat-mini { flex:1; min-width:0; }
+  .stat-mini .lab { font-size:3cqw; }
+  .stat-mini .val { font-size:5.2cqw; }
+  .stat-mini .sub { font-size:2.8cqw; }
+
+  /* ---- Blobs ---- */
+  @keyframes drift { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(3%,-2%) scale(1.03)} 66%{transform:translate(-2%,2%) scale(0.97)} }
+  @keyframes pulse { 0%,100%{opacity:.7} 50%{opacity:.95} }
+
+  /* ---- Bottom bar ---- */
+  .bottom-bar {
+    position:absolute; bottom:0; left:0; right:0;
+    padding:5cqw 8cqw 8cqw 8cqw;
+    display:flex; flex-direction:column; gap:2.2cqw;
+    background:linear-gradient(to top,rgba(6,11,20,0.98) 50%,transparent);
+  }
+  .cta-line { color:rgba(255,255,255,0.72); font-size:3.5cqw; font-weight:600; text-align:center; }
+  .brand { color:rgba(255,255,255,0.4); font-size:3cqw; font-weight:700; text-align:center; letter-spacing:0.1em; text-transform:uppercase; }
+
+  /* ---- Countdown style ---- */
+  .countdown-num {
+    font-size:26cqw; font-weight:900; letter-spacing:-0.04em;
+    color:#3b82f6; text-align:center; line-height:0.9;
+    text-shadow:0 0 10cqw rgba(59,130,246,0.6);
+  }
+
+  /* ---- EMI Calculator visual ---- */
+  .emi-row { display:flex; justify-content:space-between; align-items:center; padding:2.5cqw 4cqw; }
+  .emi-label { font-size:4cqw; font-weight:700; color:var(--ink-dim); }
+  .emi-value { font-size:4.8cqw; font-weight:900; }
+  .emi-sep { height:1px; background:rgba(10,21,53,0.1); margin:0 2cqw; }
+
+  /* ---- Fade cover ---- */
+  .fade-cover { position:absolute; inset:0; background:#000; opacity:0; pointer-events:none; z-index:50; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+
+  <!-- BLOBS -->
+  <div class="blob" style="width:150cqw;height:150cqw;top:-50cqw;left:-40cqw;background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 70%);animation:drift 16s ease-in-out infinite;"></div>
+  <div class="blob" style="width:120cqw;height:120cqw;top:50cqw;right:-40cqw;background:radial-gradient(circle,rgba(99,102,241,0.12) 0%,transparent 68%);animation:drift 20s ease-in-out infinite reverse;"></div>
+  <div class="blob" style="width:100cqw;height:100cqw;bottom:0;left:-25cqw;background:radial-gradient(circle,rgba(239,68,68,0.10) 0%,transparent 65%);animation:pulse 12s ease-in-out infinite;"></div>
+
+  <!-- ========== SCENE 1: HOOK — Countdown ========== -->
+  <div class="scene on" id="s1">
+    <div class="inner" style="justify-content:flex-start;padding-top:20cqw;gap:4cqw;">
+      <div class="tag-pill"><div class="dot"></div>RBI · Dec 2–4, 2026</div>
+
+      <div style="text-align:center;margin-top:2cqw;">
+        <div style="color:rgba(255,255,255,0.55);font-size:5cqw;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:1cqw;">DAYS BACHA HAI</div>
+        <div class="countdown-num">12</div>
+        <div style="color:rgba(255,255,255,0.4);font-size:4.4cqw;font-weight:700;margin-top:2cqw;">RBI ka bada faisla</div>
+      </div>
+
+      <div class="glass card" style="margin-top:2cqw;">
+        <div class="lab">Inflation (CPI Oct 2026)</div>
+        <div class="val big" style="color:#ef4444;">6.09%</div>
+        <div class="sub">RBI ki upper limit: 6.00% — CROSSED ✗</div>
+      </div>
+
+      <div class="h" style="font-size:7.2cqw;margin-top:1cqw;">Home loan hai?<br><span class="accent">Aapki EMI badh sakti hai.</span></div>
+    </div>
+    <div class="bottom-bar">
+      <div class="cta-line">👇 30 seconds mein sab samjho</div>
+      <div class="brand">FIN PULSE</div>
+    </div>
+  </div>
+
+  <!-- ========== SCENE 2: THE SITUATION ========== -->
+  <div class="scene" id="s2">
+    <div class="inner" style="padding-top:19cqw;">
+      <div class="tag-pill"><div class="dot"></div>Situation kya hai?</div>
+      <div class="h" style="font-size:7.8cqw;">2 numbers jo<br><span class="blue">RBI decide karega</span></div>
+
+      <div class="stat-row" style="margin-top:1cqw;">
+        <div class="glass card stat-mini">
+          <div class="lab">CPI Inflation</div>
+          <div class="val" style="font-size:6cqw;color:#ef4444;">6.09%</div>
+          <div class="sub">Limit: 6% ↑</div>
+        </div>
+        <div class="glass card stat-mini">
+          <div class="lab">WPI Inflation</div>
+          <div class="val" style="font-size:6cqw;color:#ef4444;">12.29%</div>
+          <div class="sub">2nd month double digit</div>
+        </div>
+      </div>
+
+      <div class="glass card">
+        <div class="row-chip">
+          <div class="ic">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="rc-text">
+            <div class="rc-title">Food prices +8.94%</div>
+            <div class="rc-sub">Onion +116% YoY</div>
+          </div>
+        </div>
+        <div style="height:1px;background:rgba(10,21,53,0.1);margin:0 1cqw;"></div>
+        <div class="row-chip">
+          <div class="ic" style="background:#fef2f2;">
+            <svg viewBox="0 0 24 24" style="stroke:#ef4444;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="rc-text">
+            <div class="rc-title" style="color:#ef4444;">Repo Rate abhi: 5.50%</div>
+            <div class="rc-sub">Hike possible Dec 2–4 meeting</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-bar"><div class="brand">FIN PULSE</div></div>
+  </div>
+
+  <!-- ========== SCENE 3: RBI KE 2 OPTIONS ========== -->
+  <div class="scene" id="s3">
+    <div class="inner" style="padding-top:18cqw;">
+      <div class="tag-pill"><div class="dot"></div>RBI ke paas 2 raste</div>
+      <div class="h" style="font-size:8.2cqw;">Dono ka aap pe<br><span class="accent">seedha asar</span></div>
+
+      <!-- Option A -->
+      <div class="glass card" style="border-left:6px solid #ef4444;">
+        <div class="lab" style="color:#ef4444;">OPTION A — Rate Hike</div>
+        <div class="val mid">Repo 5.50% → 5.75% (+25 bps)</div>
+        <div class="sub" style="margin-top:1cqw;">✗ EMI badhegi | ✗ Business loans costly | ✓ Inflation control</div>
+      </div>
+
+      <!-- Option B -->
+      <div class="glass card" style="border-left:6px solid #22c55e;">
+        <div class="lab" style="color:#22c55e;">OPTION B — Rate Hold</div>
+        <div class="val mid">Repo 5.50% (unchanged)</div>
+        <div class="sub" style="margin-top:1cqw;">✓ EMI same | ✓ Growth support | ✗ Inflation risk stays</div>
+      </div>
+
+      <div class="glass card dim" style="margin-top:0.5cqw;text-align:center;">
+        <div class="val" style="font-size:4.4cqw;text-align:center;line-height:1.6;">Most analysts: <span style="color:#ef4444;font-size:5.2cqw;">HIKE likely</span><br>CPI above 6% = RBI must act</div>
+      </div>
+    </div>
+    <div class="bottom-bar"><div class="brand">FIN PULSE</div></div>
+  </div>
+
+  <!-- ========== SCENE 4: EMI CALCULATOR ========== -->
+  <div class="scene" id="s4">
+    <div class="inner" style="padding-top:19cqw;">
+      <div class="tag-pill"><div class="dot dot-red"></div>Aapki EMI ka hisaab</div>
+      <div class="h" style="font-size:8cqw;">₹50 lakh loan pe<br><span class="red">kitna fark padega?</span></div>
+
+      <div class="glass" style="overflow:hidden;margin-top:1cqw;">
+        <div style="background:#f8fafc;padding:3cqw 4cqw;border-bottom:1px solid rgba(10,21,53,0.1);">
+          <div style="font-size:3.6cqw;font-weight:700;color:var(--ink-dim);">Home Loan ₹50 Lakh · 20 Yrs · Floating Rate</div>
+        </div>
+        <div class="emi-row">
+          <div class="emi-label">Abhi (5.50%)</div>
+          <div class="emi-value" style="color:#22c55e;">₹34,328/mo</div>
+        </div>
+        <div class="emi-sep"></div>
+        <div class="emi-row">
+          <div class="emi-label">Rate hike ho toh (5.75%)</div>
+          <div class="emi-value" style="color:#ef4444;">₹35,042/mo</div>
+        </div>
+        <div class="emi-sep"></div>
+        <div class="emi-row" style="background:#fef2f2;">
+          <div class="emi-label" style="color:#ef4444;font-weight:800;">Extra per month</div>
+          <div class="emi-value" style="color:#ef4444;">+₹714/mo</div>
+        </div>
+        <div style="padding:2.5cqw 4cqw;text-align:center;">
+          <div style="font-size:3.4cqw;font-weight:700;color:var(--ink-dim);">= ₹8,568/year extra</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-bar"><div class="brand">FIN PULSE</div></div>
+  </div>
+
+  <!-- ========== SCENE 5: WHAT TO DO ========== -->
+  <div class="scene" id="s5">
+    <div class="inner" style="padding-top:18cqw;">
+      <div class="tag-pill"><div class="dot"></div>Aap kya kar sakte ho?</div>
+      <div class="h" style="font-size:8.2cqw;">Dec 6 se pehle<br><span class="blue">yeh jaano</span></div>
+
+      <div class="glass card">
+        <div class="row-chip">
+          <div class="ic" style="background:#f0fdf4;">
+            <svg viewBox="0 0 24 24" style="stroke:#22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="rc-text">
+            <div class="rc-title" style="color:#15803d;">Fixed rate loan?</div>
+            <div class="rc-sub">Aap safe — EMI nahi badhegi</div>
+          </div>
+        </div>
+        <div style="height:1px;background:rgba(10,21,53,0.1);margin:0 1cqw;"></div>
+        <div class="row-chip">
+          <div class="ic" style="background:#fef2f2;">
+            <svg viewBox="0 0 24 24" style="stroke:#ef4444;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="rc-text">
+            <div class="rc-title" style="color:#ef4444;">Floating rate loan?</div>
+            <div class="rc-sub">Budget adjust karo pehle se</div>
+          </div>
+        </div>
+        <div style="height:1px;background:rgba(10,21,53,0.1);margin:0 1cqw;"></div>
+        <div class="row-chip">
+          <div class="ic">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div class="rc-text">
+            <div class="rc-title">Watch Dec 6 announcement</div>
+            <div class="rc-sub">RBI press conference: 10 AM IST</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-bar"><div class="brand">FIN PULSE</div></div>
+  </div>
+
+  <!-- ========== SCENE 6: CTA ========== -->
+  <div class="scene" id="s6">
+    <div class="inner" style="padding-top:18cqw;align-items:center;">
+      <div class="tag-pill"><div class="dot"></div>Fin Pulse</div>
+
+      <div class="h" style="font-size:9.5cqw;margin-top:2cqw;">Dec 6.<br>Save this date.</div>
+      <div class="h" style="font-size:7cqw;color:rgba(255,255,255,0.7);margin-top:1cqw;">Aapki EMI ka fate decide hoga.</div>
+
+      <div class="glass card" style="width:100%;margin-top:4cqw;background:rgba(255,255,255,0.92);">
+        <div style="text-align:center;">
+          <div style="font-size:5cqw;font-weight:800;color:var(--ink);line-height:1.4;">Kisi ka home loan<br>chal raha hai?</div>
+          <div style="font-size:4.4cqw;font-weight:700;color:var(--red);margin-top:2cqw;">👇 Send this to them</div>
+        </div>
+      </div>
+
+      <div style="color:rgba(255,255,255,0.5);font-size:3.4cqw;font-weight:600;text-align:center;margin-top:3cqw;line-height:1.6;">
+        Follow @finpulsemarkets<br>Market ka sach — daily
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <div class="brand">FIN PULSE</div>
+    </div>
+  </div>
+
+  <!-- FADE COVER -->
+  <div class="fade-cover" id="fc"></div>
+
+</div>
+
+<script>
+const STARTS = [0, 7, 14, 22, 29.5, 36.5];
+const DURS   = [7, 7,  8,  7.5, 7,   8.5];
+const TOTAL  = 45;
+
+function setT(t) {
+  let si = 0;
+  for (let i = STARTS.length - 1; i >= 0; i--) {
+    if (t >= STARTS[i]) { si = i; break; }
+  }
+  document.querySelectorAll('.scene').forEach((s, i) => {
+    s.classList.toggle('on', i === si);
+  });
+  const fc = document.getElementById('fc');
+  if (fc) {
+    const sceneT = t - STARTS[si];
+    const dur = DURS[si];
+    let op = 0;
+    if (sceneT < 0.4) op = 1 - sceneT / 0.4;
+    else if (sceneT > dur - 0.5) op = (sceneT - (dur - 0.5)) / 0.5;
+    fc.style.opacity = Math.max(0, Math.min(1, op));
+  }
+}
+
+let startMs = null;
+function tick(ts) {
+  if (!startMs) startMs = ts;
+  const t = Math.min((ts - startMs) / 1000, TOTAL);
+  setT(t);
+  if (t < TOTAL) requestAnimationFrame(tick);
+}
+
+setT(2.5);
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
