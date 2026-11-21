@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Fin Pulse – India Decouples</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#080810;
+  --accent1:#818cf8;
+  --accent2:#c084fc;
+  --accent3:#38bdf8;
+  --text:#ffffff;
+  --text-dim:rgba(255,255,255,0.65);
+  --red:#ef4444;
+  --green:#22c55e;
+}
+
+html,body{
+  width:1080px;height:1920px;
+  background:var(--bg);
+  font-family:'Inter','Helvetica Neue',Arial,sans-serif;
+  overflow:hidden;
+  container-type:inline-size;
+}
+
+/* ── Blob orbs ── */
+.orb{
+  position:absolute;border-radius:50%;
+  filter:blur(80px);
+  will-change:transform;
+  pointer-events:none;
+  mix-blend-mode:screen;
+}
+.orb1{width:72cqw;height:72cqw;background:rgba(99,102,241,0.78);top:-18cqw;left:-22cqw;}
+.orb2{width:62cqw;height:62cqw;background:rgba(192,132,252,0.72);top:5cqw;right:-18cqw;}
+.orb3{width:68cqw;height:68cqw;background:rgba(59,130,246,0.65);bottom:8cqw;left:-12cqw;}
+.orb4{width:58cqw;height:58cqw;background:rgba(236,72,153,0.60);bottom:3cqw;right:-8cqw;}
+
+/* ── Scene wrapper ── */
+.scene{
+  position:absolute;inset:0;
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+}
+.inner{
+  padding:17cqw 11cqw 30cqw 6cqw;
+  display:flex;flex-direction:column;
+  height:100%;position:relative;z-index:2;
+}
+
+/* ── Watermark ── */
+.wm{
+  position:absolute;bottom:6cqw;right:7cqw;
+  font-size:3.2cqw;font-weight:700;
+  color:rgba(255,255,255,0.4);
+  letter-spacing:0.05em;z-index:10;
+}
+
+/* ── Glass card ── */
+.glass{
+  background:rgba(255,255,255,0.88);
+  border:3px solid rgba(255,255,255,0.95);
+  border-radius:4cqw;
+  color:#1e1b4b;
+  position:relative;overflow:hidden;
+}
+.glass::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,0.55) 50%,transparent 60%);
+  transform:translateX(calc(var(--sw,0) * 200% - 100%));
+  pointer-events:none;
+  z-index:1;
+}
+
+/* ══════════════════════════════
+   SCENE 1  –  HOOK B (blur reveal)
+══════════════════════════════ */
+#s1-label{
+  font-size:4cqw;font-weight:700;
+  color:var(--text-dim);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:5cqw;opacity:0;
+}
+#s1-q{
+  font-size:9.5cqw;font-weight:900;
+  color:#fff;line-height:1.1;
+  margin-bottom:7cqw;opacity:0;
+}
+#s1-q em{color:var(--accent1);font-style:normal;}
+
+/* Reveal card */
+#s1-card{
+  padding:5cqw 6cqw;margin-bottom:5cqw;
+  opacity:0;transform:scale(0.85);
+}
+#s1-card .meta{
+  font-size:3.5cqw;font-weight:700;
+  color:#6b7280;letter-spacing:0.06em;
+  text-transform:uppercase;margin-bottom:2cqw;
+}
+#s1-num{
+  font-size:18cqw;font-weight:900;
+  color:#ef4444;line-height:1;
+  display:block;
+}
+#s1-card .subtext{
+  font-size:4cqw;font-weight:600;
+  color:#374151;margin-top:2cqw;
+}
+
+#s1-sub{
+  font-size:5.5cqw;font-weight:700;
+  color:rgba(255,255,255,0.9);
+  line-height:1.3;opacity:0;
+}
+#s1-sub strong{color:var(--accent2);}
+
+/* ══════════════════════════════
+   SCENE 2  –  THE CRASH
+══════════════════════════════ */
+#s2-title{
+  font-size:4.5cqw;font-weight:800;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:4cqw;opacity:0;
+}
+#s2-card{
+  padding:5cqw 6cqw;opacity:0;transform:scale(0.85);
+}
+#s2-card .ticker{
+  font-size:3.5cqw;font-weight:700;
+  color:#6b7280;letter-spacing:0.06em;
+  text-transform:uppercase;margin-bottom:1.5cqw;
+}
+#s2-pct{
+  font-size:17cqw;font-weight:900;
+  color:#ef4444;line-height:1;
+}
+#s2-card .desc{
+  font-size:4.2cqw;font-weight:600;
+  color:#374151;margin-top:2cqw;line-height:1.3;
+}
+
+/* Bar chart */
+.bar-chart{margin-top:4cqw;}
+.bar-row{display:flex;align-items:center;margin-bottom:3cqw;gap:3cqw;}
+.bar-label{font-size:4cqw;font-weight:700;color:#374151;min-width:28cqw;}
+.bar-track{
+  flex:1;height:5.5cqw;
+  background:#f3f4f6;border-radius:1cqw;overflow:hidden;
+}
+.bar-fill{
+  height:100%;border-radius:1cqw;
+  transform-origin:left;transform:scaleX(0);
+}
+.bar-fill.red{background:linear-gradient(90deg,#ef4444,#f97316);}
+.bar-fill.green{background:linear-gradient(90deg,#22c55e,#10b981);}
+.bar-pct{font-size:4cqw;font-weight:800;min-width:14cqw;text-align:right;}
+.bar-pct.red{color:#ef4444;}
+.bar-pct.green{color:#22c55e;}
+
+/* ══════════════════════════════
+   SCENE 3  –  WHY INDIA
+══════════════════════════════ */
+#s3-title{
+  font-size:4.5cqw;font-weight:800;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:3cqw;opacity:0;
+}
+#s3-claim{
+  font-size:9cqw;font-weight:900;
+  color:#fff;line-height:1.1;
+  margin-bottom:5cqw;opacity:0;
+}
+#s3-claim span{color:var(--accent2);}
+
+.reason-chip{
+  display:flex;align-items:center;
+  gap:4cqw;padding:4cqw 5cqw;
+  margin-bottom:3cqw;border-radius:3cqw;
+  opacity:0;
+}
+.reason-chip .num{
+  width:9cqw;height:9cqw;border-radius:50%;
+  background:var(--accent1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:4.5cqw;font-weight:900;color:#fff;flex-shrink:0;
+}
+.reason-chip .txt{
+  font-size:4.5cqw;font-weight:700;
+  color:#1e1b4b;line-height:1.3;
+}
+.reason-chip .txt em{color:#4f46e5;font-style:normal;font-weight:800;}
+
+/* ══════════════════════════════
+   SCENE 4  –  INVESTOR IMPACT
+══════════════════════════════ */
+#s4-title{
+  font-size:4.5cqw;font-weight:800;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:3cqw;opacity:0;
+}
+#s4-claim{
+  font-size:7.5cqw;font-weight:900;
+  color:#fff;line-height:1.1;
+  margin-bottom:4cqw;opacity:0;
+}
+#s4-claim em{color:var(--accent2);font-style:normal;}
+
+.impact-card{
+  padding:4cqw 5cqw;margin-bottom:3cqw;
+  opacity:0;transform:scale(0.88);
+}
+.impact-card .ic-title{
+  font-size:4.2cqw;font-weight:800;
+  color:#1e1b4b;margin-bottom:1.5cqw;
+}
+.impact-card .ic-body{
+  font-size:3.8cqw;font-weight:500;
+  color:#374151;line-height:1.4;
+}
+.disclaim{
+  font-size:3cqw;font-weight:600;
+  color:rgba(255,255,255,0.45);
+  text-align:center;margin-top:auto;
+  letter-spacing:0.04em;
+}
+
+/* ══════════════════════════════
+   SCENE 5  –  DATA GRID
+══════════════════════════════ */
+#s5-title{
+  font-size:4.5cqw;font-weight:800;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:4cqw;opacity:0;
+}
+.data-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:3cqw;flex:1;
+}
+.data-cell{
+  padding:4.5cqw 4cqw;
+  display:flex;flex-direction:column;justify-content:center;
+  opacity:0;transform:scale(0.88);
+}
+.data-cell .dc-label{
+  font-size:3cqw;font-weight:700;
+  color:#6b7280;letter-spacing:0.06em;
+  text-transform:uppercase;margin-bottom:1.5cqw;
+}
+.data-cell .dc-value{
+  font-size:9cqw;font-weight:900;
+  line-height:1;color:#1e1b4b;
+}
+.data-cell .dc-value.red{color:#ef4444;}
+.data-cell .dc-value.green{color:#22c55e;}
+.data-cell .dc-sub{
+  font-size:3.5cqw;font-weight:600;
+  color:#6b7280;margin-top:1.2cqw;line-height:1.3;
+}
+
+/* ══════════════════════════════
+   SCENE 6  –  CTA
+══════════════════════════════ */
+#s6-title{
+  font-size:4.5cqw;font-weight:800;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:4cqw;opacity:0;
+}
+#s6-cta{
+  font-size:9cqw;font-weight:900;
+  color:#fff;line-height:1.1;
+  margin-bottom:5cqw;opacity:0;
+}
+#s6-cta em{color:var(--accent2);font-style:normal;}
+
+.check-row{
+  display:flex;align-items:flex-start;
+  gap:4cqw;padding:4cqw 5cqw;
+  margin-bottom:3cqw;border-radius:3cqw;
+  opacity:0;
+}
+.check-row .ck{
+  width:8cqw;height:8cqw;border-radius:50%;
+  background:var(--accent1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:4cqw;font-weight:900;color:#fff;flex-shrink:0;
+}
+.check-row .ct{
+  font-size:4.5cqw;font-weight:700;
+  color:#1e1b4b;line-height:1.3;
+  padding-top:0.5cqw;
+}
+#s6-pill{
+  background:linear-gradient(135deg,var(--accent1),var(--accent2));
+  color:#fff;border-radius:100cqw;
+  font-size:5.5cqw;font-weight:900;
+  padding:3.5cqw 7cqw;
+  display:inline-block;
+  margin-top:4cqw;
+  letter-spacing:0.03em;
+  box-shadow:0 4px 24px rgba(129,140,248,0.5);
+  opacity:0;transform:scale(0.85);
+}
+
+/* ── Scene exit fade overlay ── */
+.scene-fade{
+  position:absolute;inset:0;
+  background:#080810;
+  opacity:0;pointer-events:none;z-index:50;
+}
+</style>
+</head>
+<body>
+
+<!-- ── BLOB ORBS ── -->
+<div class="orb orb1" id="orb1"></div>
+<div class="orb orb2" id="orb2"></div>
+<div class="orb orb3" id="orb3"></div>
+<div class="orb orb4" id="orb4"></div>
+
+<!-- ══ SCENE 1: HOOK B ══ -->
+<div class="scene" id="s1">
+  <div class="inner">
+    <div id="s1-label">This week on Wall St</div>
+
+    <div id="s1-q">
+      Everyone said<br><em>invest in US</em><br>stocks.
+    </div>
+
+    <div id="s1-card" class="glass">
+      <div class="meta">NASDAQ · WEEKLY CHANGE</div>
+      <span id="s1-num">-5.5%</span>
+      <div class="subtext">Erased ALL 2026 gains in one week</div>
+    </div>
+
+    <div id="s1-sub">
+      India just hit a<br><strong>9-month high.</strong>
+    </div>
+  </div>
+  <div class="wm">@finpulsemarkets</div>
+  <div class="scene-fade" id="s1-fade"></div>
+</div>
+
+<!-- ══ SCENE 2: THE CRASH ══ -->
+<div class="scene" id="s2">
+  <div class="inner">
+    <div id="s2-title">The AI Selloff</div>
+
+    <div id="s2-card" class="glass">
+      <div class="ticker">NASDAQ · US:COMP</div>
+      <div id="s2-pct">-5.5%</div>
+      <div class="desc">Worst week of 2026 — all gains since Jan wiped.</div>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">Nasdaq</span>
+          <div class="bar-track">
+            <div class="bar-fill red" id="b-nasdaq" style="width:100%"></div>
+          </div>
+          <span class="bar-pct red">-5.5%</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">S&amp;P 500</span>
+          <div class="bar-track">
+            <div class="bar-fill red" id="b-sp" style="width:67%"></div>
+          </div>
+          <span class="bar-pct red">-3.7%</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Nifty 50</span>
+          <div class="bar-track">
+            <div class="bar-fill green" id="b-nifty" style="width:47%"></div>
+          </div>
+          <span class="bar-pct green">+2.6%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wm">@finpulsemarkets</div>
+  <div class="scene-fade" id="s2-fade"></div>
+</div>
+
+<!-- ══ SCENE 3: WHY INDIA ══ -->
+<div class="scene" id="s3">
+  <div class="inner">
+    <div id="s3-title">Why India Didn't Fall</div>
+
+    <div id="s3-claim">
+      India<br><span>decoupled.</span>
+    </div>
+
+    <div id="s3-r1" class="reason-chip glass">
+      <div class="num">1</div>
+      <div class="txt">India runs on <em>domestic growth</em>, not US tech stocks</div>
+    </div>
+    <div id="s3-r2" class="reason-chip glass">
+      <div class="num">2</div>
+      <div class="txt"><em>FIIs returned</em> — foreign investors chose India over US</div>
+    </div>
+    <div id="s3-r3" class="reason-chip glass">
+      <div class="num">3</div>
+      <div class="txt">Bank Nifty hit an <em>all-time high</em> — India's economy looks strong</div>
+    </div>
+  </div>
+  <div class="wm">@finpulsemarkets</div>
+  <div class="scene-fade" id="s3-fade"></div>
+</div>
+
+<!-- ══ SCENE 4: INVESTOR IMPACT ══ -->
+<div class="scene" id="s4">
+  <div class="inner">
+    <div id="s4-title">What This Means</div>
+
+    <div id="s4-claim">
+      3 things to<br><em>watch now</em>
+    </div>
+
+    <div id="s4-c1" class="impact-card glass">
+      <div class="ic-title">🔴 US-focused funds took a hit</div>
+      <div class="ic-body">International or US-index funds in your SIP saw a rough week — Nasdaq wiped all 2026 gains.</div>
+    </div>
+    <div id="s4-c2" class="impact-card glass">
+      <div class="ic-title">🟢 India-focused funds held strong</div>
+      <div class="ic-body">Nifty at 25,387 — a 9-month high. Domestic Indian portfolios outperformed this week.</div>
+    </div>
+    <div id="s4-c3" class="impact-card glass">
+      <div class="ic-title">⚡ This decoupling may not last</div>
+      <div class="ic-body">If US markets keep falling, India will eventually feel it too. Volatility may return.</div>
+    </div>
+
+    <div class="disclaim">Educational content only.</div>
+  </div>
+  <div class="wm">@finpulsemarkets</div>
+  <div class="scene-fade" id="s4-fade"></div>
+</div>
+
+<!-- ══ SCENE 5: DATA SCOREBOARD ══ -->
+<div class="scene" id="s5">
+  <div class="inner">
+    <div id="s5-title">This Week's Scoreboard</div>
+
+    <div class="data-grid">
+      <div id="s5-c1" class="data-cell glass">
+        <div class="dc-label">Nasdaq Weekly</div>
+        <div class="dc-value red">-5.5%</div>
+        <div class="dc-sub">Worst week of 2026</div>
+      </div>
+      <div id="s5-c2" class="data-cell glass">
+        <div class="dc-label">Nifty 50</div>
+        <div class="dc-value green">25,387</div>
+        <div class="dc-sub">9-month high · +2.6% wk</div>
+      </div>
+      <div id="s5-c3" class="data-cell glass">
+        <div class="dc-label">Sensex</div>
+        <div class="dc-value green">82,532</div>
+        <div class="dc-sub">+2.4% this week</div>
+      </div>
+      <div id="s5-c4" class="data-cell glass">
+        <div class="dc-label">Bank Nifty</div>
+        <div class="dc-value green" style="font-size:7.5cqw;">Record ↑</div>
+        <div class="dc-sub">All-time high this week</div>
+      </div>
+    </div>
+  </div>
+  <div class="wm">@finpulsemarkets</div>
+  <div class="scene-fade" id="s5-fade"></div>
+</div>
+
+<!-- ══ SCENE 6: CTA  — NO exit fade (isLast) ══ -->
+<div class="scene" id="s6">
+  <div class="inner">
+    <div id="s6-title">Follow For More</div>
+
+    <div id="s6-cta">
+      Stay ahead<br>of <em>every</em><br>market move.
+    </div>
+
+    <div id="s6-k1" class="check-row glass">
+      <div class="ck">✓</div>
+      <div class="ct">Daily market reels — in 45 seconds flat</div>
+    </div>
+    <div id="s6-k2" class="check-row glass">
+      <div class="ck">✓</div>
+      <div class="ct">India &amp; global markets decoded simply</div>
+    </div>
+    <div id="s6-k3" class="check-row glass">
+      <div class="ck">✓</div>
+      <div class="ct">Know exactly what it means for your money</div>
+    </div>
+
+    <div id="s6-pill">@finpulsemarkets</div>
+  </div>
+  <div class="wm">@finpulsemarkets</div>
+  <!-- NO scene-fade here — isLast guard -->
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  SAS SYSTEM — Fin Pulse v2  (evening build)
+// ═══════════════════════════════════════════
+
+const DURS = [7, 7, 7, 7.5, 7, 9.5];   // sum = 45 s
+const OUT  = 0.4;                        // exit-fade duration
+const SCENES = ['s1','s2','s3','s4','s5','s6'];
+
+// Scene start times
+const sceneStarts = [];
+let _acc = 0;
+DURS.forEach((d, i) => { sceneStarts[i] = _acc; _acc += d; });
+
+// ── Easing ──
+const outCubic = t => 1 - Math.pow(1 - t, 3);
+const outBack  = t => { const c=2.70158; return 1 + (c+1)*Math.pow(t-1,3) + c*Math.pow(t-1,2); };
+const clamp    = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const prog     = (t, s, d)  => clamp((t - s) / d, 0, 1);
+
+// ── applyAnim ──
+function applyAnim(el, p, type = 'pop') {
+  if (!el) return;
+  const e = (type === 'pop') ? outBack(p) : outCubic(p);
+  const a = clamp(p * 5, 0, 1);           // fast alpha
+  if (type === 'pop') {
+    el.style.transform = `scale(${0.85 + 0.15 * e})`;
+    el.style.opacity   = String(a);
+  } else if (type === 'up') {
+    el.style.transform = `translateY(${(1 - e) * 9}cqw)`;
+    el.style.opacity   = String(a);
+  } else if (type === 'left') {
+    el.style.transform = `translateX(${-(1 - e) * 11}cqw)`;
+    el.style.opacity   = String(a);
+  } else if (type === 'right') {
+    el.style.transform = `translateX(${(1 - e) * 11}cqw)`;
+    el.style.opacity   = String(a);
+  }
+}
+
+// ── Glass shimmer ──
+function shimmer(el, t, gi) {
+  if (!el) return;
+  el.style.setProperty('--sw', String(((t * 0.45 + gi * 0.27) % 1)));
+}
+
+// ── Orb animation ──
+function animOrbs(t) {
+  const o1 = document.getElementById('orb1');
+  const o2 = document.getElementById('orb2');
+  const o3 = document.getElementById('orb3');
+  const o4 = document.getElementById('orb4');
+  if (o1) o1.style.transform = `translate(${Math.sin(t*0.4)*3}cqw,${Math.cos(t*0.3)*4}cqw)`;
+  if (o2) o2.style.transform = `translate(${Math.cos(t*0.35)*4}cqw,${Math.sin(t*0.4)*3}cqw)`;
+  if (o3) o3.style.transform = `translate(${Math.sin(t*0.3+1)*4}cqw,${Math.cos(t*0.35)*3}cqw)`;
+  if (o4) o4.style.transform = `translate(${Math.cos(t*0.4+2)*3}cqw,${Math.sin(t*0.3)*4}cqw)`;
+}
+
+// ── Scene show/hide — returns local time or undefined ──
+function sceneVisible(idx, t) {
+  const start  = sceneStarts[idx];
+  const dur    = DURS[idx];
+  const isLast = (idx === SCENES.length - 1);
+  const local  = t - start;
+  const el     = document.getElementById(SCENES[idx]);
+  if (!el) return undefined;
+
+  if (t < start || t >= start + dur + (isLast ? 20 : OUT)) {
+    el.style.display = 'none'; return undefined;
+  }
+  el.style.display = 'flex';
+
+  if (!isLast) {
+    const fadeEl = document.getElementById(SCENES[idx] + '-fade');
+    if (fadeEl) fadeEl.style.opacity = String(outCubic(prog(local, dur - OUT, OUT)));
+  }
+  return local;
+}
+
+// ══════════════════════════════
+//  SCENE ANIMATORS
+// ══════════════════════════════
+
+function animS1(local) {
+  const lbl  = document.getElementById('s1-label');
+  const q    = document.getElementById('s1-q');
+  const card = document.getElementById('s1-card');
+  const num  = document.getElementById('s1-num');
+  const sub  = document.getElementById('s1-sub');
+
+  applyAnim(lbl,  prog(local, 0.2, 0.5), 'up');
+  applyAnim(q,    prog(local, 0.6, 0.6), 'up');
+  applyAnim(card, prog(local, 1.2, 0.55),'pop');
+
+  // Hook B — blurred number unblurs at t=1.5
+  if (num) {
+    const blurP = outCubic(prog(local, 1.5, 0.65));
+    num.style.filter  = `blur(${(1 - blurP) * 22}px)`;
+    num.style.opacity = local > 0.9 ? '1' : '0';
+  }
+
+  applyAnim(sub, prog(local, 2.4, 0.5), 'up');
+
+  shimmer(card, local, 0);
+}
+
+function animS2(local) {
+  const title  = document.getElementById('s2-title');
+  const card   = document.getElementById('s2-card');
+  const pct    = document.getElementById('s2-pct');
+  const bn     = document.getElementById('b-nasdaq');
+  const bs     = document.getElementById('b-sp');
+  const bnifty = document.getElementById('b-nifty');
+
+  applyAnim(title, prog(local, 0.1, 0.4), 'up');
+  applyAnim(card,  prog(local, 0.4, 0.5), 'pop');
+
+  // Counter -0.0% → -5.5%
+  if (pct) {
+    const v = outCubic(prog(local, 0.7, 1.4)) * 5.5;
+    pct.textContent = '-' + v.toFixed(1) + '%';
+  }
+
+  if (bn)     bn.style.transform     = `scaleX(${outCubic(prog(local, 1.1, 0.9))})`;
+  if (bs)     bs.style.transform     = `scaleX(${outCubic(prog(local, 1.4, 0.9))})`;
+  if (bnifty) bnifty.style.transform = `scaleX(${outCubic(prog(local, 1.7, 0.9))})`;
+
+  shimmer(card, local, 1);
+}
+
+function animS3(local) {
+  applyAnim(document.getElementById('s3-title'), prog(local, 0.1, 0.4), 'up');
+  applyAnim(document.getElementById('s3-claim'), prog(local, 0.4, 0.55),'up');
+  applyAnim(document.getElementById('s3-r1'),    prog(local, 0.9, 0.5), 'left');
+  applyAnim(document.getElementById('s3-r2'),    prog(local, 1.3, 0.5), 'left');
+  applyAnim(document.getElementById('s3-r3'),    prog(local, 1.7, 0.5), 'left');
+
+  shimmer(document.getElementById('s3-r1'), local, 0);
+  shimmer(document.getElementById('s3-r2'), local, 1);
+  shimmer(document.getElementById('s3-r3'), local, 2);
+}
+
+function animS4(local) {
+  applyAnim(document.getElementById('s4-title'), prog(local, 0.1, 0.4), 'up');
+  applyAnim(document.getElementById('s4-claim'), prog(local, 0.4, 0.55),'up');
+  applyAnim(document.getElementById('s4-c1'),    prog(local, 0.9, 0.5), 'pop');
+  applyAnim(document.getElementById('s4-c2'),    prog(local, 1.4, 0.5), 'pop');
+  applyAnim(document.getElementById('s4-c3'),    prog(local, 1.9, 0.5), 'pop');
+
+  shimmer(document.getElementById('s4-c1'), local, 0);
+  shimmer(document.getElementById('s4-c2'), local, 1);
+  shimmer(document.getElementById('s4-c3'), local, 2);
+}
+
+function animS5(local) {
+  applyAnim(document.getElementById('s5-title'), prog(local, 0.1, 0.4), 'up');
+  applyAnim(document.getElementById('s5-c1'),    prog(local, 0.5, 0.5), 'pop');
+  applyAnim(document.getElementById('s5-c2'),    prog(local, 0.7, 0.5), 'pop');
+  applyAnim(document.getElementById('s5-c3'),    prog(local, 0.9, 0.5), 'pop');
+  applyAnim(document.getElementById('s5-c4'),    prog(local, 1.1, 0.5), 'pop');
+
+  shimmer(document.getElementById('s5-c1'), local, 0);
+  shimmer(document.getElementById('s5-c2'), local, 1);
+  shimmer(document.getElementById('s5-c3'), local, 2);
+  shimmer(document.getElementById('s5-c4'), local, 3);
+}
+
+function animS6(local) {
+  applyAnim(document.getElementById('s6-title'), prog(local, 0.1, 0.4), 'up');
+  applyAnim(document.getElementById('s6-cta'),   prog(local, 0.4, 0.6), 'up');
+  applyAnim(document.getElementById('s6-k1'),    prog(local, 0.9, 0.5), 'left');
+  applyAnim(document.getElementById('s6-k2'),    prog(local, 1.3, 0.5), 'left');
+  applyAnim(document.getElementById('s6-k3'),    prog(local, 1.7, 0.5), 'left');
+  applyAnim(document.getElementById('s6-pill'),  prog(local, 2.3, 0.5), 'pop');
+
+  shimmer(document.getElementById('s6-k1'), local, 0);
+  shimmer(document.getElementById('s6-k2'), local, 1);
+  shimmer(document.getElementById('s6-k3'), local, 2);
+}
+
+// ══════════════════════════════
+//  MASTER DRIVER: window.setT()
+// ══════════════════════════════
+window.setT = function(t) {
+  animOrbs(t);
+
+  SCENES.forEach((id, idx) => {
+    const local = sceneVisible(idx, t);
+    if (local === undefined) return;
+    if (idx === 0) animS1(local);
+    else if (idx === 1) animS2(local);
+    else if (idx === 2) animS3(local);
+    else if (idx === 3) animS4(local);
+    else if (idx === 4) animS5(local);
+    else if (idx === 5) animS6(local);
+  });
+};
+
+// ══════════════════════════════
+//  AUDIO ENGINE — Web Audio API
+// ══════════════════════════════
+(function() {
+  let ctx = null;
+  const fired = new Set();
+
+  function ensureCtx() {
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  function tone(freq, dur, vol, type, att, dec) {
+    try {
+      const c = ensureCtx();
+      const g = c.createGain(); g.connect(c.destination);
+      const o = c.createOscillator();
+      o.type = type; o.frequency.value = freq; o.connect(g);
+      const now = c.currentTime;
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(vol, now + att);
+      g.gain.exponentialRampToValueAtTime(0.001, now + att + dec + dur);
+      o.start(now); o.stop(now + att + dec + dur + 0.05);
+    } catch(e) {}
+  }
+
+  function noise(dur, vol, freq, q) {
+    try {
+      const c = ensureCtx();
+      const sr = c.sampleRate;
+      const buf = c.createBuffer(1, sr * dur, sr);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      const src = c.createBufferSource(); src.buffer = buf;
+      const f = c.createBiquadFilter();
+      f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q;
+      const g = c.createGain();
+      src.connect(f); f.connect(g); g.connect(c.destination);
+      const now = c.currentTime;
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(vol, now + 0.04);
+      g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+      src.start(now); src.stop(now + dur + 0.1);
+    } catch(e) {}
+  }
+
+  const SFX = {
+    whoosh:        () => noise(0.25, 0.18, 1400, 0.5),
+    reveal_whoosh: () => noise(0.40, 0.22, 1800, 0.4),
+    tick:          () => tone(900,  0.02, 0.15, 'square',   0.002, 0.015),
+    beep:          () => tone(660,  0.06, 0.20, 'sine',     0.005, 0.040),
+    final_beep:    () => tone(880,  0.12, 0.25, 'sine',     0.005, 0.080),
+    impact:        () => tone(200,  0.10, 0.28, 'sawtooth', 0.002, 0.050),
+    swoosh:        () => noise(0.20, 0.15, 1200, 0.6),
+    glass_pop:     () => tone(1200, 0.04, 0.20, 'sine',     0.001, 0.030),
+    ding:          () => tone(1047, 0.15, 0.25, 'sine',     0.002, 0.100),
+    pulse:         () => tone(440,  0.08, 0.18, 'triangle', 0.005, 0.050),
+  };
+
+  const CUE = [
+    [0.2,  'whoosh'],
+    [1.4,  'reveal_whoosh'],
+    [2.3,  'beep'],
+    [7.0,  'whoosh'],
+    [7.5,  'impact'],
+    [9.0,  'tick'],
+    [10.5, 'tick'],
+    [12.1, 'tick'],
+    [14.0, 'whoosh'],
+    [14.6, 'glass_pop'],
+    [15.4, 'glass_pop'],
+    [16.3, 'glass_pop'],
+    [21.0, 'whoosh'],
+    [21.5, 'pulse'],
+    [22.4, 'pulse'],
+    [23.3, 'pulse'],
+    [28.5, 'whoosh'],
+    [29.0, 'glass_pop'],
+    [29.5, 'glass_pop'],
+    [30.0, 'glass_pop'],
+    [30.5, 'glass_pop'],
+    [35.5, 'whoosh'],
+    [36.0, 'glass_pop'],
+    [36.4, 'glass_pop'],
+    [36.8, 'glass_pop'],
+    [37.3, 'ding'],
+    [44.0, 'final_beep'],
+  ];
+
+  window._sfxT = -1;
+  const baseFn = window.setT;
+
+  window.setT = function(t) {
+    baseFn(t);
+    if (t < window._sfxT - 0.1) fired.clear();  // rewind
+    window._sfxT = t;
+    CUE.forEach(([ct, name]) => {
+      if (t >= ct && !fired.has(ct)) {
+        fired.add(ct);
+        if (SFX[name]) SFX[name]();
+      }
+    });
+  };
+})();
+
+// ── Thumbnail frame ──
+window.setT(0.5);
+</script>
+</body>
+</html>
