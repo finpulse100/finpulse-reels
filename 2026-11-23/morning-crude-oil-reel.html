@@ -1,0 +1,522 @@
+<!doctype html>
+<!--
+  FIN PULSE · Morning Reel · 2026-11-23
+  Story: Brent crude oil crashed 19% in one month to $89/bbl — Strait of Hormuz tanker fires but prices FELL anyway
+  Hook A (morning): ALERT stamp + stat cards + countdown + digit reveal
+  Palette: Deep navy #000a1a — blobs cyan/indigo/teal/blue
+  Music: nastelbom-soft-corporate-485896.mp3
+  DURS: [7, 7, 7, 7.5, 7, 9.5] = 45s
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Crude Oil Crash — Fin Pulse</title>
+<style>
+  :root {
+    --bg: #000a1a;
+    --ink: #0a1628;
+    --ink-dim: rgba(10,22,40,0.75);
+    --chip-bg: #052040;
+    --chip-ink: #67e8f9;
+    --accent: #06b6d4;
+    --accent2: #0891b2;
+    --font: 'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#000;}
+  .frame{position:relative;width:1080px;height:1920px;container-type:inline-size;overflow:hidden;background:var(--bg);font-family:var(--font);color:var(--ink);font-variant-numeric:tabular-nums;}
+  .blob{position:absolute;border-radius:50%;will-change:transform;}
+  .scene{position:absolute;inset:0;display:none;}
+  .scene.on{display:block;}
+  .inner{position:absolute;inset:0;padding:17cqw 11cqw 30cqw 6cqw;display:flex;flex-direction:column;justify-content:center;gap:3.2cqw;min-width:0;}
+  .safe{display:none;position:absolute;inset:17cqw 11cqw 30cqw 6cqw;border:2px dashed rgba(255,255,255,0.8);z-index:9;pointer-events:none;}
+  body.dbg .safe{display:block;}
+
+  /* handle */
+  .handle{position:absolute;bottom:5cqw;right:4.5cqw;font-size:3.3cqw;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:0.01em;z-index:10;}
+
+  /* tag-pill */
+  .tag-pill{position:relative;align-self:center;display:inline-flex;align-items:center;justify-content:center;gap:2.6cqw;padding:2.2cqw 6cqw;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.52));backdrop-filter:blur(40px) saturate(100%);-webkit-backdrop-filter:blur(40px) saturate(100%);border:1.5px solid rgba(255,255,255,0.9);box-shadow:0 2cqw 6cqw rgba(0,0,0,0.45),inset 0 0.5cqw 1cqw rgba(255,255,255,0.95),inset 0 -0.7cqw 1.4cqw rgba(10,22,40,0.14);color:var(--ink);font-size:4.6cqw;font-weight:800;line-height:1.2;white-space:nowrap;flex:none;}
+  .tag-pill::before{content:"";position:absolute;inset:1cqw;border-radius:999px;border:1px solid rgba(255,255,255,0.75);pointer-events:none;}
+  .dot{position:relative;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--accent);}
+
+  /* headline */
+  .h{margin:0;text-align:center;color:#fff;font-size:8.8cqw;font-weight:800;letter-spacing:-0.02em;line-height:1.1;text-wrap:balance;flex:none;text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.5);}
+  .h .w{display:inline-block;}
+
+  /* glass */
+  .glass{background:rgba(255,255,255,0.37);backdrop-filter:blur(40px) saturate(100%);-webkit-backdrop-filter:blur(40px) saturate(100%);border:1px solid rgba(255,255,255,0.25);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+  .frame .glass{position:relative;overflow:hidden;background:rgba(255,255,255,0.88);border:3px solid rgba(255,255,255,0.95);border-radius:4cqw;box-shadow:0 2cqw 7cqw rgba(0,0,0,0.5);}
+  .frame .glass.dim{background:rgba(255,255,255,0.4);}
+  .glass::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.5) 50%,transparent 62%);transform:translateX(var(--sw,-130%));}
+
+  .card{padding:4cqw;display:flex;flex-direction:column;gap:2.4cqw;min-width:0;flex:none;}
+  .lab{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+  .val{margin:0;font-weight:800;letter-spacing:-0.02em;line-height:1.05;color:var(--ink);}
+  .big{font-size:7.4cqw;}
+  .mid{font-size:5.6cqw;}
+  .sub{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+  .svg{width:100%;height:auto;display:block;flex:none;}
+  .svg text{font-family:var(--font);font-weight:700;fill:var(--ink-dim);}
+  .ax{stroke:rgba(10,22,40,0.3);stroke-width:0.5;fill:none;}
+
+  .ic{flex:none;width:9cqw;height:9cqw;border-radius:50%;background:var(--chip-bg);display:grid;place-items:center;}
+  .ic svg{width:56%;height:56%;stroke:var(--chip-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .ic svg .f{fill:var(--chip-ink);stroke:none;}
+
+  .row-chip{display:flex;align-items:center;gap:3cqw;padding:2.4cqw 3.6cqw;flex:none;}
+  .row-chip .ic{width:8.6cqw;height:8.6cqw;}
+  .row-chip span.t{font-size:4.3cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3cqw;flex:none;}
+  .pillar{padding:3cqw 3.4cqw;display:flex;flex-direction:column;align-items:flex-start;gap:2cqw;}
+  .pillar .val{font-size:5.4cqw;}
+  .pillar .ic{width:8.6cqw;height:8.6cqw;}
+
+  .tick{display:flex;align-items:center;gap:3cqw;}
+  .tick span.t{font-size:4.4cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+  .tick .ic{width:8cqw;height:8cqw;}
+
+  /* alert stamp */
+  .alert-stamp{align-self:center;padding:2cqw 6.4cqw;border-radius:2.2cqw;background:linear-gradient(135deg,#dc2626,#9f1239);border:3px solid rgba(255,100,100,0.75);color:#fff;font-size:7.6cqw;font-weight:900;letter-spacing:0.08em;flex:none;text-shadow:0 0.3cqw 1cqw rgba(0,0,0,0.4);}
+
+  /* stat row */
+  .stat-row{display:flex;gap:2.4cqw;flex:none;}
+  .stat-row .sc{flex:1;padding:2.8cqw 2cqw;display:flex;flex-direction:column;align-items:center;gap:1.4cqw;}
+  .stat-row .sc .ic{width:7.6cqw;height:7.6cqw;}
+  .stat-row .sc .val{font-size:5.4cqw;text-align:center;}
+  .stat-row .sc .lab{font-size:3.3cqw;text-align:center;}
+
+  /* countdown */
+  .cdown-wrap{align-self:center;position:relative;width:20cqw;height:20cqw;flex:none;}
+  .cdown-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9.4cqw;font-weight:900;}
+
+  /* digit reveal */
+  .dig-rev{align-self:center;font-size:9.4cqw;font-weight:900;color:#fff;letter-spacing:-0.04em;flex:none;}
+
+  /* coming up */
+  .coming-up{align-self:center;font-size:3.8cqw;font-weight:700;color:rgba(255,255,255,0.7);letter-spacing:0.02em;flex:none;}
+
+  /* disc */
+  .disc{font-size:3.2cqw;font-weight:700;color:var(--ink-dim);text-align:center;margin:0;}
+
+  /* per-scene */
+  #s1 .inner{gap:2.8cqw;}
+  #s1 .h{font-size:7.2cqw;}
+  #s2 .inner{gap:4cqw;}
+  #s3 .inner{gap:3cqw;}
+  #s3 .row-chip{padding:2cqw 3.6cqw;}
+  #s5 .inner{gap:5cqw;}
+  #s6 .inner{gap:5.4cqw;}
+  #s6 .card.tk{padding:5cqw 4.4cqw;}
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- S1 · Hook A -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>CRUDE OIL · NOV 23</div>
+    <div class="alert-stamp" id="alertStamp">OIL CRASH</div>
+    <h2 class="h" data-split="0.6">Tankers on fire. Oil price fell 19%. Something doesn't add up.</h2>
+    <div class="stat-row">
+      <div class="glass card sc" data-a="pop:1.5:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+        <p class="val" id="v1">$0</p>
+        <p class="lab">Brent/bbl</p>
+      </div>
+      <div class="glass card sc" data-a="pop:1.75:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M22 7L13 16l-4-4-7 7"/><path d="M16 7h6v6"/></svg></span>
+        <p class="val" id="v2">-0%</p>
+        <p class="lab">Monthly drop</p>
+      </div>
+      <div class="glass card sc" data-a="pop:2.0:0.65">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span>
+        <p class="val">85%</p>
+        <p class="lab">India imports</p>
+      </div>
+    </div>
+    <!-- countdown -->
+    <div class="cdown-wrap" data-a="pop:2.6:0.5">
+      <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(6,182,212,0.18)" stroke-width="6"/>
+        <circle id="cdarc" cx="50" cy="50" r="44" fill="none" stroke="url(#cdg)" stroke-width="6"
+          stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5"
+          transform="rotate(-90 50 50)"/>
+        <defs><linearGradient id="cdg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#06b6d4"/>
+          <stop offset="1" stop-color="#f59e0b"/>
+        </linearGradient></defs>
+      </svg>
+      <span class="cdown-num" id="cdnum" style="color:var(--accent)">5</span>
+    </div>
+    <!-- digit reveal -->
+    <div class="dig-rev" id="digitReveal" style="opacity:0;transform:scale(0.8)">-19%</div>
+    <p class="coming-up" id="comingUp" style="opacity:0">Why this matters for India ↓</p>
+  </div></section>
+
+  <!-- S2 · Reveal -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>BRENT CRUDE OIL</div>
+    <h2 class="h" data-split="0.35">Oil hit a 12-month low</h2>
+    <div class="glass card" data-a="pop:0.9:0.8">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:3cqw">
+        <div>
+          <p class="lab">BRENT CRUDE OIL · ICE FUTURES</p>
+          <p class="val big" id="brentVal">$0.00</p>
+          <p class="sub">per barrel</p>
+        </div>
+        <div style="text-align:right">
+          <p class="lab">30-day change</p>
+          <p class="val mid" style="color:#dc2626">-19%</p>
+          <p class="sub" style="color:#dc2626">From ~$110</p>
+        </div>
+      </div>
+      <!-- price line chart -->
+      <svg class="svg" viewBox="0 0 100 36" id="priceChart">
+        <defs>
+          <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#dc2626" stop-opacity="0.3"/>
+            <stop offset="1" stop-color="#dc2626" stop-opacity="0"/>
+          </linearGradient>
+          <clipPath id="cc"><rect id="ccr" x="0" y="0" width="0" height="36"/></clipPath>
+        </defs>
+        <path d="M5 5 C15 5,22 6,32 7 C42 8,47 9,56 11 C65 14,74 20,84 25 C90 27,93 29,95 31 L95 34 L5 34 Z"
+          fill="url(#cg)" clip-path="url(#cc)"/>
+        <path id="chartLine" pathLength="1"
+          d="M5 5 C15 5,22 6,32 7 C42 8,47 9,56 11 C65 14,74 20,84 25 C90 27,93 29,95 31"
+          fill="none" stroke="#dc2626" stroke-width="1.8" stroke-linecap="round"/>
+        <line class="ax" x1="4" y1="34" x2="96" y2="34"/>
+        <text x="5" y="34.5" font-size="3" dy="3" fill="#6b7280">Oct 23</text>
+        <text x="95" y="34.5" font-size="3" text-anchor="end" dy="3" fill="#6b7280">Nov 23</text>
+        <text x="6" y="4" font-size="3" fill="#dc2626">$110</text>
+        <text x="93" y="30" font-size="3" fill="#dc2626" text-anchor="end">$89</text>
+        <circle id="chartDot" cx="95" cy="31" r="0" fill="#dc2626" stroke="#fff" stroke-width="0.8"/>
+      </svg>
+    </div>
+    <div class="glass card dim" data-a="pop:3.2:0.6" style="flex-direction:row;align-items:center;gap:3cqw;padding:3cqw 3.6cqw">
+      <span class="ic" style="background:rgba(220,38,38,0.12)">
+        <svg viewBox="0 0 24 24" style="stroke:#dc2626"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </span>
+      <p class="lab" style="margin:0;font-size:4cqw;font-weight:800;color:var(--ink)">Hormuz tanker fires — oil fell 3% anyway</p>
+    </div>
+  </div></section>
+
+  <!-- S3 · Why -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHY IT'S FALLING</div>
+    <h2 class="h" data-split="0.35">Supply glut beats geopolitical risk</h2>
+    <div class="glass row-chip" data-a="right:1.3:0.65">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+      </span>
+      <span class="t">US crude output at record production highs</span>
+    </div>
+    <div class="glass row-chip" data-a="right:1.9:0.65">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 3 2.5 15 0 18"/><path d="M12 3c-2.5 3-2.5 15 0 18"/></svg>
+      </span>
+      <span class="t">OPEC supply outpacing global demand</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.5:0.65">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><path d="M22 7L13 16l-4-4-7 7"/><path d="M16 7h6v6"/></svg>
+      </span>
+      <span class="t">China demand growth slowing sharply</span>
+    </div>
+  </div></section>
+
+  <!-- S4 · What it means -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>FOR YOUR MONEY</div>
+    <h2 class="h" data-split="0.35">Oil below $90 changes your costs</h2>
+    <div class="glass card" data-a="pop:1.0:0.7" style="flex-direction:row;gap:3cqw;align-items:center">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><path d="M14 2a5 5 0 0 1 5 5v.5A3.5 3.5 0 0 1 22 11H2a3.5 3.5 0 0 1 3-3.465V7a5 5 0 0 1 5-5h4z"/><rect x="2" y="11" width="20" height="10" rx="2"/></svg>
+      </span>
+      <div>
+        <p class="val mid">Fuel price cut incoming</p>
+        <p class="sub">HPCL &amp; IOC margin relief — pump cut likely</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:1.9:0.7" style="flex-direction:row;gap:3cqw;align-items:center">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><path d="M3 17l1-4h16l1 4"/><path d="M6 13V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v6"/><path d="M9 17v4M15 17v4"/></svg>
+      </span>
+      <div>
+        <p class="val mid">Airlines &amp; logistics save</p>
+        <p class="sub">IndiGo ATF costs drop — cheaper fares ahead</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.8:0.7" style="flex-direction:row;gap:3cqw;align-items:center">
+      <span class="ic">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </span>
+      <div>
+        <p class="val mid">Import bill drops ₹2.5L Cr</p>
+        <p class="sub">Rupee strengthens, CAD narrows</p>
+      </div>
+    </div>
+    <p class="disc" data-a="pop:3.6:0.5">Educational content only.</p>
+  </div></section>
+
+  <!-- S5 · Numbers -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE NUMBERS</div>
+    <h2 class="h" data-split="0.35">What a $21 oil drop means for India</h2>
+    <div class="grid2">
+      <div class="glass card pillar" data-a="pop:1.0:0.6">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+        <p class="val" style="font-size:5.4cqw">$89/bbl</p>
+        <p class="sub">Brent crude today</p>
+      </div>
+      <div class="glass card pillar" data-a="pop:1.3:0.6">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M22 7L13 16l-4-4-7 7"/><path d="M16 7h6v6"/></svg></span>
+        <p class="val" style="font-size:5.4cqw;color:#dc2626">-19%</p>
+        <p class="sub">Monthly decline</p>
+      </div>
+      <div class="glass card pillar" data-a="pop:1.6:0.6">
+        <span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span>
+        <p class="val" style="font-size:5.4cqw">85%</p>
+        <p class="sub">India's oil imported</p>
+      </div>
+      <div class="glass card pillar" data-a="pop:1.9:0.6">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+        <p class="val" style="font-size:4.8cqw">₹2.5L Cr</p>
+        <p class="sub">Annual savings est.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- S6 · CTA -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>KEY TAKEAWAY</div>
+    <h2 class="h" data-split="0.35">India wins big when oil crashes</h2>
+    <div class="glass card tk" data-a="pop:0.9:0.7" style="gap:3.4cqw">
+      <div class="tick" data-a="right:1.2:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Fuel price cut window is now open</span>
+      </div>
+      <div class="tick" data-a="right:1.65:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Airlines &amp; OMCs benefit most</span>
+      </div>
+      <div class="tick" data-a="right:2.1:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9"/></svg></span>
+        <span class="t">Less inflation pressure — RBI has room</span>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:3.0:0.7" style="text-align:center;padding:4cqw">
+      <p class="val" style="font-size:5.4cqw">Follow for daily market insights</p>
+      <p class="sub" style="text-align:center;margin-top:1.6cqw">@finpulsemarkets · Share if this helped</p>
+    </div>
+  </div></section>
+
+  <div class="safe"></div>
+  <div class="handle">@finpulsemarkets</div>
+</div>
+
+<script>
+var DURS=[7,7,7,7.5,7,9.5];
+window.COVER_T=0.5;
+var OUT=0.4;
+var STARTS=[];(function(){var a=0;DURS.forEach(function(d){STARTS.push(a);a+=d;});})();
+window.TOTAL=DURS.reduce(function(a,b){return a+b;},0);
+
+var clamp=function(x,a,b){a=a===undefined?0:a;b=b===undefined?1:b;return Math.min(b,Math.max(a,x));};
+var E={
+  outCubic:function(x){return 1-Math.pow(1-x,3);},
+  outBack:function(x){var s=1.5,c=s+1;return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2);},
+  inCubic:function(x){return x*x*x;},
+  inOut:function(x){return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;}
+};
+var $=function(id){return document.getElementById(id);};
+var NS='http://www.w3.org/2000/svg';
+
+/* split headlines */
+document.querySelectorAll('.h[data-split]').forEach(function(h){
+  var base=parseFloat(h.getAttribute('data-split'));
+  var words=h.textContent.trim().split(/\s+/);
+  h.textContent='';
+  words.forEach(function(w,i){
+    var s=document.createElement('span');s.className='w';s.textContent=w;
+    s._a={k:'up',s:base+i*0.08,d:0.6};
+    h.appendChild(s);
+    if(i<words.length-1)h.appendChild(document.createTextNode(' '));
+  });
+});
+
+/* gather animated elements */
+var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+scenes.forEach(function(sc){
+  sc._els=[];
+  sc.querySelectorAll('[data-a]').forEach(function(el){
+    var p=el.getAttribute('data-a').split(':');
+    el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+    sc._els.push(el);
+  });
+  sc.querySelectorAll('.h .w').forEach(function(el){sc._els.push(el);});
+  sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+});
+
+function applyAnim(el,t){
+  var a=el._a,p=clamp((t-a.s)/a.d),e=E.outCubic(p),b=E.outBack(p),o=clamp(p*2),x=0,y=0,s=1;
+  if(a.k==='pop'){s=0.86+0.14*b;y=(1-e)*6;}
+  else if(a.k==='up'){y=(1-e)*7;}
+  else if(a.k==='drop'){y=-(1-e)*6;s=0.94+0.06*b;}
+  else if(a.k==='left'){x=-(1-e)*18;}
+  else if(a.k==='right'){x=(1-e)*18;}
+  el.style.opacity=o;
+  el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+}
+
+/* blobs */
+function blob(el,color,size,x,y){
+  el.style.width=size+'cqw';el.style.height=size+'cqw';
+  el.style.left=x+'cqw';el.style.top=y+'cqw';
+  el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+}
+blob($('b1'),'rgba(6,182,212,0.95)',140,-50,-45);
+blob($('b2'),'rgba(14,116,144,0.9)',105,55,65);
+blob($('b3'),'rgba(99,102,241,0.9)',125,-30,108);
+blob($('b4'),'rgba(20,184,166,0.85)',85,55,100);
+function orbs(T){
+  $('b1').style.transform='translate('+(9*Math.sin(T*0.45)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.38)).toFixed(2)+'cqw)';
+  $('b2').style.transform='translate('+(-10*Math.sin(T*0.36+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.41)).toFixed(2)+'cqw)';
+  $('b3').style.transform='translate('+(10*Math.cos(T*0.33)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.4+2)).toFixed(2)+'cqw)';
+  $('b4').style.transform='translate('+(-8*Math.cos(T*0.5+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.47)).toFixed(2)+'cqw)';
+}
+
+/* ---- S1 ---- */
+function s1(t){
+  /* alert stamp: scale 1.9→1 snap */
+  var el=$('alertStamp');
+  var p1=clamp((t-0.05)/0.35);
+  var sc=1+0.9*(1-E.outBack(p1));
+  var rot=(1-E.outCubic(clamp((t-0.05)/0.2)))*(-4);
+  var glow=(0.3+0.3*Math.sin(t*18));
+  el.style.opacity=clamp(p1*4);
+  el.style.transform='scale('+Math.max(0,sc).toFixed(3)+') rotate('+rot.toFixed(2)+'deg)';
+  el.style.boxShadow='0 0 '+(3+2*glow).toFixed(1)+'cqw rgba(220,38,38,'+glow.toFixed(2)+'), 0 2cqw 6cqw rgba(0,0,0,0.5)';
+
+  /* counters */
+  var vp1=E.outCubic(clamp((t-1.5)/0.9));
+  $('v1').textContent='$'+Math.round(89*vp1);
+  var vp2=E.outCubic(clamp((t-1.75)/0.9));
+  $('v2').textContent='-'+Math.round(19*vp2)+'%';
+
+  /* countdown */
+  var cdElapsed=t-2.6;
+  if(cdElapsed>=0){
+    var num=Math.max(1,5-Math.floor(cdElapsed*(5/4.3)));
+    $('cdnum').textContent=num;
+    var prog=Math.min(1,cdElapsed/4.3);
+    $('cdarc').style.strokeDashoffset=(276.5*(1-prog)).toFixed(1);
+    var r=Math.round(6+244*prog),g=Math.round(182-23*prog),b=Math.round(212-181*prog);
+    $('cdnum').style.color='rgb('+r+','+g+','+b+')';
+  }
+
+  /* digit reveal */
+  var drp=clamp((t-5.0)/0.65);
+  var dr=$('digitReveal');
+  dr.style.opacity=E.outCubic(drp);
+  dr.style.transform='scale('+(0.8+0.2*E.outBack(drp)).toFixed(3)+')';
+  dr.style.textShadow='0 0 '+(2+1*drp).toFixed(1)+'cqw rgba(6,182,212,'+(0.5+0.3*drp).toFixed(2)+')';
+  $('comingUp').style.opacity=E.outCubic(clamp((t-5.5)/0.5));
+}
+
+/* ---- S2 ---- */
+var chartLine=$('chartLine');
+chartLine.style.strokeDasharray='1';
+function s2(t){
+  var p=E.inOut(clamp((t-0.9)/2.0));
+  chartLine.style.strokeDashoffset=1-p;
+  $('ccr').setAttribute('width',p*100);
+  $('chartDot').setAttribute('r',(2.5*Math.max(0,E.outBack(clamp((t-2.9)/0.4)))).toFixed(2));
+  var vp=E.outCubic(clamp((t-0.9)/0.9));
+  $('brentVal').textContent='$'+(89.07*vp).toFixed(2);
+}
+
+/* ---- S3,4,5 — no extra JS ---- */
+function s3(t){}
+function s4(t){}
+function s5(t){}
+
+/* ---- S6 ---- */
+var cks=Array.prototype.slice.call(document.querySelectorAll('.ck'));
+cks.forEach(function(c){c.style.strokeDasharray='1';c.style.strokeDashoffset='1';});
+function s6(t){
+  cks.forEach(function(c,i){c.style.strokeDashoffset=(1-E.outCubic(clamp((t-(1.45+i*0.45))/0.35))).toFixed(3);});
+}
+
+var FX=[s1,s2,s3,s4,s5,s6];
+
+/* ---- Audio engine ---- */
+var AC,SFX_FIRED={};
+function initAudio(){if(AC)return;AC=new(window.AudioContext||window.webkitAudioContext)();}
+function mkTone(freq,dur,type,vol){
+  if(!AC)return;
+  var o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||'sine';o.frequency.value=freq;
+  g.gain.setValueAtTime(0.001,AC.currentTime);
+  g.gain.exponentialRampToValueAtTime(vol||0.3,AC.currentTime+0.01);
+  g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+dur);
+  o.connect(g);g.connect(AC.destination);
+  o.start();o.stop(AC.currentTime+dur+0.05);
+}
+var SFX={
+  whoosh:function(v){mkTone(220,0.3,'sawtooth',v||0.25);},
+  tick:function(v){mkTone(880,0.05,'square',v||0.2);},
+  beep:function(v){mkTone(660,0.08,'sine',v||0.25);},
+  final_beep:function(v){mkTone(880,0.15,'sine',v||0.3);},
+  reveal_whoosh:function(v){mkTone(330,0.4,'sawtooth',v||0.28);},
+  impact:function(v){mkTone(80,0.15,'square',v||0.4);},
+  swoosh:function(v){mkTone(260,0.25,'sawtooth',v||0.22);},
+  glass_pop:function(v){mkTone(1320,0.06,'sine',v||0.2);},
+  ding:function(v){mkTone(1047,0.12,'sine',v||0.25);},
+  pulse:function(v){mkTone(440,0.08,'sine',v||0.18);}
+};
+function cue(T,name,vol){
+  var key=name+'_'+Math.round(T*10);
+  if(SFX_FIRED[key])return;
+  SFX_FIRED[key]=true;
+  if(SFX[name])SFX[name](vol);
+}
+document.addEventListener('click',function(){initAudio();},{once:true});
+
+window.setT=function(T){
+  orbs(T);
+  var i=0;for(var k=0;k<STARTS.length;k++)if(T>=STARTS[k]-1e-6)i=k;
+  var t=T-STARTS[i],d=DURS[i];
+  var isLast=(i===scenes.length-1);
+  scenes.forEach(function(sc,k){sc.classList.toggle('on',k===i);});
+  var sc=scenes[i];
+  sc._els.forEach(function(el){applyAnim(el,t);});
+  FX[i](t);
+  sc._glass.forEach(function(g,gi){
+    var q=((t*0.45+gi*0.27)%1);
+    g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+  });
+  /* SFX cues (fire once per absolute T) */
+  if(i===0){cue(0.1,'impact',0.4);if(t>1.4)cue(T,'whoosh',0.3);if(t>2.5)cue(T,'tick',0.25);if(t>5.0)cue(T,'reveal_whoosh',0.35);}
+  if(i===1){cue(STARTS[1],'swoosh',0.3);}
+  if(i===2){cue(STARTS[2],'beep',0.25);}
+  if(i===4){cue(STARTS[4],'ding',0.3);}
+  if(i===5){if(t>1.1)cue(T,'glass_pop',0.25);cue(STARTS[5],'pulse',0.25);if(t>5.5)cue(T,'final_beep',0.35);}
+  /* exit fade — SKIP on last scene */
+  var o=isLast?0:clamp((t-(d-OUT))/OUT);
+  var inner=sc.querySelector('.inner');
+  inner.style.opacity=(1-E.inCubic(o));
+  inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+  /* tag-pill float */
+  var pill=sc.querySelector('.tag-pill');
+  if(pill){pill.style.transform='translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';}
+};
+setT(0.5);
+</script>
+</body>
+</html>
