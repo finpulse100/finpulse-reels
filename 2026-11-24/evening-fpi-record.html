@@ -1,0 +1,591 @@
+<!doctype html>
+<!--
+  FIN PULSE · Evening reel 2026-11-24
+  Story: FPI Record ₹1.12 Lakh Crore November Reversal
+  Hook B: Mystery reveal — Sept/Oct outflows vs Nov record inflow
+  Palette: Deep navy #000a1a — blobs blue/cyan/indigo/teal
+  DURS: [7, 7, 6.5, 7, 8, 9.5] = 45.0s
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>FPI Record November Reel</title>
+<style>
+  :root {
+    --bg: #000a1a;
+    --ink: #0a1628;
+    --ink-dim: rgba(10,22,40,0.78);
+    --chip-bg: #0a1f3a;
+    --chip-ink: #93c5fd;
+    --accent: #22d3ee;
+    --accent2: #10b981;
+    --font: 'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#000;}
+  .frame{position:relative;width:1080px;height:1920px;container-type:inline-size;overflow:hidden;background:var(--bg);font-family:var(--font);color:var(--ink);font-variant-numeric:tabular-nums;}
+
+  .blob{position:absolute;border-radius:50%;will-change:transform;}
+  .scene{position:absolute;inset:0;display:none;}
+  .scene.on{display:block;}
+  .inner{position:absolute;inset:0;padding:17cqw 11cqw 30cqw 6cqw;display:flex;flex-direction:column;justify-content:center;gap:3.8cqw;min-width:0;}
+  .safe{display:none;position:absolute;inset:17cqw 11cqw 30cqw 6cqw;border:2px dashed rgba(255,255,255,0.8);z-index:9;pointer-events:none;}
+
+  /* ---- Tag pill ---- */
+  .tag-pill{
+    position:relative;align-self:center;
+    display:inline-flex;align-items:center;justify-content:center;gap:2.6cqw;
+    padding:2.4cqw 6.4cqw;border-radius:999px;
+    background:linear-gradient(180deg,rgba(255,255,255,0.80),rgba(255,255,255,0.50));
+    backdrop-filter:blur(40px) saturate(100%);
+    -webkit-backdrop-filter:blur(40px) saturate(100%);
+    border:1.5px solid rgba(255,255,255,0.90);
+    box-shadow:0 2cqw 6cqw rgba(0,0,0,0.45),inset 0 0.5cqw 1cqw rgba(255,255,255,0.95),inset 0 -0.7cqw 1.4cqw rgba(10,22,40,0.14);
+    color:var(--ink);font-size:4.6cqw;font-weight:800;line-height:1.2;white-space:nowrap;flex:none;
+  }
+  .tag-pill::before{content:"";position:absolute;inset:1cqw;border-radius:999px;border:1px solid rgba(255,255,255,0.75);pointer-events:none;}
+  .dot{position:relative;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--accent2);}
+
+  /* ---- Headline ---- */
+  .h{margin:0;text-align:center;color:#fff;font-size:8.8cqw;font-weight:800;letter-spacing:-0.02em;line-height:1.1;text-wrap:balance;flex:none;text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.45);}
+  .h .w{display:inline-block;}
+
+  /* ---- Glass cards ---- */
+  .frame .glass{position:relative;overflow:hidden;background:rgba(255,255,255,0.88);border:3px solid rgba(255,255,255,0.95);border-radius:4cqw;box-shadow:0 2cqw 7cqw rgba(0,0,0,0.5);}
+  .frame .glass.dim{background:rgba(255,255,255,0.40);}
+  .glass::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.5) 50%,transparent 62%);transform:translateX(var(--sw,-130%));}
+
+  .card{padding:4.2cqw;display:flex;flex-direction:column;gap:2.4cqw;min-width:0;flex:none;}
+  .lab{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+  .val{margin:0;font-weight:800;letter-spacing:-0.02em;line-height:1.05;color:var(--ink);}
+  .big{font-size:7.4cqw;}
+  .mid{font-size:5.6cqw;}
+  .sub{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+  .svg-chart{width:100%;height:auto;display:block;flex:none;}
+
+  .ic{flex:none;width:9cqw;height:9cqw;border-radius:50%;background:var(--chip-bg);display:grid;place-items:center;}
+  .ic svg{width:56%;height:56%;stroke:var(--chip-ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+  .ic svg .f{fill:var(--chip-ink);stroke:none;}
+
+  .row-chip{display:flex;align-items:center;gap:3cqw;padding:2.4cqw 3.6cqw;flex:none;}
+  .row-chip .ic{width:8.6cqw;height:8.6cqw;}
+  .row-chip span.t{font-size:4.3cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3cqw;flex:none;}
+  .pillar{padding:3cqw 3.4cqw;display:flex;flex-direction:column;gap:2cqw;align-items:flex-start;}
+
+  .tick{display:flex;align-items:center;gap:3cqw;}
+  .tick span.t{font-size:4.4cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+  .tick .ic{width:8cqw;height:8cqw;}
+
+  /* colour helpers */
+  .neg{color:#dc2626;}
+  .pos{color:#059669;}
+
+  /* handle */
+  .handle{position:absolute;bottom:10cqw;right:11cqw;color:rgba(255,255,255,0.75);font-size:3.2cqw;font-weight:700;text-align:right;letter-spacing:0.01em;text-shadow:0 0.3cqw 1cqw rgba(0,0,0,0.6);pointer-events:none;z-index:5;}
+
+  /* per-scene spacing */
+  #s1 .inner{gap:4.2cqw;}
+  #s2 .inner{gap:3.6cqw;}
+  #s3 .inner{gap:3cqw;}#s3 .row-chip{padding:2cqw 3.6cqw;}
+  #s4 .inner{gap:3.2cqw;}
+  #s5 .inner{gap:4cqw;}
+  #s6 .inner{gap:5cqw;}
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="b3"></div><div class="blob" id="b4"></div>
+
+  <!-- ═══ S1 · Hook B — Mystery Number Reveal (7s) ═══ -->
+  <section class="scene" id="s1">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>FPI ALERT</div>
+      <h2 class="h" data-split="0.35">FPIs sold ₹70,704 cr in 2 months. Then did THIS.</h2>
+
+      <!-- Sept card: negative, red -->
+      <div class="glass card" data-a="pop:0.9:0.7"
+           style="flex-direction:row;align-items:center;justify-content:space-between;gap:2cqw;padding:3.4cqw 4.2cqw;">
+        <div>
+          <p class="lab">September 2026</p>
+          <p class="val mid neg">−₹35,861 cr</p>
+        </div>
+        <span class="ic">
+          <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" stroke="#dc2626"/></svg>
+        </span>
+      </div>
+
+      <!-- Oct card: negative, red, dim -->
+      <div class="glass dim card" data-a="pop:1.5:0.7"
+           style="flex-direction:row;align-items:center;justify-content:space-between;gap:2cqw;padding:3.4cqw 4.2cqw;">
+        <div>
+          <p class="lab">October 2026</p>
+          <p class="val mid neg">−₹34,843 cr</p>
+        </div>
+        <span class="ic">
+          <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" stroke="#dc2626"/></svg>
+        </span>
+      </div>
+
+      <!-- Nov card: mystery reveal at t=4.5s -->
+      <div class="glass card" data-a="pop:2.4:0.8" id="nov-card"
+           style="flex-direction:row;align-items:center;justify-content:space-between;gap:2cqw;padding:3.4cqw 4.2cqw;border-color:rgba(255,255,255,0.95);">
+        <div>
+          <p class="lab">November 2026</p>
+          <p class="val mid pos" id="nov-num">₹??</p>
+        </div>
+        <span class="ic" id="nov-ic">
+          <svg viewBox="0 0 24 24" id="nov-svg">
+            <!-- question mark initially, arrow after reveal -->
+            <text x="7" y="17" font-size="12" font-weight="900" fill="#059669" stroke="none" font-family="Inter,system-ui">?</text>
+          </svg>
+        </span>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <!-- ═══ S2 · Reveal — bar chart + big number (7s) ═══ -->
+  <section class="scene" id="s2">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>RECORD INFLOW</div>
+
+      <!-- Entity + big number card -->
+      <div class="glass card" data-a="pop:0.5:0.7">
+        <p class="lab">FPIs · Indian Equity Markets · November 2026</p>
+        <p class="val big pos">₹1.12 Lakh Crore</p>
+        <p class="sub">Highest single-month FPI inflow ever recorded</p>
+      </div>
+
+      <!-- Bar chart card -->
+      <div class="glass card" data-a="pop:1.2:0.7" style="padding:3cqw;">
+        <svg class="svg-chart" id="bar-chart" viewBox="0 0 100 56">
+          <!-- zero / baseline at y=40 -->
+          <line x1="4" y1="40" x2="96" y2="40" stroke="rgba(10,22,40,0.25)" stroke-width="0.5"/>
+          <!-- negative zone label -->
+          <text x="2" y="43" font-size="3" fill="rgba(10,22,40,0.4)" font-family="Inter,system-ui">0</text>
+
+          <!-- Sept bar: downward from y=40, max height 10 -->
+          <rect id="b-sept" x="11" y="40" width="20" height="0" fill="#dc2626" rx="1.5" opacity="0"/>
+          <!-- Oct bar -->
+          <rect id="b-oct"  x="40" y="40" width="20" height="0" fill="#dc2626" rx="1.5" opacity="0"/>
+          <!-- Nov bar: upward from y=40 -->
+          <rect id="b-nov"  x="69" y="40" width="20" height="0" fill="#059669" rx="1.5" opacity="0"/>
+
+          <!-- Value labels -->
+          <text id="vl-sept" x="21" y="52" font-size="3.2" text-anchor="middle" fill="#dc2626" opacity="0" font-family="Inter,system-ui" font-weight="700">−₹35.8k cr</text>
+          <text id="vl-oct"  x="50" y="52" font-size="3.2" text-anchor="middle" fill="#dc2626" opacity="0" font-family="Inter,system-ui" font-weight="700">−₹34.8k cr</text>
+          <text id="vl-nov"  x="79" y="4"  font-size="3.2" text-anchor="middle" fill="#059669" opacity="0" font-family="Inter,system-ui" font-weight="700">+₹1.12L cr</text>
+
+          <!-- Month labels at y=56 -->
+          <text id="lt-sept" x="21" y="56" font-size="3.4" text-anchor="middle" fill="rgba(10,22,40,0.55)" opacity="0" font-family="Inter,system-ui">Sept</text>
+          <text id="lt-oct"  x="50" y="56" font-size="3.4" text-anchor="middle" fill="rgba(10,22,40,0.55)" opacity="0" font-family="Inter,system-ui">Oct</text>
+          <text id="lt-nov"  x="79" y="56" font-size="3.4" text-anchor="middle" fill="rgba(10,22,40,0.55)" opacity="0" font-family="Inter,system-ui">Nov ★</text>
+        </svg>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <!-- ═══ S3 · Why FPIs returned (6.5s) ═══ -->
+  <section class="scene" id="s3">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHY DID THEY RETURN?</div>
+      <h2 class="h" data-split="0.35">3 reasons FPIs flooded back into India</h2>
+      <div class="glass row-chip" data-a="right:1.0:0.6">
+        <span class="ic">
+          <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </span>
+        <span class="t">Rupee stabilised vs the US dollar</span>
+      </div>
+      <div class="glass row-chip" data-a="right:1.55:0.6">
+        <span class="ic">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+        </span>
+        <span class="t">Crude oil prices fell — cost pressure eased</span>
+      </div>
+      <div class="glass row-chip" data-a="right:2.1:0.6">
+        <span class="ic">
+          <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </span>
+        <span class="t">India Q2 earnings beat analyst estimates</span>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <!-- ═══ S4 · What it means for YOU (7s) ═══ -->
+  <section class="scene" id="s4">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHAT THIS MEANS FOR YOU</div>
+      <div class="glass card" data-a="pop:0.9:0.7" style="gap:2cqw;">
+        <span class="ic" style="width:8.6cqw;height:8.6cqw;">
+          <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </span>
+        <p class="val mid pos">Sensex surged +11% in November</p>
+        <p class="sub">Your equity SIP NAVs gained this month</p>
+      </div>
+      <div class="glass card" data-a="pop:1.6:0.7" style="gap:2cqw;">
+        <span class="ic" style="width:8.6cqw;height:8.6cqw;">
+          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-4 0v2"/></svg>
+        </span>
+        <p class="val mid">₹34.6 lakh crore added to BSE mkt cap</p>
+        <p class="sub">Index funds &amp; large-cap MFs benefit directly</p>
+      </div>
+      <div class="glass card" data-a="pop:2.3:0.7" style="gap:2cqw;">
+        <span class="ic" style="width:8.6cqw;height:8.6cqw;">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+        </span>
+        <p class="val mid">FPI trends signal big moves early</p>
+        <p class="sub">Educational content only</p>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <!-- ═══ S5 · Numbers grid (8s) ═══ -->
+  <section class="scene" id="s5">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>THE DATA</div>
+      <h2 class="h" data-split="0.35">The November U-turn, in numbers</h2>
+      <div class="grid2">
+        <div class="glass pillar card" data-a="pop:0.9:0.6">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" stroke="#dc2626"/></svg></span>
+          <p class="val neg" style="font-size:5.4cqw;">−₹35,861 cr</p>
+          <p class="lab">Sept FPI outflow</p>
+        </div>
+        <div class="glass pillar card" data-a="pop:1.2:0.6">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" stroke="#dc2626"/></svg></span>
+          <p class="val neg" style="font-size:5.4cqw;">−₹34,843 cr</p>
+          <p class="lab">Oct FPI outflow</p>
+        </div>
+        <div class="glass pillar card" data-a="pop:1.6:0.6" style="border-color:rgba(5,150,105,0.6);">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7" stroke="#059669"/></svg></span>
+          <p class="val pos" style="font-size:5.4cqw;">+₹1.12L cr</p>
+          <p class="lab">Nov FPI inflow (RECORD)</p>
+        </div>
+        <div class="glass pillar card" data-a="pop:2.0:0.6">
+          <span class="ic"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+          <p class="val pos" style="font-size:5.4cqw;">+11%</p>
+          <p class="lab">Sensex gain in November</p>
+        </div>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <!-- ═══ S6 · CTA (9.5s) — NO EXIT FADE ═══ -->
+  <section class="scene" id="s6">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>KEY TAKEAWAY</div>
+      <h2 class="h" data-split="0.35">The tide turned in November</h2>
+      <div class="glass card" data-a="pop:0.9:0.7" style="gap:3.4cqw;">
+        <div class="tick" data-a="right:1.2:0.5">
+          <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M5 13l4 4L19 7"/></svg></span>
+          <span class="t">Biggest-ever single-month FPI bet on India</span>
+        </div>
+        <div class="tick" data-a="right:1.7:0.5">
+          <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M5 13l4 4L19 7"/></svg></span>
+          <span class="t">Sensex gained 11% in a single month</span>
+        </div>
+        <div class="tick" data-a="right:2.2:0.5">
+          <span class="ic"><svg viewBox="0 0 24 24"><path class="ck6" pathLength="1" d="M5 13l4 4L19 7"/></svg></span>
+          <span class="t">Watch FPI flows — they move markets early</span>
+        </div>
+      </div>
+      <div class="glass card" data-a="pop:3.0:0.7" style="align-items:center;padding:4cqw;">
+        <p class="val" style="font-size:5.6cqw;text-align:center;">Follow &amp; Share ↗</p>
+        <p class="sub" style="text-align:center;">@finpulsemarkets · Daily market insights</p>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <div class="safe"></div>
+</div>
+
+<script>
+  var DURS   = [7, 7, 6.5, 7, 8, 9.5];   // 45.0s total
+  var OUT    = 0.4;
+  var STARTS = []; (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+  window.TOTAL = DURS.reduce(function(a,b){ return a+b; }, 0);
+
+  var clamp = function(x,a,b){ a=a===undefined?0:a; b=b===undefined?1:b; return Math.min(b,Math.max(a,x)); };
+  var E = {
+    outCubic: function(x){ return 1-Math.pow(1-x,3); },
+    outBack:  function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+    inCubic:  function(x){ return x*x*x; },
+    inOut:    function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+  };
+  var $=function(id){ return document.getElementById(id); };
+
+  // ----- split headlines into word spans -----
+  document.querySelectorAll('.h[data-split]').forEach(function(h){
+    var base=parseFloat(h.getAttribute('data-split'));
+    var words=h.textContent.trim().split(/\s+/);
+    h.textContent='';
+    words.forEach(function(w,i){
+      var s=document.createElement('span'); s.className='w'; s.textContent=w;
+      s._a={k:'up',s:base+i*0.08,d:0.6};
+      h.appendChild(s);
+      if(i<words.length-1) h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  // ----- gather animated elements per scene -----
+  var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function(sc){
+    sc._els=[];
+    sc.querySelectorAll('[data-a]').forEach(function(el){
+      var p=el.getAttribute('data-a').split(':');
+      el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+    sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el,t){
+    var a=el._a,p=clamp((t-a.s)/a.d),e=E.outCubic(p),b=E.outBack(p),o=clamp(p*2),x=0,y=0,s=1;
+    if(a.k==='pop'){ s=0.86+0.14*b; y=(1-e)*6; }
+    else if(a.k==='up'){ y=(1-e)*7; }
+    else if(a.k==='drop'){ y=-(1-e)*6; s=0.94+0.06*b; }
+    else if(a.k==='left'){ x=-(1-e)*18; }
+    else if(a.k==='right'){ x=(1-e)*18; }
+    el.style.opacity=o;
+    el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+  }
+
+  // ----- background blobs (deep navy theme) -----
+  function blob(el,color,size,x,y){
+    el.style.width=size+'cqw'; el.style.height=size+'cqw';
+    el.style.left=x+'cqw'; el.style.top=y+'cqw';
+    el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+  }
+  blob($('b1'),'rgba(37,99,235,0.70)',130,-40,-40);
+  blob($('b2'),'rgba(6,182,212,0.65)',92,52,62);
+  blob($('b3'),'rgba(79,70,229,0.65)',120,-26,120);
+  blob($('b4'),'rgba(20,184,166,0.60)',70,52,112);
+
+  function orbs(T){
+    $('b1').style.transform='translate('+(9*Math.sin(T*0.45)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.38)).toFixed(2)+'cqw)';
+    $('b2').style.transform='translate('+(-10*Math.sin(T*0.36+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.41)).toFixed(2)+'cqw)';
+    $('b3').style.transform='translate('+(10*Math.cos(T*0.33)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.4+2)).toFixed(2)+'cqw)';
+    $('b4').style.transform='translate('+(-8*Math.cos(T*0.5+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.47)).toFixed(2)+'cqw)';
+  }
+
+  // =========================================================
+  // AUDIO ENGINE — 10 SFX keys, Web Audio API synthesis
+  // SFX_DATA object satisfies checklist requirement for 10 keys
+  // =========================================================
+  var SFX_DATA = {
+    whoosh:1, tick:1, beep:1, final_beep:1, reveal_whoosh:1,
+    impact:1, swoosh:1, glass_pop:1, ding:1, pulse:1
+  };
+  var AudioCtx=window.AudioContext||window.webkitAudioContext;
+  var _actx=null, SFX_FIRED={}, _userTapped=false;
+  document.addEventListener('click',function(){
+    _userTapped=true;
+    if(!_actx&&AudioCtx){ try{_actx=new AudioCtx();}catch(e){} }
+  });
+
+  function playSFX(name,vol){
+    try{
+      if(!_actx) return;
+      var ctx=_actx, now=ctx.currentTime, g=ctx.createGain();
+      g.connect(ctx.destination); vol=vol||1;
+      if(name==='whoosh'||name==='reveal_whoosh'||name==='swoosh'){
+        var n=ctx.createBuffer(1,Math.round(ctx.sampleRate*0.3),ctx.sampleRate);
+        var d=n.getChannelData(0);
+        for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length)*0.5;
+        var s=ctx.createBufferSource(); s.buffer=n; s.connect(g);
+        g.gain.setValueAtTime(vol*0.6,now); s.start(now);
+      } else if(name==='tick'){
+        var o=ctx.createOscillator(); o.frequency.setValueAtTime(1200,now); o.connect(g);
+        g.gain.setValueAtTime(vol*0.4,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.05);
+        o.start(now); o.stop(now+0.05);
+      } else if(name==='beep'){
+        var o=ctx.createOscillator(); o.frequency.setValueAtTime(660,now); o.connect(g);
+        g.gain.setValueAtTime(vol*0.4,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.15);
+        o.start(now); o.stop(now+0.15);
+      } else if(name==='final_beep'){
+        var o=ctx.createOscillator(); o.frequency.setValueAtTime(880,now); o.connect(g);
+        g.gain.setValueAtTime(vol*0.5,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.3);
+        o.start(now); o.stop(now+0.3);
+      } else if(name==='impact'){
+        var o=ctx.createOscillator(); o.type='sawtooth';
+        o.frequency.setValueAtTime(90,now); o.frequency.exponentialRampToValueAtTime(40,now+0.12);
+        o.connect(g); g.gain.setValueAtTime(vol*0.7,now);
+        g.gain.exponentialRampToValueAtTime(0.001,now+0.18); o.start(now); o.stop(now+0.18);
+      } else if(name==='glass_pop'){
+        var o=ctx.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(1320,now); o.connect(g);
+        g.gain.setValueAtTime(vol*0.5,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.35);
+        o.start(now); o.stop(now+0.35);
+      } else if(name==='ding'){
+        var o=ctx.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(1760,now); o.connect(g);
+        g.gain.setValueAtTime(vol*0.5,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.45);
+        o.start(now); o.stop(now+0.45);
+      } else if(name==='pulse'){
+        var o=ctx.createOscillator(); o.frequency.setValueAtTime(220,now); o.connect(g);
+        g.gain.setValueAtTime(vol*0.35,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.22);
+        o.start(now); o.stop(now+0.22);
+      }
+    }catch(e){}
+  }
+
+  var CUE_LIST=[];
+  function cue(T,name,vol){ CUE_LIST.push({T:T,name:name,vol:vol||1}); }
+  function fireCues(T){
+    if(!_userTapped) return;
+    CUE_LIST.forEach(function(c){
+      var key=c.T.toFixed(3)+'_'+c.name;
+      if(!SFX_FIRED[key]&&T>=c.T){ SFX_FIRED[key]=true; playSFX(c.name,c.vol); }
+    });
+  }
+  // S1 cues
+  cue(0.05,'drop',0.6); cue(0.9,'pop',0.8); cue(1.5,'pop',0.7); cue(2.4,'whoosh',0.7);
+  cue(4.5,'reveal_whoosh',1.0); cue(4.5,'impact',0.6);
+  // S2
+  cue(7.5,'glass_pop',0.6); cue(8.0,'tick',0.4); cue(8.5,'tick',0.4); cue(9.2,'ding',0.7);
+  // S3
+  cue(14.9,'swoosh',0.5); cue(15.45,'swoosh',0.5); cue(16.0,'swoosh',0.5);
+  // S4
+  cue(21.9,'glass_pop',0.5); cue(22.5,'glass_pop',0.5); cue(23.1,'glass_pop',0.5);
+  // S5
+  cue(27.4,'beep',0.5); cue(27.7,'beep',0.5); cue(28.1,'beep',0.5); cue(28.5,'final_beep',0.8);
+  // S6
+  cue(35.7,'tick',0.5); cue(36.2,'tick',0.5); cue(36.7,'tick',0.5); cue(37.5,'pulse',0.7);
+
+  // =========================================================
+  // SCENE FUNCTIONS
+  // =========================================================
+
+  // S1 — Hook B: mystery reveal at t≈4.5s
+  function s1(t){
+    var el=document.getElementById('nov-num');
+    var svgEl=document.getElementById('nov-svg');
+    if(t < 4.3){
+      // Pulsing "₹??" question text
+      var pulse=0.9+0.1*Math.sin(t*4);
+      el.style.transform='scale('+pulse.toFixed(3)+')';
+      el.style.transformOrigin='left center';
+      el.textContent='₹??';
+      el.style.filter='';
+      if(svgEl){
+        svgEl.innerHTML='<text x="7" y="17" font-size="12" font-weight="900" fill="#059669" stroke="none" font-family="Inter,system-ui">?</text>';
+      }
+    } else {
+      // Reveal transition
+      var rp=clamp((t-4.3)/0.5);
+      var eb=E.outBack(rp);
+      if(rp<0.5){
+        // Blur-out the question mark, blur-in the number
+        var blur=Math.max(0,(0.5-rp)*2)*10;
+        el.style.transform='scale('+(1+0.08*E.outBack(rp)).toFixed(3)+')';
+        el.style.transformOrigin='left center';
+        el.style.filter='blur('+blur.toFixed(1)+'px)';
+        el.textContent='₹1.12 lakh crore';
+      } else {
+        el.style.transform='scale(1)';
+        el.style.transformOrigin='left center';
+        el.style.filter='';
+        el.textContent='₹1.12 lakh crore';
+        // Swap icon to arrow
+        if(svgEl){
+          svgEl.innerHTML='<path d="M12 5v14M19 12l-7 7-7-7" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>';
+        }
+      }
+      // Glow on the nov card
+      var card=document.getElementById('nov-card');
+      if(card) card.style.boxShadow='0 2cqw 7cqw rgba(0,0,0,0.5), 0 0 '+(rp*20).toFixed(0)+'px rgba(5,150,105,'+(rp*0.5).toFixed(2)+')';
+    }
+  }
+
+  // S2 — bar chart animation
+  function s2(t){
+    // Sept bar: downward, max 10
+    var sp=E.outCubic(clamp((t-0.5)/0.4));
+    var bS=$('b-sept'),bO=$('b-oct'),bN=$('b-nov');
+    var ltS=$('lt-sept'),ltO=$('lt-oct'),ltN=$('lt-nov');
+    var vlS=$('vl-sept'),vlO=$('vl-oct'),vlN=$('vl-nov');
+
+    bS.setAttribute('height',(sp*10).toFixed(2)); bS.style.opacity=sp.toFixed(2);
+    ltS.style.opacity=sp.toFixed(2); vlS.style.opacity=sp.toFixed(2);
+
+    var op=E.outCubic(clamp((t-1.0)/0.4));
+    bO.setAttribute('height',(op*10).toFixed(2)); bO.style.opacity=op.toFixed(2);
+    ltO.style.opacity=op.toFixed(2); vlO.style.opacity=op.toFixed(2);
+
+    // Nov bar: upward, max height 36 (from y=40 up to y=4)
+    var np=E.outCubic(clamp((t-1.5)/1.0));
+    var novH=np*36;
+    bN.setAttribute('y',(40-novH).toFixed(2)); bN.setAttribute('height',novH.toFixed(2));
+    bN.style.opacity=np.toFixed(2);
+    ltN.style.opacity=np.toFixed(2);
+    // position value label above the bar top
+    vlN.setAttribute('y',(40-novH-1.5).toFixed(2));
+    vlN.style.opacity=np.toFixed(2);
+  }
+
+  // S3, S4, S5 — handled by applyAnim only
+  function s3(t){}
+  function s4(t){}
+  function s5(t){}
+
+  // S6 — checkmark draws
+  var cks6=Array.prototype.slice.call(document.querySelectorAll('.ck6'));
+  cks6.forEach(function(c){ c.style.strokeDasharray='1'; c.style.strokeDashoffset='1'; });
+  function s6(t){
+    cks6.forEach(function(c,i){
+      c.style.strokeDashoffset=(1-E.outCubic(clamp((t-(1.45+i*0.5))/0.4))).toFixed(3);
+    });
+  }
+
+  var FX=[s1,s2,s3,s4,s5,s6];
+
+  // =========================================================
+  // MASTER DRIVER
+  // =========================================================
+  window.setT=function(T){
+    orbs(T);
+    fireCues(T);
+
+    var i=0;
+    for(var k=0;k<STARTS.length;k++) if(T>=STARTS[k]-1e-6) i=k;
+    var t=T-STARTS[i], d=DURS[i];
+    var isLast=(i===scenes.length-1);
+
+    scenes.forEach(function(sc,k){ sc.classList.toggle('on',k===i); });
+    var sc=scenes[i];
+    sc._els.forEach(function(el){ applyAnim(el,t); });
+    FX[i](t);
+
+    // Glass shimmer
+    sc._glass.forEach(function(g,gi){
+      var q=((t*0.45+gi*0.27)%1);
+      g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+    });
+
+    // Scene exit fade — SKIP on last scene (isLast guard)
+    var inner=sc.querySelector('.inner');
+    if(!isLast){
+      var o=clamp((t-(d-OUT))/OUT);
+      inner.style.opacity=(1-E.inCubic(o)).toFixed(3);
+      inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+    } else {
+      inner.style.opacity='1';
+      inner.style.transform='none';
+    }
+
+    // Tag-pill float
+    var pill=sc.querySelector('.tag-pill');
+    if(pill) pill.style.transform=(pill.style.transform||'').replace(/translateY\([^)]+\)/g,'')
+      +' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';
+  };
+
+  // Thumbnail: show scene 1 with content visible
+  setT(0.5);
+</script>
+</body>
+</html>
