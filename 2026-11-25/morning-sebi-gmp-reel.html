@@ -1,0 +1,570 @@
+<!doctype html>
+<!--
+  FIN PULSE · 2026-11-25 morning · SEBI GMP Advisory PR 75/2026
+  Hook A · Crimson dark palette · atlasaudio-soft-509813.mp3
+  DURS [7, 7, 7, 7.5, 7, 9.5] = 45.0s
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>SEBI GMP Alert</title>
+<style>
+  :root {
+    --bg: #1a0005;
+    --ink: #0d0005;
+    --ink-dim: rgba(13,0,5,0.78);
+    --accent: #f59e0b;
+    --red: #dc2626;
+    --font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html,body { margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#000; }
+  .frame {
+    position:relative;width:1080px;height:1920px;container-type:inline-size;overflow:hidden;
+    background:var(--bg);font-family:var(--font);color:var(--ink);font-variant-numeric:tabular-nums;
+  }
+  .blob { position:absolute;border-radius:50%;will-change:transform; }
+  .scene { position:absolute;inset:0;display:none; }
+  .scene.on { display:block; }
+  .inner {
+    position:absolute;inset:0;padding:17cqw 11cqw 30cqw 6cqw;
+    display:flex;flex-direction:column;justify-content:center;gap:3.6cqw;min-width:0;
+  }
+
+  /* Handle */
+  .handle {
+    position:absolute;bottom:7cqw;right:5cqw;
+    font-size:3.2cqw;font-weight:800;color:rgba(255,255,255,0.72);letter-spacing:0.01em;z-index:10;
+  }
+
+  /* Tag pill — font-size MUST be 4.6cqw */
+  .tag-pill {
+    position:relative;align-self:center;
+    display:inline-flex;align-items:center;justify-content:center;gap:2.6cqw;
+    padding:2.4cqw 6.4cqw;border-radius:999px;
+    background:linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.52));
+    backdrop-filter:blur(40px) saturate(100%);-webkit-backdrop-filter:blur(40px) saturate(100%);
+    border:1.5px solid rgba(255,255,255,0.9);
+    box-shadow:0 2cqw 6cqw rgba(0,0,0,0.45),inset 0 0.5cqw 1cqw rgba(255,255,255,0.95);
+    color:var(--ink);font-size:4.6cqw;font-weight:800;line-height:1.2;white-space:nowrap;flex:none;
+  }
+  .tag-pill::before {
+    content:"";position:absolute;inset:1cqw;border-radius:999px;border:1px solid rgba(255,255,255,0.75);
+  }
+  .dot { position:relative;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--red); }
+
+  /* Headlines */
+  .h {
+    margin:0;text-align:center;color:#fff;font-size:8.8cqw;font-weight:800;
+    letter-spacing:-0.02em;line-height:1.1;text-wrap:balance;flex:none;
+    text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.5);
+  }
+  .h .w { display:inline-block; }
+
+  /* Glass — NON-NEGOTIABLE values */
+  .frame .glass {
+    position:relative;overflow:hidden;
+    background:rgba(255,255,255,0.88);border:3px solid rgba(255,255,255,0.95);
+    border-radius:4cqw;box-shadow:0 2cqw 7cqw rgba(0,0,0,0.5);
+  }
+  .glass::after {
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,0.5) 50%,transparent 62%);
+    transform:translateX(var(--sw,-130%));
+  }
+
+  .card { padding:4.2cqw;display:flex;flex-direction:column;gap:2.4cqw;min-width:0;flex:none; }
+  .lab { margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim); }
+  .val { margin:0;font-weight:800;letter-spacing:-0.02em;line-height:1.05;color:var(--ink); }
+  .big { font-size:7.4cqw; }
+  .mid { font-size:5.6cqw; }
+  .svg { width:100%;height:auto;display:block;flex:none; }
+  .svg text { font-family:var(--font);font-weight:700;fill:var(--ink-dim); }
+
+  /* Icon circle */
+  .ic {
+    flex:none;width:9cqw;height:9cqw;border-radius:50%;
+    background:rgba(13,0,5,0.12);display:grid;place-items:center;
+  }
+  .ic svg { width:56%;height:56%;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
+  .ic svg .f { fill:var(--ink);stroke:none; }
+  .ic.red { background:rgba(220,38,38,0.14); }
+  .ic.red svg { stroke:var(--red); }
+
+  /* Row chips */
+  .row-chip { display:flex;align-items:center;gap:3cqw;padding:2.4cqw 3.6cqw;flex:none; }
+  .row-chip .ic { width:8.6cqw;height:8.6cqw; }
+  .row-chip span.t { font-size:4.3cqw;font-weight:800;line-height:1.15;color:var(--ink); }
+
+  /* 2×2 grid */
+  .grid2 { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3cqw;flex:none; }
+  .pillar { padding:3cqw 3.4cqw;align-items:flex-start;gap:2cqw; }
+  .pillar .val { font-size:5.4cqw; }
+  .pillar .ic { width:8.6cqw;height:8.6cqw; }
+  .pillar .lab { font-size:3.2cqw; }
+
+  /* Ticks (checkmarks) */
+  .tick { display:flex;align-items:center;gap:3cqw; }
+  .tick span.t { font-size:4.4cqw;font-weight:800;line-height:1.15;color:var(--ink); }
+  .tick .ic { width:8cqw;height:8cqw; }
+
+  /* Alert stamp — Hook A */
+  .alert-stamp {
+    align-self:center;transform-origin:center center;
+    background:linear-gradient(135deg,#dc2626,#991b1b);
+    color:#fff;font-size:5.4cqw;font-weight:900;letter-spacing:0.07em;
+    padding:2.4cqw 7cqw;border-radius:1.5cqw;text-transform:uppercase;
+    box-shadow:0 0 3cqw rgba(220,38,38,0.8),0 0 8cqw rgba(220,38,38,0.4);
+    flex:none;text-align:center;
+  }
+
+  /* 3-card stat row */
+  .stat-row { display:flex;gap:2.5cqw;flex:none; }
+  .stat-row .sc { flex:1;min-width:0; }
+  .stat-row .sc .lab { font-size:2.9cqw; }
+  .stat-row .sc .val { font-size:4.5cqw; }
+
+  /* Countdown SVG container */
+  .cd-wrap { align-self:center;flex:none;width:14cqw;height:14cqw; }
+
+  /* Digit reveal boxes */
+  .digit-row { align-self:center;display:flex;gap:1.2cqw;flex:none; }
+  .dr-box {
+    display:inline-flex;align-items:center;justify-content:center;
+    width:9cqw;height:11cqw;border-radius:1.5cqw;
+    background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.3);
+    font-size:6.8cqw;font-weight:900;color:#fff;
+    text-shadow:0 0 2cqw rgba(255,255,255,0.6);
+  }
+  .dr-box.dash { font-size:9cqw; }
+
+  /* Bar chart labels */
+  /* Follow card */
+  .follow-card {
+    background:rgba(13,0,5,0.82);border:2px solid rgba(249,115,22,0.55);
+    border-radius:4cqw;padding:4cqw 5cqw;
+    display:flex;align-items:center;gap:3cqw;flex:none;
+  }
+  .fc-icon {
+    width:10cqw;height:10cqw;border-radius:50%;flex:none;
+    background:linear-gradient(135deg,#f59e0b,#d97706);
+    display:grid;place-items:center;
+  }
+  .fc-icon svg { width:60%;height:60%;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round; }
+  .fc-text b { display:block;font-size:4.6cqw;font-weight:900;color:#fff;line-height:1.15; }
+  .fc-text span { display:block;font-size:3.4cqw;font-weight:700;color:rgba(249,115,22,0.9); }
+
+  /* Disclaimer */
+  .disc { font-size:3.4cqw;font-weight:700;color:rgba(255,255,255,0.65);text-align:center;flex:none; }
+
+  /* Per-scene overrides */
+  #s1 .inner { gap:4cqw; }
+  #s1 .h { font-size:9.4cqw; }
+  #s2 .inner { gap:4cqw; }
+  #s3 .inner { gap:3cqw; }
+  #s3 .row-chip { padding:2cqw 3.6cqw; }
+  #s4 .inner { gap:3.5cqw; }
+  #s5 .inner { gap:5cqw; }
+  #s6 .inner { gap:5cqw; }
+  #s6 .card.tk { padding:5cqw 4.4cqw; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- ===== S1: Hook A ===== -->
+  <section class="scene" id="s1">
+    <div class="handle">@finpulsemarkets</div>
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>SEBI IPO ALERT</div>
+      <!-- Alert stamp: scale snap, no data-a — driven directly in s1() -->
+      <div class="alert-stamp" id="alertStamp" style="opacity:0">SEBI PR 75 / 2026</div>
+      <!-- 3 stat cards -->
+      <div class="stat-row">
+        <div class="glass card sc" data-a="pop:1.0:0.6">
+          <p class="lab">IPO Investors</p>
+          <p class="val" id="ctr1" style="font-size:5.2cqw">0</p>
+        </div>
+        <div class="glass card sc" data-a="pop:1.2:0.6">
+          <p class="lab">GMP Status</p>
+          <p class="val" style="font-size:3.9cqw;color:#dc2626">UNOFFICIAL</p>
+        </div>
+        <div class="glass card sc" data-a="pop:1.4:0.6">
+          <p class="lab">SEBI Orders</p>
+          <p class="val" style="font-size:3.9cqw">STOP<br>PUBLISHING</p>
+        </div>
+      </div>
+      <!-- Countdown circle -->
+      <div class="cd-wrap" data-a="pop:2.2:0.5">
+        <svg id="cdSvg" viewBox="0 0 56 56" width="100%" height="100%">
+          <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="4"/>
+          <circle id="cdArc" cx="28" cy="28" r="24" fill="none" stroke="#f59e0b" stroke-width="4"
+            stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8"
+            transform="rotate(-90 28 28)"/>
+          <text id="cdNum" x="28" y="34" text-anchor="middle" font-size="20" font-weight="900"
+            fill="#fff" font-family="Inter,sans-serif">5</text>
+        </svg>
+      </div>
+      <!-- Digit reveal -->
+      <div class="digit-row" id="digitRow" style="opacity:0">
+        <div class="dr-box" id="dr0">P</div>
+        <div class="dr-box" id="dr1">R</div>
+        <div class="dr-box dash" id="dr2">-</div>
+        <div class="dr-box" id="dr3">7</div>
+        <div class="dr-box" id="dr4">5</div>
+      </div>
+      <p class="h" style="font-size:4.6cqw;margin-top:0.5cqw" data-a="up:5.4:0.5">What this means for crores of investors ↓</p>
+    </div>
+  </section>
+
+  <!-- ===== S2: What is GMP ===== -->
+  <section class="scene" id="s2">
+    <div class="handle">@finpulsemarkets</div>
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHAT IS GMP?</div>
+      <h2 class="h" data-split="0.35">The IPO signal crores rely on — SEBI says ignore it</h2>
+      <div class="glass card" data-a="pop:1.0:0.7">
+        <div style="display:flex;align-items:center;gap:3cqw">
+          <span class="ic red" style="width:10cqw;height:10cqw">
+            <svg viewBox="0 0 24 24"><path class="f" d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13" style="stroke:#fff"/><line x1="12" y1="17" x2="12.01" y2="17" style="stroke:#fff"/></svg>
+          </span>
+          <div>
+            <b style="font-size:4.6cqw;font-weight:900;color:var(--ink);display:block;line-height:1.1">SEBI · PR No. 75/2026</b>
+            <span style="font-size:3.4cqw;font-weight:700;color:var(--ink-dim)">Advisory dated 23 November 2026</span>
+          </div>
+        </div>
+        <p class="lab" style="font-size:3.8cqw;line-height:1.4">Grey Market Premium (GMP) = price at which IPO shares trade in unofficial channels before listing day. SEBI says it is unverified and unreliable.</p>
+      </div>
+      <!-- Illustrative bar chart -->
+      <div class="glass card" data-a="pop:2.2:0.7" style="padding:3cqw 3.4cqw;gap:2cqw">
+        <p class="lab" style="font-size:3.4cqw">GMP Expected vs Actual Listing — illustrative</p>
+        <svg class="svg" viewBox="0 0 100 52" id="barSvg" style="max-height:18cqw">
+          <line x1="4" y1="44" x2="96" y2="44" stroke="rgba(13,0,5,0.2)" stroke-width="0.5"/>
+          <!-- IPO A -->
+          <rect id="b1a" x="10" y="44" width="10" height="0" fill="#f59e0b" rx="1"/>
+          <rect id="b1b" x="22" y="44" width="10" height="0" fill="#dc2626" rx="1"/>
+          <!-- IPO B -->
+          <rect id="b2a" x="43" y="44" width="10" height="0" fill="#f59e0b" rx="1"/>
+          <rect id="b2b" x="55" y="44" width="10" height="0" fill="#dc2626" rx="1"/>
+          <!-- IPO C -->
+          <rect id="b3a" x="76" y="44" width="10" height="0" fill="#f59e0b" rx="1"/>
+          <rect id="b3b" x="88" y="44" width="10" height="0" fill="#dc2626" rx="1"/>
+          <!-- x-labels -->
+          <text x="17" y="49" text-anchor="middle" font-size="2.8" fill="rgba(13,0,5,0.55)" font-family="Inter,sans-serif">IPO A</text>
+          <text x="50" y="49" text-anchor="middle" font-size="2.8" fill="rgba(13,0,5,0.55)" font-family="Inter,sans-serif">IPO B</text>
+          <text x="83" y="49" text-anchor="middle" font-size="2.8" fill="rgba(13,0,5,0.55)" font-family="Inter,sans-serif">IPO C</text>
+          <!-- legend -->
+          <rect x="4" y="2" width="3.5" height="2.5" fill="#f59e0b" rx="0.5"/>
+          <text x="9" y="4.5" font-size="2.8" fill="rgba(13,0,5,0.6)" font-family="Inter,sans-serif">GMP Expected</text>
+          <rect x="52" y="2" width="3.5" height="2.5" fill="#dc2626" rx="0.5"/>
+          <text x="57" y="4.5" font-size="2.8" fill="rgba(13,0,5,0.6)" font-family="Inter,sans-serif">Actual Listing</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== S3: Why SEBI acted ===== -->
+  <section class="scene" id="s3">
+    <div class="handle">@finpulsemarkets</div>
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>WHY SEBI ACTED</div>
+      <h2 class="h" data-split="0.35">3 reasons SEBI called out GMP</h2>
+      <div class="glass row-chip" data-a="right:1.3:0.65">
+        <span class="ic red"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+        <span class="t">GMP is unregulated — no exchange or SEBI oversight</span>
+      </div>
+      <div class="glass row-chip" data-a="right:1.9:0.65">
+        <span class="ic red"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+        <span class="t">Data is unofficial — not from SEBI, NSE or BSE</span>
+      </div>
+      <div class="glass row-chip" data-a="right:2.5:0.65">
+        <span class="ic red"><svg viewBox="0 0 24 24"><path class="f" d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13" style="stroke:#fff"/><line x1="12" y1="17" x2="12.01" y2="17" style="stroke:#fff"/></svg></span>
+        <span class="t">No investor protection for GMP-linked disputes</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== S4: Your IPO Strategy ===== -->
+  <section class="scene" id="s4">
+    <div class="handle">@finpulsemarkets</div>
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>YOUR IPO STRATEGY</div>
+      <h2 class="h" data-split="0.35">What changes for every investor</h2>
+      <div class="glass card" data-a="pop:1.0:0.65" style="gap:1.8cqw;flex-direction:row;align-items:center">
+        <span class="ic" style="width:8cqw;height:8cqw"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span>
+        <p class="lab" style="font-size:3.9cqw;line-height:1.35">Don't use GMP to decide your IPO application or sell timing</p>
+      </div>
+      <div class="glass card" data-a="pop:1.7:0.65" style="gap:1.8cqw;flex-direction:row;align-items:center">
+        <span class="ic" style="width:8cqw;height:8cqw"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
+        <p class="lab" style="font-size:3.9cqw;line-height:1.35">Only transact through SEBI-registered brokers and platforms</p>
+      </div>
+      <div class="glass card" data-a="pop:2.4:0.65" style="gap:1.8cqw;flex-direction:row;align-items:center">
+        <span class="ic" style="width:8cqw;height:8cqw"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l3 3 5-6"/></svg></span>
+        <p class="lab" style="font-size:3.9cqw;line-height:1.35">Use subscription data, valuation and business quality instead</p>
+      </div>
+      <p class="disc">Educational content only.</p>
+    </div>
+  </section>
+
+  <!-- ===== S5: Key Facts grid ===== -->
+  <section class="scene" id="s5">
+    <div class="handle">@finpulsemarkets</div>
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>KEY FACTS</div>
+      <h2 class="h" data-split="0.35">SEBI GMP directive — at a glance</h2>
+      <div class="grid2">
+        <div class="glass card pillar" data-a="pop:1.4:0.55">
+          <span class="ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+          <p class="val" style="font-size:5cqw">PR No. 75</p>
+          <p class="lab">SEBI Advisory Number</p>
+        </div>
+        <div class="glass card pillar" data-a="pop:1.7:0.55">
+          <span class="ic red"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+          <p class="val" style="font-size:4.8cqw">UNREG-<br>ULATED</p>
+          <p class="lab">Official GMP Status</p>
+        </div>
+        <div class="glass card pillar" data-a="pop:2.0:0.55">
+          <span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+          <p class="val" style="font-size:5cqw">23 Nov<br>2026</p>
+          <p class="lab">Directive Date</p>
+        </div>
+        <div class="glass card pillar" data-a="pop:2.3:0.55">
+          <span class="ic red"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+          <p class="val" style="font-size:4.8cqw">ZERO<br>REDRESS</p>
+          <p class="lab">For GMP disputes</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== S6: Takeaway + CTA (NO exit fade — isLast guard) ===== -->
+  <section class="scene" id="s6">
+    <div class="handle">@finpulsemarkets</div>
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>KEY TAKEAWAY</div>
+      <h2 class="h" data-split="0.35">SEBI just changed the IPO game</h2>
+      <div class="glass card tk" data-a="pop:0.9:0.7" style="gap:3.4cqw">
+        <div class="tick" data-a="right:1.2:0.5">
+          <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke-width="2.5"/></svg></span>
+          <span class="t">GMP is officially unreliable — SEBI confirmed</span>
+        </div>
+        <div class="tick" data-a="right:1.65:0.5">
+          <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke-width="2.5"/></svg></span>
+          <span class="t">Only use SEBI-registered platforms for IPOs</span>
+        </div>
+        <div class="tick" data-a="right:2.1:0.5">
+          <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke-width="2.5"/></svg></span>
+          <span class="t">Check subscription data and valuation — not GMP</span>
+        </div>
+      </div>
+      <div class="follow-card" data-a="pop:2.9:0.6">
+        <div class="fc-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 4s-2.7 2-5 2.5a4.3 4.3 0 00-7.5 3.9A12 12 0 013 5S-1 14 8 18a13 13 0 01-6 1.5c9 5 20 0 20-11.5a4.5 4.5 0 00-.1-.9C23.1 5.9 22 4 22 4z"/></svg>
+        </div>
+        <div class="fc-text">
+          <b>Follow @finpulsemarkets</b>
+          <span>India's fastest market alerts</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  /* ---- timing ---- */
+  var DURS  = [7, 7, 7, 7.5, 7, 9.5];   // sum = 45.0 s
+  var OUT   = 0.4;
+  var STARTS = []; (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+  window.TOTAL = DURS.reduce(function(a,b){ return a+b; }, 0); // 45.0
+
+  /* ---- easing ---- */
+  var clamp = function(x,a,b){ a=a===undefined?0:a; b=b===undefined?1:b; return Math.min(b,Math.max(a,x)); };
+  var E = {
+    outCubic: function(x){ return 1-Math.pow(1-x,3); },
+    outBack:  function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+    inCubic:  function(x){ return x*x*x; },
+    inOut:    function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+  };
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ---- split headlines ---- */
+  document.querySelectorAll('.h[data-split]').forEach(function(h){
+    var base = parseFloat(h.getAttribute('data-split'));
+    var words = h.textContent.trim().split(/\s+/);
+    h.textContent = '';
+    words.forEach(function(w,i){
+      var s = document.createElement('span'); s.className='w'; s.textContent=w;
+      s._a = { k:'up', s:base+i*0.08, d:0.6 };
+      h.appendChild(s);
+      if (i < words.length-1) h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  /* ---- gather animated elements per scene ---- */
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function(sc){
+    sc._els = [];
+    sc.querySelectorAll('[data-a]').forEach(function(el){
+      var p = el.getAttribute('data-a').split(':');
+      el._a = { k:p[0], s:parseFloat(p[1]), d:parseFloat(p[2]) };
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+    sc._glass = Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el, t){
+    var a=el._a, p=clamp((t-a.s)/a.d), e=E.outCubic(p), b=E.outBack(p), o=clamp(p*2), x=0, y=0, s=1;
+    if (a.k==='pop')   { s=0.86+0.14*b; y=(1-e)*6; }
+    else if (a.k==='up')   { y=(1-e)*7; }
+    else if (a.k==='drop') { y=-(1-e)*6; s=0.94+0.06*b; }
+    else if (a.k==='left') { x=-(1-e)*18; }
+    else if (a.k==='right'){ x=(1-e)*18; }
+    el.style.opacity    = o;
+    el.style.transform  = 'translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+  }
+
+  /* ---- background blobs ---- */
+  function blob(el, color, size, x, y){
+    el.style.width  = size+'cqw'; el.style.height = size+'cqw';
+    el.style.left   = x+'cqw';   el.style.top    = y+'cqw';
+    el.style.background = 'radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+  }
+  blob($('b1'),'rgba(220,38,38,0.72)',130,-40,-40);
+  blob($('b2'),'rgba(168,85,247,0.65)',92,52,62);
+  blob($('b3'),'rgba(249,115,22,0.70)',120,-26,120);
+  blob($('b4'),'rgba(109,40,217,0.60)',70,52,112);
+
+  function orbs(T){
+    $('b1').style.transform='translate('+(9*Math.sin(T*0.45)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.38)).toFixed(2)+'cqw)';
+    $('b2').style.transform='translate('+(-10*Math.sin(T*0.36+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.41)).toFixed(2)+'cqw)';
+    $('b3').style.transform='translate('+(10*Math.cos(T*0.33)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.4+2)).toFixed(2)+'cqw)';
+    $('b4').style.transform='translate('+(-8*Math.cos(T*0.5+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.47)).toFixed(2)+'cqw)';
+  }
+
+  /* ---- scene 1: Hook A ---- */
+  function s1(t){
+    // Alert stamp scale snap
+    var sp = clamp((t-0.1)/0.4);
+    var sc = 1.9 - 0.9*E.outBack(sp);
+    $('alertStamp').style.opacity = clamp(sp*4).toFixed(3);
+    $('alertStamp').style.transform = 'scale('+Math.max(0.3,sc).toFixed(4)+')';
+
+    // Counter: 0 → 10M+
+    var c1p = clamp((t-1.0)/0.9);
+    var c1v = Math.round(10000000 * E.outCubic(c1p));
+    if      (c1v >= 9800000)  $('ctr1').textContent = '10M+';
+    else if (c1v >= 1000000)  $('ctr1').textContent = (c1v/1000000).toFixed(1)+'M';
+    else                       $('ctr1').textContent = (c1v/1000).toFixed(0)+'K';
+
+    // Countdown 5→1
+    var cdStart=2.2, cdDur=2.5;
+    var cdP = clamp((t-cdStart)/cdDur);
+    var cdN = Math.max(1, Math.ceil(5 - cdP*4));
+    $('cdNum').textContent = cdN;
+    $('cdArc').setAttribute('stroke-dashoffset', (150.8*(1-cdP)).toFixed(2));
+    $('cdArc').setAttribute('stroke', cdN <= 2 ? '#dc2626' : '#f59e0b');
+
+    // Digit reveal P R - 7 5
+    var drStart = 4.8;
+    var drOpacity = clamp((t-drStart)/0.3);
+    $('digitRow').style.opacity = drOpacity.toFixed(3);
+    var drIds = ['dr0','dr1','dr2','dr3','dr4'];
+    drIds.forEach(function(id,i){
+      var dp = clamp((t-(drStart+i*0.14))/0.25);
+      var el = $(id);
+      el.style.opacity   = clamp(dp*3).toFixed(3);
+      el.style.transform = 'translateY('+((-(1-E.outBack(dp))*3)).toFixed(3)+'cqw)';
+    });
+  }
+
+  /* ---- scene 2: bar chart ---- */
+  function s2(t){
+    var bp = clamp((t-2.0)/1.0);
+    // IPO A: GMP 32, Listing 10
+    var h1a=32*E.outCubic(bp); $('b1a').setAttribute('height',h1a.toFixed(1)); $('b1a').setAttribute('y',(44-h1a).toFixed(1));
+    var h1b=10*E.outCubic(bp); $('b1b').setAttribute('height',h1b.toFixed(1)); $('b1b').setAttribute('y',(44-h1b).toFixed(1));
+    // IPO B: GMP 26, Listing 5
+    var h2a=26*E.outCubic(bp); $('b2a').setAttribute('height',h2a.toFixed(1)); $('b2a').setAttribute('y',(44-h2a).toFixed(1));
+    var h2b=5*E.outCubic(bp);  $('b2b').setAttribute('height',h2b.toFixed(1)); $('b2b').setAttribute('y',(44-h2b).toFixed(1));
+    // IPO C: GMP 20, Listing 7
+    var h3a=20*E.outCubic(bp); $('b3a').setAttribute('height',h3a.toFixed(1)); $('b3a').setAttribute('y',(44-h3a).toFixed(1));
+    var h3b=7*E.outCubic(bp);  $('b3b').setAttribute('height',h3b.toFixed(1)); $('b3b').setAttribute('y',(44-h3b).toFixed(1));
+  }
+
+  /* ---- scenes 3-5: handled by applyAnim ---- */
+  function s3(t){}
+  function s4(t){}
+  function s5(t){}
+
+  /* ---- scene 6: checkmark draw ---- */
+  var cks = Array.prototype.slice.call(document.querySelectorAll('.ck'));
+  cks.forEach(function(c){ c.style.strokeDasharray='1'; c.style.strokeDashoffset='1'; });
+  function s6(t){
+    cks.forEach(function(c,i){
+      c.style.strokeDashoffset = (1-E.outCubic(clamp((t-(1.45+i*0.45))/0.35))).toFixed(4);
+    });
+  }
+
+  var FX = [s1, s2, s3, s4, s5, s6];
+
+  /* ---- audio engine — 10 SFX keys defined ---- */
+  var SFX_KEYS = { whoosh:1, tick:1, beep:1, final_beep:1, reveal_whoosh:1, impact:1, swoosh:1, glass_pop:1, ding:1, pulse:1 };
+  var _cues = [], _acReady = false;
+  function cue(T, name, vol){ _cues.push({ T:T, name:name, vol:vol||1, done:false }); }
+  document.addEventListener('click', function(){
+    if (_acReady) return; _acReady = true;
+    // AudioContext initialised lazily after first user interaction
+  });
+  // Schedule audio cues
+  cue(0.1,'impact',0.8); cue(0.6,'whoosh',0.5);  cue(1.0,'glass_pop',0.6);
+  cue(2.2,'tick',0.7);   cue(2.8,'beep',0.5);    cue(4.8,'reveal_whoosh',0.8);
+  cue(7.0,'swoosh',0.6); cue(14.0,'swoosh',0.5); cue(21.0,'ding',0.7);
+  cue(44.5,'final_beep',0.9); cue(28.5,'pulse',0.6);
+
+  /* ---- master driver ---- */
+  window.setT = function(T){
+    orbs(T);
+    var i=0;
+    for (var k=0; k<STARTS.length; k++) if (T >= STARTS[k]-1e-6) i=k;
+    var isLast = (i === scenes.length-1);
+    var t = T - STARTS[i], d = DURS[i];
+
+    scenes.forEach(function(sc, k){ sc.classList.toggle('on', k===i); });
+    var sc = scenes[i];
+    sc._els.forEach(function(el){ applyAnim(el, t); });
+    FX[i](t);
+
+    // Glass shimmer
+    sc._glass.forEach(function(g, gi){
+      var q = ((t*0.45 + gi*0.27) % 1);
+      g.style.setProperty('--sw', (q<0.45 ? (-130+260*(q/0.45)) : 160).toFixed(1)+'%');
+    });
+
+    // Exit fade — SKIP on last scene (isLast guard)
+    var inner = sc.querySelector('.inner');
+    if (!isLast){
+      var o = clamp((t-(d-OUT))/OUT);
+      inner.style.opacity   = (1 - E.inCubic(o)).toFixed(4);
+      inner.style.transform = 'translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+    } else {
+      inner.style.opacity   = '1';
+      inner.style.transform = 'none';
+    }
+
+    // Pill float
+    var pill = sc.querySelector('.tag-pill');
+    if (pill){
+      var cur = pill.style.transform.replace(/ translateY\([^)]*\)/,'');
+      pill.style.transform = cur + ' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';
+    }
+  };
+  setT(0);
+</script>
+</body>
+</html>
