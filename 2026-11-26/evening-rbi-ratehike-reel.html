@@ -1,0 +1,466 @@
+<!doctype html>
+<!--
+  FIN PULSE · Evening Reel · 2026-11-26
+  Story  : RBI December 2026 rate hike — MPC meets Dec 2–4, expected +25bps
+  Hook B : Before/after flip — rate cut cycle (5.25% ↓) vs hike cycle (5.50% ↑)
+  Palette: Deep purple #0a0010
+  Music  : apalonbeats-soft-background-music-576280.mp3
+  DURS   : [7, 7, 7, 7.5, 7, 9.5] = 45.0 s
+  1080×1920, CRF 10, setT(seconds)
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>RBI Rate Hike Dec 2026 · Fin Pulse</title>
+<style>
+  :root {
+    --bg:       #0a0010;
+    --ink:      #12044a;
+    --ink-dim:  rgba(18,4,74,0.70);
+    --chip-bg:  #2d1b69;
+    --chip-ink: #c4b5fd;
+    --acc:      #7c3aed;
+    --acc2:     #a855f7;
+    --grn:      #15803d;
+    --red:      #dc2626;
+    --gold:     #b45309;
+    --font:     'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  .frame {
+    position: relative; width: 1080px; height: 1920px;
+    container-type: inline-size; overflow: hidden;
+    background: var(--bg); font-family: var(--font);
+    color: var(--ink); font-variant-numeric: tabular-nums;
+  }
+  .blob  { position: absolute; border-radius: 50%; will-change: transform; }
+  .scene { position: absolute; inset: 0; display: none; }
+  .scene.on { display: block; }
+  .inner {
+    position: absolute; inset: 0;
+    padding: 17cqw 11cqw 30cqw 6cqw;
+    display: flex; flex-direction: column;
+    justify-content: center; gap: 3.6cqw; min-width: 0;
+  }
+
+  /* ── Tag pill ── */
+  .tag-pill {
+    position: relative; align-self: center;
+    display: inline-flex; align-items: center; justify-content: center; gap: 2.6cqw;
+    padding: 2.4cqw 6.4cqw; border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.80), rgba(255,255,255,0.50));
+    backdrop-filter: blur(40px) saturate(100%);
+    -webkit-backdrop-filter: blur(40px) saturate(100%);
+    border: 1.5px solid rgba(255,255,255,0.90);
+    box-shadow: 0 2cqw 6cqw rgba(0,0,0,0.45),
+                inset 0 0.5cqw 1cqw rgba(255,255,255,0.95),
+                inset 0 -0.7cqw 1.4cqw rgba(18,4,74,0.14);
+    color: var(--ink); font-size: 4.6cqw; font-weight: 800; line-height: 1.2;
+    white-space: nowrap; flex: none;
+  }
+  .tag-pill::before {
+    content: ""; position: absolute; inset: 1cqw;
+    border-radius: 999px; border: 1px solid rgba(255,255,255,0.75); pointer-events: none;
+  }
+  .dot { position: relative; width: 2.6cqw; height: 2.6cqw; border-radius: 50%; background: var(--acc); }
+
+  /* ── Headline ── */
+  .h {
+    margin: 0; text-align: center; color: #fff;
+    font-size: 8.8cqw; font-weight: 800; letter-spacing: -0.02em;
+    line-height: 1.1; text-wrap: balance; flex: none;
+    text-shadow: 0 0.6cqw 2.4cqw rgba(0,0,0,0.60);
+  }
+  .h .w { display: inline-block; }
+
+  /* ── Glass cards ── */
+  .glass {
+    position: relative; overflow: hidden;
+    background: rgba(255,255,255,0.88);
+    border: 3px solid rgba(255,255,255,0.95);
+    border-radius: 4cqw;
+    box-shadow: 0 2cqw 7cqw rgba(0,0,0,0.5);
+  }
+  .glass.dim  { background: rgba(255,255,255,0.40); border: 2px solid rgba(255,255,255,0.60); }
+  .glass::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.5) 50%, transparent 62%);
+    transform: translateX(var(--sw, -130%));
+  }
+
+  .card     { padding: 4.2cqw; display: flex; flex-direction: column; gap: 2.4cqw; min-width: 0; flex: none; }
+  .lab      { margin: 0; font-size: 3.6cqw; font-weight: 700; line-height: 1.2; color: var(--ink-dim); }
+  .val      { margin: 0; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; color: var(--ink); }
+  .big      { font-size: 7.4cqw; }
+  .mid      { font-size: 5.6cqw; }
+  .sub      { margin: 0; font-size: 3.6cqw; font-weight: 700; line-height: 1.2; color: var(--ink-dim); }
+  .svg      { width: 100%; height: auto; display: block; flex: none; }
+
+  .grn  { color: var(--grn)  !important; }
+  .red  { color: var(--red)  !important; }
+  .acc  { color: var(--acc)  !important; }
+  .gold { color: var(--gold) !important; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 2cqw; }
+  .chip  { background: var(--chip-bg); color: var(--chip-ink); font-size: 4cqw; font-weight: 700; line-height: 1.1; padding: 1.6cqw 3.6cqw; border-radius: 999px; }
+
+  .ic { flex: none; width: 9cqw; height: 9cqw; border-radius: 50%; background: var(--chip-bg); display: grid; place-items: center; }
+  .ic svg { width: 56%; height: 56%; stroke: var(--chip-ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .row-chip { display: flex; align-items: center; gap: 3cqw; padding: 2.4cqw 3.6cqw; flex: none; }
+  .row-chip .ic { width: 8.6cqw; height: 8.6cqw; }
+  .row-chip span.t { font-size: 4.3cqw; font-weight: 800; line-height: 1.15; color: var(--ink); }
+
+  .arrow { align-self: center; width: 9cqw; height: 9cqw; border-radius: 50%; background: var(--chip-bg); display: grid; place-items: center; flex: none; }
+  .arrow svg { width: 60%; height: 60%; stroke: var(--chip-ink); fill: none; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  .grid2  { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 3cqw; flex: none; }
+
+  .tick { display: flex; align-items: center; gap: 3cqw; }
+  .tick span.t { font-size: 4.4cqw; font-weight: 800; line-height: 1.15; color: var(--ink); }
+  .tick .ic { width: 8cqw; height: 8cqw; }
+
+  /* per-scene overrides */
+  #s1 .inner { gap: 5.5cqw; }
+  #s1 .h     { font-size: 9.4cqw; }
+  #s2 .inner { gap: 4.2cqw; }
+  #s3 .inner { gap: 3cqw; }
+  #s3 .row-chip { padding: 2cqw 3.6cqw; }
+  #s5 .inner { gap: 5cqw; }
+  #s6 .inner { gap: 5.6cqw; }
+  #s6 .card.tk { padding: 5cqw 4.4cqw; }
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- ── S1 · Hook — Rate flip reveal (Hook B: before/after) ── -->
+  <section class="scene" id="s1"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>@finpulsemarkets</div>
+    <h2 class="h" data-split="0.35">India cut rates to a low. Now RBI may hike again.</h2>
+    <div class="grid2">
+      <div class="glass card" data-a="left:0.9:0.7" style="gap:2cqw">
+        <p class="lab">DEC 2025 LOW</p>
+        <p class="val big grn">5.25% ↓</p>
+        <p class="sub">3 cuts from Feb</p>
+      </div>
+      <div class="glass card" data-a="right:1.1:0.7" style="gap:2cqw">
+        <p class="lab">OCT 2026</p>
+        <p class="val big red">5.50% ↑</p>
+        <p class="sub">First hike back</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:1.9:0.6" id="urgency1" style="text-align:center;padding:3.4cqw">
+      <p class="val mid acc">MPC DEC 2–4 · 6 DAYS AWAY</p>
+    </div>
+  </div></section>
+
+  <!-- ── S2 · Reveal — The rate reversal story ── -->
+  <section class="scene" id="s2"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>@finpulsemarkets</div>
+    <h2 class="h" data-split="0.35">RBI cut 3 times — then reversed in just 11 months</h2>
+    <div class="glass card" data-a="pop:0.9:0.8" style="gap:3cqw;padding:3.4cqw">
+      <svg class="svg" viewBox="0 0 100 50">
+        <defs>
+          <linearGradient id="tg1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"   stop-color="#12044a"  stop-opacity="0.3"/>
+            <stop offset="0.5" stop-color="#15803d"  stop-opacity="0.8"/>
+            <stop offset="1"   stop-color="#dc2626"  stop-opacity="0.8"/>
+          </linearGradient>
+        </defs>
+        <!-- base axis -->
+        <line x1="6" y1="38" x2="94" y2="38" stroke="rgba(18,4,74,0.18)" stroke-width="0.8"/>
+        <!-- rate path: starts high (6.50%), dips to 5.25%, back to 5.50% -->
+        <path id="tlpath" pathLength="1"
+              d="M6 12 C18 13 24 28 36 32 C46 35 48 36 52 36.5 C60 37.5 70 34 94 30"
+              fill="none" stroke="url(#tg1)" stroke-width="2.6" stroke-linecap="round"/>
+        <!-- milestone dots -->
+        <circle id="d1" cx="6"  cy="12"   r="0" fill="#7c3aed" stroke="#fff" stroke-width="0.9"/>
+        <circle id="d2" cx="52" cy="36.5" r="0" fill="#15803d" stroke="#fff" stroke-width="0.9"/>
+        <circle id="d3" cx="94" cy="30"   r="0" fill="#dc2626" stroke="#fff" stroke-width="0.9"/>
+        <!-- labels above/below dots -->
+        <text x="6"  y="8"   font-size="3.5" font-family="Inter,sans-serif" font-weight="800" fill="#12044a" text-anchor="middle">6.50%</text>
+        <text x="6"  y="4.5" font-size="3.0" font-family="Inter,sans-serif" font-weight="700" fill="rgba(18,4,74,0.55)" text-anchor="middle">Feb '25</text>
+        <text x="52" y="43"  font-size="3.5" font-family="Inter,sans-serif" font-weight="800" fill="#15803d" text-anchor="middle">5.25%</text>
+        <text x="52" y="47"  font-size="3.0" font-family="Inter,sans-serif" font-weight="700" fill="rgba(18,4,74,0.55)" text-anchor="middle">Dec '25</text>
+        <text x="94" y="26"  font-size="3.5" font-family="Inter,sans-serif" font-weight="800" fill="#dc2626" text-anchor="middle">5.50%</text>
+        <text x="94" y="22.5" font-size="3.0" font-family="Inter,sans-serif" font-weight="700" fill="rgba(18,4,74,0.55)" text-anchor="middle">Oct '26</text>
+      </svg>
+    </div>
+    <div class="glass card" data-a="pop:2.4:0.7" style="padding:3.4cqw;gap:2cqw">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:3cqw">
+        <div>
+          <p class="lab">Expected Dec 4</p>
+          <p class="val big acc">5.75%</p>
+        </div>
+        <div style="text-align:right">
+          <p class="lab">MPC Meeting</p>
+          <p class="val mid">Dec 2–4, 2026</p>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- ── S3 · Why — Reasons for the reversal ── -->
+  <section class="scene" id="s3"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>@finpulsemarkets</div>
+    <h2 class="h" data-split="0.35">Why is RBI hiking after cutting rates?</h2>
+    <div class="glass row-chip" data-a="right:1.1:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 3h18v4l-6 5v8l-6-3v-5L3 7V3z"/></svg></span>
+      <span class="t">Food inflation rebounded above 5%</span>
+    </div>
+    <div class="glass row-chip" data-a="right:1.55:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span>
+      <span class="t">Rupee near record lows vs USD</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.0:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
+      <span class="t">US Fed paused — global rates rising</span>
+    </div>
+    <div class="glass row-chip" data-a="right:2.45:0.6">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+      <span class="t">India's GDP holding at 6.8% — room to act</span>
+    </div>
+  </div></section>
+
+  <!-- ── S4 · Impact — What this means for your EMI ── -->
+  <section class="scene" id="s4"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>@finpulsemarkets</div>
+    <h2 class="h" data-split="0.35">What +25bps could mean for your home loan</h2>
+    <div class="glass card" data-a="pop:0.9:0.8" style="gap:3cqw">
+      <p class="lab" style="font-size:4cqw">₹50 lakh · 20-yr tenor · EBLR-linked loan</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:2cqw">
+        <div>
+          <p class="lab">Rate 8.75%</p>
+          <p class="val big">₹44,170</p>
+          <p class="sub">/month</p>
+        </div>
+        <div class="arrow" style="flex-shrink:0">
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div style="text-align:right">
+          <p class="lab">Rate 9.00%</p>
+          <p class="val big red">₹44,990</p>
+          <p class="sub">/month</p>
+        </div>
+      </div>
+      <div data-a="pop:2.6:0.6" style="background:rgba(220,38,38,0.08);border-radius:3cqw;padding:2.4cqw 3.2cqw;border:2px solid rgba(220,38,38,0.2)">
+        <p class="val" style="font-size:5cqw;text-align:center">EMI up ~<span class="red">₹820</span>/month</p>
+      </div>
+    </div>
+    <div class="glass card dim" data-a="pop:3.5:0.6" style="padding:2.8cqw;text-align:center">
+      <p class="lab" style="font-size:3.4cqw;color:rgba(18,4,74,0.5)">Educational content only. Consult your lender for exact figures.</p>
+    </div>
+  </div></section>
+
+  <!-- ── S5 · Numbers — Key data points ── -->
+  <section class="scene" id="s5"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>@finpulsemarkets</div>
+    <h2 class="h" data-split="0.35">The numbers that tell the story</h2>
+    <div class="grid2">
+      <div class="glass card" data-a="pop:0.9:0.6" style="gap:1.8cqw;padding:3.8cqw">
+        <p class="lab">2025 Low</p>
+        <p class="val big grn">5.25%</p>
+        <p class="sub">3 cuts from Feb</p>
+      </div>
+      <div class="glass card" data-a="pop:1.15:0.6" style="gap:1.8cqw;padding:3.8cqw">
+        <p class="lab">Today</p>
+        <p class="val big">5.50%</p>
+        <p class="sub">Oct '26 hike</p>
+      </div>
+      <div class="glass card" data-a="pop:1.4:0.6" style="gap:1.8cqw;padding:3.8cqw">
+        <p class="lab">Expected</p>
+        <p class="val big acc">5.75%</p>
+        <p class="sub">If Dec 4 hike lands</p>
+      </div>
+      <div class="glass card" data-a="pop:1.65:0.6" style="gap:1.8cqw;padding:3.8cqw">
+        <p class="lab">Full cycle</p>
+        <p class="val big gold">11 mo</p>
+        <p class="sub">Cut → Hike reversal</p>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:2.4:0.7" style="padding:3.2cqw;text-align:center">
+      <p class="lab">MPC Decision Day</p>
+      <p class="val big acc">December 4, 2026</p>
+    </div>
+  </div></section>
+
+  <!-- ── S6 · Takeaway + CTA ── -->
+  <section class="scene" id="s6"><div class="inner">
+    <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>@finpulsemarkets</div>
+    <h2 class="h" data-split="0.35">Watch December 4. It could reset your EMI.</h2>
+    <div class="glass card tk" data-a="pop:0.9:0.7" style="gap:3.4cqw">
+      <div class="tick" data-a="right:1.2:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke="#c4b5fd" stroke-width="2.4"/></svg></span>
+        <span class="t">RBI may hike again on Dec 4</span>
+      </div>
+      <div class="tick" data-a="right:1.65:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke="#c4b5fd" stroke-width="2.4"/></svg></span>
+        <span class="t">+25bps could add ~₹820/mo to EMIs</span>
+      </div>
+      <div class="tick" data-a="right:2.1:0.5">
+        <span class="ic"><svg viewBox="0 0 24 24"><path class="ck" pathLength="1" d="M6 12.5l4 4 8-9" stroke="#c4b5fd" stroke-width="2.4"/></svg></span>
+        <span class="t">Rate cycle reversed in just 11 months</span>
+      </div>
+    </div>
+    <div class="glass card" data-a="pop:3.0:0.7" style="padding:4.2cqw;text-align:center;gap:2cqw">
+      <p class="val mid">Follow <span class="acc">@finpulsemarkets</span></p>
+      <p class="lab">for instant market updates · Instagram &amp; YouTube</p>
+    </div>
+  </div></section>
+
+</div><!-- /frame -->
+
+<script>
+  var DURS   = [7, 7, 7, 7.5, 7, 9.5];   // 45.0 s total
+  window.COVER_T = 0.5;
+  var OUT    = 0.4;
+  var STARTS = []; (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+  window.TOTAL = DURS.reduce(function(a,b){ return a+b; }, 0);
+
+  var clamp = function(x,a,b){ a=a===undefined?0:a; b=b===undefined?1:b; return Math.min(b,Math.max(a,x)); };
+  var E = {
+    outCubic: function(x){ return 1-Math.pow(1-x,3); },
+    outBack:  function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+    inCubic:  function(x){ return x*x*x; },
+    inOut:    function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+  };
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ── Split headlines into animatable words ── */
+  document.querySelectorAll('.h[data-split]').forEach(function(h){
+    var base = parseFloat(h.getAttribute('data-split'));
+    var words = h.textContent.trim().split(/\s+/);
+    h.textContent = '';
+    words.forEach(function(w,i){
+      var s = document.createElement('span'); s.className='w'; s.textContent=w;
+      s._a = { k:'up', s:base+i*0.08, d:0.6 };
+      h.appendChild(s);
+      if(i < words.length-1) h.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  /* ── Gather animated elements per scene ── */
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  scenes.forEach(function(sc){
+    sc._els = [];
+    sc.querySelectorAll('[data-a]').forEach(function(el){
+      var p = el.getAttribute('data-a').split(':');
+      el._a = { k:p[0], s:parseFloat(p[1]), d:parseFloat(p[2]) };
+      sc._els.push(el);
+    });
+    sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+    sc._glass = Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+  });
+
+  function applyAnim(el,t){
+    var a=el._a, p=clamp((t-a.s)/a.d), e=E.outCubic(p), b=E.outBack(p), o=clamp(p*2), x=0, y=0, s=1;
+    if(a.k==='pop'   ){ s=0.86+0.14*b; y=(1-e)*6; }
+    else if(a.k==='up'   ){ y=(1-e)*7; }
+    else if(a.k==='drop' ){ y=-(1-e)*6; s=0.94+0.06*b; }
+    else if(a.k==='left' ){ x=-(1-e)*18; }
+    else if(a.k==='right'){ x=(1-e)*18; }
+    else if(a.k==='zoom' ){ s=Math.max(0,b); o=clamp(p*3); }
+    el.style.opacity  = o;
+    el.style.transform = 'translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+  }
+
+  /* ── Background blobs — deep purple palette ── */
+  function blob(el,color,size,x,y){
+    el.style.width=size+'cqw'; el.style.height=size+'cqw';
+    el.style.left=x+'cqw';    el.style.top=y+'cqw';
+    el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+  }
+  blob($('b1'),'rgba(124,58,237,1)',   140, -50,  -50);
+  blob($('b2'),'rgba(245,158,11,0.9)',  88,  54,   56);
+  blob($('b3'),'rgba(99,102,241,0.9)', 118, -28,  114);
+  blob($('b4'),'rgba(167,139,250,0.85)',72,  54,  106);
+
+  function orbs(T){
+    $('b1').style.transform='translate('+(9*Math.sin(T*0.45)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.38)).toFixed(2)+'cqw)';
+    $('b2').style.transform='translate('+(-10*Math.sin(T*0.36+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.41)).toFixed(2)+'cqw)';
+    $('b3').style.transform='translate('+(10*Math.cos(T*0.33)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.4+2)).toFixed(2)+'cqw)';
+    $('b4').style.transform='translate('+(-8*Math.cos(T*0.5+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.47)).toFixed(2)+'cqw)';
+  }
+
+  /* ── Scene-specific functions ── */
+
+  // S1: pulse urgency card
+  function s1(t){
+    var u=$('urgency1');
+    if(u) u.style.boxShadow='0 0 '+(8+4*Math.sin(t*2.5)).toFixed(1)+'px rgba(124,58,237,0.6)';
+  }
+
+  // S2: animate timeline path + dots
+  var tlpath=$('tlpath');
+  if(tlpath){ tlpath.style.strokeDasharray='1'; tlpath.style.strokeDashoffset='1'; }
+  function s2(t){
+    if(!tlpath) return;
+    var p=E.inOut(clamp((t-0.9)/1.4));
+    tlpath.style.strokeDashoffset=(1-p).toFixed(4);
+    var ids=['d1','d2','d3'], ts=[1.0,1.6,2.1];
+    ids.forEach(function(id,i){
+      var d=$(id); if(!d) return;
+      var sc=Math.max(0,E.outBack(clamp((t-ts[i])/0.35)));
+      d.setAttribute('r',(2.4*sc).toFixed(3));
+    });
+  }
+
+  // S3–S5: no custom animation needed
+  function s3(t){}
+  function s4(t){}
+  function s5(t){}
+
+  // S6: draw checkmarks
+  var cks=Array.prototype.slice.call(document.querySelectorAll('.ck'));
+  cks.forEach(function(c){ c.style.strokeDasharray='1'; c.style.strokeDashoffset='1'; });
+  function s6(t){
+    cks.forEach(function(c,i){
+      c.style.strokeDashoffset=(1-E.outCubic(clamp((t-(1.45+i*0.45))/0.35))).toFixed(4);
+    });
+  }
+
+  var FX=[s1,s2,s3,s4,s5,s6];
+
+  /* ── Master driver ── */
+  window.setT = function(T){
+    orbs(T);
+    var i=0; for(var k=0;k<STARTS.length;k++) if(T>=STARTS[k]-1e-6) i=k;
+    var t=T-STARTS[i], d=DURS[i];
+    scenes.forEach(function(sc,k){ sc.classList.toggle('on',k===i); });
+    var sc=scenes[i];
+    sc._els.forEach(function(el){ applyAnim(el,t); });
+    FX[i](t);
+    // glass shimmer
+    sc._glass.forEach(function(g,gi){
+      var q=((t*0.45+gi*0.27)%1);
+      g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+    });
+    // isLast guard — no exit fade on final scene
+    var isLast=(i===scenes.length-1);
+    var inner=sc.querySelector('.inner');
+    if(!isLast){
+      var o=clamp((t-(d-OUT))/OUT);
+      inner.style.opacity   = (1-E.inCubic(o)).toFixed(4);
+      inner.style.transform = 'translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+    } else {
+      inner.style.opacity   = '1';
+      inner.style.transform = '';
+    }
+    // tag-pill bob
+    var pill=sc.querySelector('.tag-pill');
+    if(pill){
+      var base=pill.style.transform;
+      pill.style.transform=base+' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)';
+    }
+  };
+
+  setT(0.5);  // thumbnail frame
+</script>
+</body>
+</html>
