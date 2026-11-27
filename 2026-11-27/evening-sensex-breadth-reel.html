@@ -1,0 +1,672 @@
+<!doctype html>
+<!--
+  FIN PULSE · 2026-11-27 Evening Reel
+  Story  : Sensex fell 989 pts — but midcap index closed GREEN (breadth vs index divergence)
+  Hook B : Blurred reveal → -989 red flash → midcap +64 green slide
+  Palette: Slate #080810 · Accent violet #8b5cf6 / teal #06b6d4
+  Music  : atlasaudio-soft-509813.mp3 (solo piano, -13.5 LUFS)
+  DURS   : [7, 7, 7, 7.5, 7, 9.5] = 45.0 s
+  Sources: Free Press Journal, Liquide blog (27 Nov 2026)
+           Sensex 83,339 (-989), Nifty 25,607 (-277), Midcap +64, IT -1.88%, Crude $95.31
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Fin Pulse · Sensex Breadth Divergence 27 Nov 2026</title>
+<style>
+:root{
+  --bg:#080810; --ink:#09091c; --ink-dim:rgba(9,9,28,0.78);
+  --chip-bg:#14143c; --chip-ink:#a5b4fc;
+  --acc:#8b5cf6; --acc2:#06b6d4;
+  --red:#ef4444; --red2:#dc2626;
+  --grn:#10b981; --grn2:#059669;
+  --gold:#f59e0b;
+  --font:'Inter','Segoe UI',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:#000;}
+.frame{
+  position:relative;width:1080px;height:1920px;
+  container-type:inline-size;overflow:hidden;
+  background:var(--bg);font-family:var(--font);
+  color:var(--ink);font-variant-numeric:tabular-nums;
+}
+.blob{position:absolute;border-radius:50%;will-change:transform;}
+.scene{position:absolute;inset:0;display:none;}
+.scene.on{display:block;}
+/* SAFE ZONE — NEVER CHANGE */
+.inner{
+  position:absolute;inset:0;
+  padding:17cqw 11cqw 30cqw 6cqw;
+  display:flex;flex-direction:column;justify-content:center;
+  gap:3.6cqw;min-width:0;
+}
+/* handle — lower bottom-right per instructions */
+.handle{
+  position:absolute;bottom:7cqw;right:5cqw;
+  font-size:3.4cqw;font-weight:800;
+  color:rgba(255,255,255,0.72);
+  letter-spacing:0.01em;z-index:10;
+  font-family:var(--font);
+}
+/* tag-pill — ALWAYS first child inside .inner */
+.tag-pill{
+  position:relative;align-self:flex-start;
+  display:inline-flex;align-items:center;gap:2.4cqw;
+  padding:2cqw 5.6cqw;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,0.84),rgba(255,255,255,0.54));
+  backdrop-filter:blur(40px) saturate(100%);
+  -webkit-backdrop-filter:blur(40px) saturate(100%);
+  border:1.5px solid rgba(255,255,255,0.92);
+  box-shadow:0 2cqw 6cqw rgba(0,0,0,0.45),
+             inset 0 0.5cqw 1cqw rgba(255,255,255,0.95);
+  color:var(--ink);font-size:4.6cqw;font-weight:800;
+  line-height:1.2;white-space:nowrap;flex:none;
+}
+.tag-pill::before{
+  content:"";position:absolute;inset:1cqw;
+  border-radius:999px;border:1px solid rgba(255,255,255,0.75);
+  pointer-events:none;
+}
+.dot{width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--acc);flex:none;}
+
+/* headlines */
+.h{
+  margin:0;text-align:center;color:#fff;
+  font-size:8.8cqw;font-weight:800;
+  letter-spacing:-0.02em;line-height:1.1;
+  text-wrap:balance;flex:none;
+  text-shadow:0 0.6cqw 2.4cqw rgba(0,0,0,0.5);
+}
+.h .w{display:inline-block;}
+
+/* glass cards */
+.frame .glass{
+  position:relative;overflow:hidden;
+  background:rgba(255,255,255,0.88);
+  border:3px solid rgba(255,255,255,0.95);
+  border-radius:4cqw;
+  box-shadow:0 2cqw 7cqw rgba(0,0,0,0.5);
+}
+.glass::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,
+    rgba(255,255,255,0.5) 50%,transparent 62%);
+  transform:translateX(var(--sw,-130%));
+}
+.card{
+  padding:4.2cqw;display:flex;flex-direction:column;
+  gap:2.4cqw;min-width:0;flex:none;
+}
+.lab{margin:0;font-size:3.6cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+.val{margin:0;font-weight:800;letter-spacing:-0.02em;line-height:1.05;color:var(--ink);}
+.big{font-size:7.4cqw;}
+.mid{font-size:5.6cqw;}
+.sub{margin:0;font-size:3.4cqw;font-weight:700;line-height:1.2;color:var(--ink-dim);}
+
+/* icon circle */
+.ic{
+  flex:none;width:9cqw;height:9cqw;border-radius:50%;
+  background:var(--chip-bg);display:grid;place-items:center;
+}
+.ic svg{
+  width:56%;height:56%;stroke:var(--chip-ink);fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+}
+.ic svg .f{fill:var(--chip-ink);stroke:none;}
+
+/* row-chips */
+.row-chip{
+  display:flex;align-items:center;gap:3cqw;
+  padding:2.4cqw 3.6cqw;flex:none;
+}
+.row-chip .ic{width:8.6cqw;height:8.6cqw;}
+.row-chip span.t{font-size:4.3cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+
+/* 2×2 grid */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3cqw;flex:none;}
+.pillar{padding:3cqw 3.4cqw;align-items:flex-start;gap:2cqw;display:flex;flex-direction:column;}
+.pillar .val{font-size:5.4cqw;}
+.pillar .ic{width:8.6cqw;height:8.6cqw;}
+.pillar .lab{font-size:3.4cqw;}
+
+/* tick (checkmark row) */
+.tick{display:flex;align-items:center;gap:3cqw;}
+.tick span.t{font-size:4.4cqw;font-weight:800;line-height:1.15;color:var(--ink);}
+.tick .ic{width:8cqw;height:8cqw;}
+
+/* S1 specific — Hook B blurred reveal */
+#s1 .inner{gap:4.8cqw;}
+.reveal-wrap{
+  position:relative;flex:none;
+  display:flex;flex-direction:column;gap:3cqw;
+}
+.sense-card{
+  padding:4.2cqw 5cqw;
+  display:flex;align-items:center;justify-content:space-between;gap:3cqw;
+}
+.sense-num{
+  font-size:9.4cqw;font-weight:800;
+  letter-spacing:-0.04em;line-height:1;
+  color:var(--red);transition:filter 0.3s;
+}
+.sense-label{
+  font-size:4cqw;font-weight:800;
+  color:var(--ink-dim);line-height:1.2;text-align:left;
+  flex:1;min-width:0;
+}
+.mid-card{
+  padding:4.2cqw 5cqw;
+  display:flex;align-items:center;justify-content:space-between;gap:3cqw;
+}
+.mid-num{
+  font-size:9.4cqw;font-weight:800;
+  letter-spacing:-0.04em;line-height:1;
+  color:var(--grn);
+}
+.reveal-label{
+  margin:0;text-align:center;
+  font-size:4.6cqw;font-weight:800;
+  color:rgba(255,255,255,0.65);
+  line-height:1.2;flex:none;
+}
+
+/* S5 pillar colour overrides */
+.red-val{color:var(--red)!important;}
+.grn-val{color:var(--grn)!important;}
+
+/* S6 follow card */
+.follow-card{
+  padding:4.6cqw 5cqw;
+  display:flex;flex-direction:column;align-items:center;
+  gap:2.8cqw;text-align:center;
+}
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+
+  <!-- ════════════ S1 · HOOK B — BLURRED REVEAL ════════════ -->
+  <section class="scene" id="s1">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Market Close · 27 Nov</div>
+
+      <h2 class="h" data-split="0.4">Index crashed. Most stocks went the other way.</h2>
+
+      <div class="reveal-wrap">
+        <!-- Sensex card — blurred until t=1.8s -->
+        <div class="glass card sense-card" data-a="pop:0.9:0.7">
+          <div class="sense-label">
+            <div style="font-size:3.6cqw;color:var(--ink-dim);margin-bottom:0.6cqw">SENSEX CLOSE</div>
+            <div style="font-size:4cqw;font-weight:800;color:var(--ink)">BSE 30 · 27 Nov 2026</div>
+          </div>
+          <div id="sense-num" class="sense-num">−989</div>
+        </div>
+
+        <!-- Midcap card — slides in at t=3.2s -->
+        <div class="glass card mid-card" data-a="pop:3.2:0.7" id="mid-card">
+          <div class="sense-label">
+            <div style="font-size:3.6cqw;color:var(--ink-dim);margin-bottom:0.6cqw">NIFTY MIDCAP 150</div>
+            <div style="font-size:4cqw;font-weight:800;color:var(--grn)">Same day — went UP ↑</div>
+          </div>
+          <div class="mid-num">+64</div>
+        </div>
+      </div>
+
+      <p class="reveal-label" id="rev-q" data-a="drop:5.0:0.6">The index doesn't tell the full story.</p>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <!-- ════════════ S2 · SECTOR BREAKDOWN ════════════ -->
+  <section class="scene" id="s2">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Sector breakdown</div>
+      <h2 class="h" data-split="0.35">IT booked profits. Metals didn't.</h2>
+      <div class="glass card" data-a="pop:0.9:0.75">
+        <p class="lab">NSE Sector Indices · 27 Nov 2026</p>
+        <svg viewBox="0 0 100 60" style="width:100%;display:block;overflow:visible" id="bar-svg">
+          <defs>
+            <linearGradient id="gR" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ef4444" stop-opacity="0.9"/>
+              <stop offset="1" stop-color="#ef4444" stop-opacity="0.45"/>
+            </linearGradient>
+            <linearGradient id="gG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#10b981" stop-opacity="0.9"/>
+              <stop offset="1" stop-color="#10b981" stop-opacity="0.45"/>
+            </linearGradient>
+          </defs>
+          <!-- baseline -->
+          <line x1="4" y1="44" x2="96" y2="44" stroke="rgba(9,9,28,0.25)" stroke-width="0.5"/>
+
+          <!-- IT -1.88% bar → height 24.5 -->
+          <rect id="bIT" x="8"  y="44" width="14" height="0" fill="url(#gR)" rx="1.4"/>
+          <text x="15" y="50.5" text-anchor="middle"
+            style="font-family:'Inter',sans-serif;font-weight:700;fill:rgba(9,9,28,0.6);font-size:3.2px">IT</text>
+          <text id="lIT" x="15" y="17" text-anchor="middle"
+            style="font-family:'Inter',sans-serif;font-weight:800;fill:#ef4444;font-size:3.6px" opacity="0">−1.88%</text>
+
+          <!-- Auto -1.48% bar → height 19.3 -->
+          <rect id="bAU" x="27" y="44" width="14" height="0" fill="url(#gR)" rx="1.4"/>
+          <text x="34" y="50.5" text-anchor="middle"
+            style="font-family:'Inter',sans-serif;font-weight:700;fill:rgba(9,9,28,0.6);font-size:3.2px">Auto</text>
+          <text id="lAU" x="34" y="23" text-anchor="middle"
+            style="font-family:'Inter',sans-serif;font-weight:800;fill:#ef4444;font-size:3.6px" opacity="0">−1.48%</text>
+
+          <!-- Realty -1.43% bar → height 18.6 -->
+          <rect id="bRE" x="46" y="44" width="14" height="0" fill="url(#gR)" rx="1.4"/>
+          <text x="53" y="50.5" text-anchor="middle"
+            style="font-family:'Inter',sans-serif;font-weight:700;fill:rgba(9,9,28,0.6);font-size:3.2px">Realty</text>
+          <text id="lRE" x="53" y="24" text-anchor="middle"
+            style="font-family:'Inter',sans-serif;font-weight:800;fill:#ef4444;font-size:3.6px" opacity="0">−1.43%</text>
+
+          <!-- Metal +1.40% bar → goes UP from baseline -->
+          <rect id="bME" x="65" y="44" width="14" height="0" fill="url(#gG)" rx="1.4"/>
+          <text x="72" y="50.5" text-anchor="middle"
+            style="font-family:'Inter',sans-serif;font-weight:700;fill:rgba(9,9,28,0.6);font-size:3.2px">Metal</text>
+          <text id="lME" x="72" y="27" text-anchor="middle"
+            style="font-family:'Inter',sans-serif;font-weight:800;fill:#10b981;font-size:3.6px" opacity="0">+1.40%</text>
+        </svg>
+      </div>
+      <div class="glass card" data-a="pop:3.5:0.7" style="flex-direction:row;align-items:center;justify-content:space-between;gap:3cqw;padding:3.4cqw 4.2cqw;">
+        <div>
+          <p class="lab">Nifty Midcap 150</p>
+          <p class="val mid grn-val">+64 pts ↑</p>
+        </div>
+        <div style="text-align:right">
+          <p class="lab">Advances outnumbered</p>
+          <p class="val mid" style="font-size:4cqw;color:var(--grn)">declines today</p>
+        </div>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <!-- ════════════ S3 · WHY ════════════ -->
+  <section class="scene" id="s3">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Why did it happen?</div>
+      <h2 class="h" data-split="0.35">Three things drove today's sell-off</h2>
+
+      <div class="glass row-chip" data-a="right:0.9:0.6">
+        <span class="ic">
+          <svg viewBox="0 0 24 24">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+            <polyline points="17 6 23 6 23 12"/>
+          </svg>
+        </span>
+        <span class="t">IT &amp; Realty booked profits after +3.5% Thursday rally</span>
+      </div>
+
+      <div class="glass row-chip" data-a="right:1.55:0.6">
+        <span class="ic">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2a9 9 0 00-9 9c0 4.17 2.84 7.67 6.69 8.69L12 22l2.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 00-9-9z"/>
+            <circle cx="12" cy="11" r="3"/>
+          </svg>
+        </span>
+        <span class="t">Crude oil hits $95.31 — 3-week losing streak ends</span>
+      </div>
+
+      <div class="glass row-chip" data-a="right:2.2:0.6">
+        <span class="ic">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <path d="M8 21h8M12 17v4"/>
+          </svg>
+        </span>
+        <span class="t">Heavy Sensex stocks dragged index — small caps held up</span>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <!-- ════════════ S4 · WHAT IT MEANS FOR YOU ════════════ -->
+  <section class="scene" id="s4">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>What this means for you</div>
+      <h2 class="h" data-split="0.35">Your portfolio may look different from the headlines</h2>
+
+      <div class="glass card" data-a="pop:1.0:0.65">
+        <span class="ic" style="margin-bottom:0.6cqw">
+          <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </span>
+        <p class="lab">Check your holdings</p>
+        <p class="val mid">If you hold midcaps or metals — today may be in the green</p>
+      </div>
+
+      <div class="glass card" data-a="pop:2.4:0.65">
+        <span class="ic" style="margin-bottom:0.6cqw">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </span>
+        <p class="lab">Watch crude oil</p>
+        <p class="val mid">Crude above $95 raises India's import bill — OPEC+ meets Nov 29</p>
+      </div>
+
+      <div class="glass card" data-a="pop:3.8:0.65">
+        <p class="lab" style="font-size:3.2cqw;font-style:italic;color:var(--ink-dim)">Educational content only. Not a recommendation.</p>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <!-- ════════════ S5 · THE NUMBERS ════════════ -->
+  <section class="scene" id="s5">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Today's numbers</div>
+      <h2 class="h" data-split="0.35">The full picture — not just the headline index</h2>
+      <div class="grid2">
+        <div class="glass card pillar" data-a="pop:1.0:0.6">
+          <span class="ic">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </span>
+          <p class="val red-val">−989</p>
+          <p class="lab">Sensex pts drop</p>
+        </div>
+        <div class="glass card pillar" data-a="pop:1.3:0.6">
+          <span class="ic">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </span>
+          <p class="val red-val">−277</p>
+          <p class="lab">Nifty pts drop</p>
+        </div>
+        <div class="glass card pillar" data-a="pop:1.6:0.6">
+          <span class="ic">
+            <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </span>
+          <p class="val grn-val">+64</p>
+          <p class="lab">Nifty Midcap pts</p>
+        </div>
+        <div class="glass card pillar" data-a="pop:1.9:0.6">
+          <span class="ic">
+            <svg viewBox="0 0 24 24">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <path d="M8 21h8M12 17v4"/>
+            </svg>
+          </span>
+          <p class="val red-val">−1.88%</p>
+          <p class="lab">Nifty IT index</p>
+        </div>
+      </div>
+      <div class="glass card" data-a="pop:3.2:0.6" style="padding:3cqw 4.2cqw;flex-direction:row;align-items:center;gap:3cqw;">
+        <span class="ic">
+          <svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 00-9 9c0 4.17 2.84 7.67 6.69 8.69L12 22l2.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 00-9-9z"/><circle cx="12" cy="11" r="3"/></svg>
+        </span>
+        <div>
+          <p class="lab">Brent Crude</p>
+          <p class="val" style="font-size:5cqw">$95.31 / bbl &nbsp;<span style="color:var(--red)">+0.24%</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+  <!-- ════════════ S6 · CTA · NO EXIT FADE ════════════ -->
+  <section class="scene" id="s6">
+    <div class="inner">
+      <div class="tag-pill" data-a="drop:0.05:0.6"><i class="dot"></i>Key takeaways</div>
+      <h2 class="h" data-split="0.35">The index tells one story. Your portfolio may tell another.</h2>
+
+      <div class="glass card" data-a="pop:0.9:0.7" style="gap:3.4cqw;padding:4.6cqw 4.2cqw;">
+        <div class="tick" data-a="right:1.3:0.5">
+          <span class="ic">
+            <svg viewBox="0 0 24 24"><path id="ck1" pathLength="1" d="M6 12.5l4 4 8-9" stroke="var(--acc)" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="t">Sensex fell 989 pts — but breadth was positive</span>
+        </div>
+        <div class="tick" data-a="right:1.75:0.5">
+          <span class="ic">
+            <svg viewBox="0 0 24 24"><path id="ck2" pathLength="1" d="M6 12.5l4 4 8-9" stroke="var(--acc)" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="t">IT &amp; Auto profit booking dragged heavyweight index</span>
+        </div>
+        <div class="tick" data-a="right:2.2:0.5">
+          <span class="ic">
+            <svg viewBox="0 0 24 24"><path id="ck3" pathLength="1" d="M6 12.5l4 4 8-9" stroke="var(--acc)" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="t">Watch crude &amp; OPEC+ (Nov 29) for the next move</span>
+        </div>
+      </div>
+
+      <div class="glass card follow-card" data-a="pop:3.1:0.75">
+        <p style="margin:0;font-size:5.2cqw;font-weight:800;color:var(--ink);text-align:center;line-height:1.15">
+          Follow <span style="color:var(--acc)">@finpulsemarkets</span>
+        </p>
+        <p style="margin:0;font-size:3.8cqw;font-weight:700;color:var(--ink-dim);text-align:center;line-height:1.3">
+          Daily market moves — explained in 45 seconds
+        </p>
+        <p style="margin:0;font-size:3.6cqw;font-weight:800;color:var(--ink);text-align:center">
+          💬 Which surprises you more — the fall or the breadth?
+        </p>
+      </div>
+    </div>
+    <div class="handle">@finpulsemarkets</div>
+  </section>
+
+</div><!-- /frame -->
+
+<script>
+var DURS   = [7, 7, 7, 7.5, 7, 9.5];
+var OUT    = 0.4;
+var STARTS = []; (function(){ var a=0; DURS.forEach(function(d){ STARTS.push(a); a+=d; }); })();
+window.TOTAL = DURS.reduce(function(a,b){return a+b;},0);
+
+var clamp=function(x,a,b){ a=a===undefined?0:a; b=b===undefined?1:b; return Math.min(b,Math.max(a,x)); };
+var E={
+  outCubic: function(x){ return 1-Math.pow(1-x,3); },
+  outBack:  function(x){ var s=1.5,c=s+1; return 1+c*Math.pow(x-1,3)+s*Math.pow(x-1,2); },
+  inCubic:  function(x){ return x*x*x; },
+  inOut:    function(x){ return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+};
+var $=function(id){ return document.getElementById(id); };
+var NS='http://www.w3.org/2000/svg';
+
+// ----- split headlines into words -----
+document.querySelectorAll('.h[data-split]').forEach(function(h){
+  var base=parseFloat(h.getAttribute('data-split'));
+  var words=h.textContent.trim().split(/\s+/);
+  h.textContent='';
+  words.forEach(function(w,i){
+    var s=document.createElement('span'); s.className='w'; s.textContent=w;
+    s._a={k:'up',s:base+i*0.08,d:0.6};
+    h.appendChild(s);
+    if(i<words.length-1) h.appendChild(document.createTextNode(' '));
+  });
+});
+
+// ----- gather animated elements per scene -----
+var scenes=Array.prototype.slice.call(document.querySelectorAll('.scene'));
+scenes.forEach(function(sc){
+  sc._els=[];
+  sc.querySelectorAll('[data-a]').forEach(function(el){
+    var p=el.getAttribute('data-a').split(':');
+    el._a={k:p[0],s:parseFloat(p[1]),d:parseFloat(p[2])};
+    sc._els.push(el);
+  });
+  sc.querySelectorAll('.h .w').forEach(function(el){ sc._els.push(el); });
+  sc._glass=Array.prototype.slice.call(sc.querySelectorAll('.glass'));
+});
+
+function applyAnim(el,t){
+  var a=el._a, p=clamp((t-a.s)/a.d), e=E.outCubic(p), b=E.outBack(p), o=clamp(p*2), x=0, y=0, s=1;
+  if(a.k==='pop'){ s=0.86+0.14*b; y=(1-e)*6; }
+  else if(a.k==='up'){ y=(1-e)*7; }
+  else if(a.k==='drop'){ y=-(1-e)*6; s=0.94+0.06*b; }
+  else if(a.k==='left'){ x=-(1-e)*18; }
+  else if(a.k==='right'){ x=(1-e)*18; }
+  el.style.opacity=o;
+  el.style.transform='translate('+x.toFixed(3)+'cqw,'+y.toFixed(3)+'cqw) scale('+s.toFixed(4)+')';
+}
+
+// ----- background blobs (slate + violet/indigo/blue/pink) -----
+function blob(el,color,size,x,y){
+  el.style.width=size+'cqw'; el.style.height=size+'cqw';
+  el.style.left=x+'cqw'; el.style.top=y+'cqw';
+  el.style.background='radial-gradient(closest-side,'+color+' 0%,'+color+' 38%,rgba(0,0,0,0) 100%)';
+}
+blob($('b1'),'rgba(139,92,246,0.72)',138,-44,-38);   /* violet */
+blob($('b2'),'rgba(99,102,241,0.68)',96,54,66);       /* indigo */
+blob($('b3'),'rgba(59,130,246,0.65)',118,-30,124);    /* blue */
+blob($('b4'),'rgba(236,72,153,0.60)',76,56,118);      /* pink */
+function orbs(T){
+  $('b1').style.transform='translate('+(9*Math.sin(T*0.44)).toFixed(2)+'cqw,'+(7*Math.cos(T*0.37)).toFixed(2)+'cqw)';
+  $('b2').style.transform='translate('+(-10*Math.sin(T*0.35+1)).toFixed(2)+'cqw,'+(9*Math.cos(T*0.40)).toFixed(2)+'cqw)';
+  $('b3').style.transform='translate('+(10*Math.cos(T*0.32)).toFixed(2)+'cqw,'+(-9*Math.sin(T*0.39+2)).toFixed(2)+'cqw)';
+  $('b4').style.transform='translate('+(-8*Math.cos(T*0.49+1)).toFixed(2)+'cqw,'+(8*Math.sin(T*0.46)).toFixed(2)+'cqw)';
+}
+
+// ═══ AUDIO ENGINE ═════════════════════════════════════════
+var _actx=null, _fired={};
+function getActx(){
+  if(!_actx){ try{ _actx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+  return _actx;
+}
+function synth(type,freq,dur,vol,freqEnd){
+  var c=getActx(); if(!c) return;
+  var o=c.createOscillator(), g=c.createGain();
+  o.connect(g); g.connect(c.destination);
+  o.type=type;
+  o.frequency.setValueAtTime(freq,c.currentTime);
+  if(freqEnd) o.frequency.exponentialRampToValueAtTime(freqEnd,c.currentTime+dur*0.6);
+  g.gain.setValueAtTime(vol||0.3,c.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur);
+  o.start(c.currentTime); o.stop(c.currentTime+dur+0.01);
+}
+var SFX_DATA={
+  whoosh:        function(v){ synth('sawtooth',300,0.25,v||0.3,80); },
+  tick:          function(v){ synth('square',1200,0.07,v||0.4); },
+  beep:          function(v){ synth('sine',880,0.1,v||0.35); },
+  final_beep:    function(v){ synth('sine',1320,0.18,v||0.5); },
+  reveal_whoosh: function(v){ synth('sawtooth',200,0.3,v||0.35,500); },
+  impact:        function(v){ synth('triangle',120,0.15,v||0.5); },
+  swoosh:        function(v){ synth('triangle',600,0.2,v||0.3,200); },
+  glass_pop:     function(v){ synth('sine',1800,0.06,v||0.35); },
+  ding:          function(v){ synth('sine',1047,0.25,v||0.35); },
+  pulse:         function(v){ synth('sine',440,0.12,v||0.25); }
+};
+function cue(T,name,vol){
+  var key=T.toFixed(2)+'_'+name;
+  if(_fired[key]) return; _fired[key]=1;
+  if(!getActx()) return;
+  if(SFX_DATA[name]) SFX_DATA[name](vol);
+}
+document.addEventListener('click',function(){
+  getActx()&&_actx.resume&&_actx.resume();
+},{once:true});
+
+// ═══ SCENE 1 — Hook B: Blurred reveal ════════════════════
+function s1(t){
+  // Sensex card: starts with blur, clears at t=1.8s with impact
+  var num=$('sense-num');
+  var blurAmt=Math.max(0,8*(1-E.outCubic(clamp((t-1.5)/0.5))));
+  num.style.filter='blur('+blurAmt.toFixed(1)+'px)';
+  // Red flash at reveal
+  if(t>=1.8&&t<2.5){
+    var flash=E.outCubic(clamp((t-1.8)/0.4));
+    num.style.textShadow='0 0 '+(30*(1-flash)).toFixed(0)+'px rgba(239,68,68,'+(0.9*(1-flash)).toFixed(2)+')';
+  } else {
+    num.style.textShadow='none';
+  }
+  if(t>=1.5&&t<1.6) cue(1.5,'impact',0.6);
+  if(t>=1.8&&t<1.9) cue(1.8,'reveal_whoosh',0.4);
+  if(t>=3.2&&t<3.3) cue(3.2,'glass_pop',0.35);
+  if(t>=5.0&&t<5.1) cue(5.0,'ding',0.3);
+}
+
+// ═══ SCENE 2 — Sector bar chart ═══════════════════════════
+function s2(t){
+  // Bars grow down (red = negative), up (green = positive) from baseline y=44
+  var bars=[
+    {id:'bIT', h:24.4, label:'lIT', t0:1.0},  // IT -1.88% → 24.4px height
+    {id:'bAU', h:19.2, label:'lAU', t0:1.4},  // Auto -1.48% → 19.2px
+    {id:'bRE', h:18.6, label:'lRE', t0:1.8},  // Realty -1.43% → 18.6px
+    {id:'bME', h:18.2, label:'lME', t0:2.5, green:true}  // Metal +1.40% → 18.2px up
+  ];
+  bars.forEach(function(b){
+    var p=E.outCubic(clamp((t-b.t0)/0.5));
+    var el=$(b.id), lel=$(b.label);
+    if(b.green){
+      el.setAttribute('y',(44-b.h*p).toFixed(2));
+      el.setAttribute('height',(b.h*p).toFixed(2));
+    } else {
+      el.setAttribute('y','44');
+      el.setAttribute('height',(b.h*p).toFixed(2));
+    }
+    lel.setAttribute('opacity',clamp((t-b.t0-0.3)/0.4));
+    if(t>=b.t0&&t<b.t0+0.1) cue(b.t0,'swoosh',0.25);
+  });
+  if(t>=3.5&&t<3.6) cue(3.5,'ding',0.3);
+}
+
+// ═══ SCENE 3 — Why ════════════════════════════════════════
+function s3(t){
+  if(t>=0.9&&t<1.0)  cue(0.9,'swoosh',0.3);
+  if(t>=1.55&&t<1.65) cue(1.55,'swoosh',0.3);
+  if(t>=2.2&&t<2.3)  cue(2.2,'swoosh',0.3);
+}
+
+// ═══ SCENE 4 — What it means ══════════════════════════════
+function s4(t){
+  if(t>=1.0&&t<1.1)  cue(1.0,'glass_pop',0.3);
+  if(t>=2.4&&t<2.5)  cue(2.4,'glass_pop',0.3);
+  if(t>=3.8&&t<3.9)  cue(3.8,'ding',0.3);
+}
+
+// ═══ SCENE 5 — Numbers ════════════════════════════════════
+function s5(t){
+  if(t>=1.0&&t<1.1)  cue(1.0,'impact',0.4);
+  if(t>=1.3&&t<1.4)  cue(1.3,'impact',0.4);
+  if(t>=1.6&&t<1.7)  cue(1.6,'ding',0.35);
+  if(t>=1.9&&t<2.0)  cue(1.9,'impact',0.4);
+  if(t>=3.2&&t<3.3)  cue(3.2,'glass_pop',0.3);
+}
+
+// ═══ SCENE 6 — CTA (isLast — NO exit fade) ════════════════
+var cks=[
+  document.getElementById('ck1'),
+  document.getElementById('ck2'),
+  document.getElementById('ck3')
+];
+cks.forEach(function(c){ if(c){ c.style.strokeDasharray='1'; c.style.strokeDashoffset='1'; } });
+function s6(t){
+  cks.forEach(function(c,i){
+    if(c) c.style.strokeDashoffset=(1-E.outCubic(clamp((t-(1.3+i*0.45))/0.35))).toFixed(4);
+  });
+  if(t>=1.3&&t<1.4)  cue(1.3,'ding',0.4);
+  if(t>=1.75&&t<1.85) cue(1.75,'ding',0.4);
+  if(t>=2.2&&t<2.3)  cue(2.2,'ding',0.4);
+  if(t>=3.1&&t<3.2)  cue(3.1,'glass_pop',0.35);
+}
+
+var FX=[s1,s2,s3,s4,s5,s6];
+
+window.setT=function(T){
+  orbs(T);
+  var i=0; for(var k=0;k<STARTS.length;k++) if(T>=STARTS[k]-1e-6) i=k;
+  var t=T-STARTS[i], d=DURS[i], isLast=(i===scenes.length-1);
+  scenes.forEach(function(sc,k){ sc.classList.toggle('on',k===i); });
+  var sc=scenes[i];
+  sc._els.forEach(function(el){ applyAnim(el,t); });
+  FX[i](t);
+  sc._glass.forEach(function(g,gi){
+    var q=((t*0.45+gi*0.27)%1);
+    g.style.setProperty('--sw',(q<0.45?(-130+260*(q/0.45)):160).toFixed(1)+'%');
+  });
+  // Exit fade — SKIP on last scene
+  if(!isLast){
+    var o=clamp((t-(d-OUT))/OUT), inner=sc.querySelector('.inner');
+    inner.style.opacity=1-E.inCubic(o);
+    inner.style.transform='translateY('+(-2*E.inCubic(o)).toFixed(3)+'cqw)';
+  }
+  var pill=sc.querySelector('.tag-pill');
+  if(pill){ pill.style.transform=pill.style.transform.replace(/ translateY\([^)]*\)/,'');
+            pill.style.transform+=' translateY('+(Math.sin(T*2)*0.5).toFixed(3)+'cqw)'; }
+};
+setT(0.5);  // thumbnail init — scene 1 fully visible
+</script>
+</body>
+</html>
