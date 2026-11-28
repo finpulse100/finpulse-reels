@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fin Pulse · IT Sector Rotation</title>
+<style>
+:root {
+  --bg:#0d0900; --acc:#f59e0b; --acc2:#f97316; --white:#fff;
+  --g88:rgba(255,255,255,0.88); --gb:rgba(255,255,255,0.95);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
+#bg{position:fixed;inset:0;background:var(--bg)}
+.blob{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;opacity:0;transition:opacity 0s}
+#b1{width:900px;height:900px;top:-200px;left:-200px;background:rgba(245,158,11,0.68)}
+#b2{width:700px;height:700px;top:600px;right:-200px;background:rgba(249,115,22,0.60)}
+#b3{width:600px;height:600px;bottom:400px;left:-100px;background:rgba(220,38,38,0.55)}
+#b4{width:500px;height:500px;bottom:-100px;right:-50px;background:rgba(161,82,8,0.50)}
+#wrap{position:relative;width:1080px;height:1920px;container-type:size;overflow:hidden}
+.scene{position:absolute;inset:0;opacity:0;pointer-events:none}
+.scene.vis{pointer-events:auto}
+.inner{padding:17cqw 11cqw 30cqw 6cqw;display:flex;flex-direction:column;height:100%;position:relative}
+/* tag-pill */
+.tp{display:inline-flex;align-items:center;background:var(--acc);color:#000;
+  font-size:4.6cqw;font-weight:800;padding:1.2cqw 3cqw;border-radius:99px;
+  margin-bottom:4.5cqw;letter-spacing:0.05em;width:fit-content;opacity:0;transform:translateY(-8px) scale(0.85)}
+/* headline */
+.hl{font-size:9.4cqw;font-weight:900;color:#fff;line-height:1.08;margin-bottom:3cqw;opacity:0}
+.hl2{font-size:7.4cqw;font-weight:900;color:#fff;line-height:1.1;opacity:0}
+.sub{font-size:4cqw;color:rgba(255,255,255,0.72);margin-top:2cqw;line-height:1.4;opacity:0}
+/* glass card */
+.gc{background:var(--g88);border:3px solid var(--gb);border-radius:2.5cqw;
+  padding:3cqw 4cqw;color:#111;backdrop-filter:blur(16px);
+  box-shadow:0 8px 40px rgba(0,0,0,0.45);opacity:0;overflow:hidden;position:relative}
+.gc::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.4) 0%,transparent 60%);
+  transform:translateX(calc((var(--sw,0) - 0.5) * 200%));pointer-events:none}
+/* row chip */
+.rc{display:flex;align-items:center;gap:3cqw;background:var(--g88);border:3px solid var(--gb);
+  border-radius:2cqw;padding:2.8cqw 3.5cqw;margin-bottom:2.8cqw;backdrop-filter:blur(12px);
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);opacity:0}
+.rc-icon{width:7cqw;height:7cqw;flex-shrink:0}
+.rc-txt{font-size:3.8cqw;font-weight:700;color:#111;line-height:1.3}
+.rc-txt span{font-size:3.2cqw;font-weight:500;color:#444;display:block;margin-top:0.3cqw}
+/* handle */
+.handle{position:absolute;bottom:7cqw;right:6cqw;font-size:3.4cqw;font-weight:800;
+  color:rgba(255,255,255,0.65);letter-spacing:0.03em}
+/* big stat */
+.stat-num{font-size:7.4cqw;font-weight:900;color:var(--acc)}
+.stat-lbl{font-size:3.6cqw;font-weight:600;color:#333;margin-top:0.5cqw}
+/* grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:3cqw;margin-top:3cqw}
+/* bar chart */
+.bar-wrap{display:flex;align-items:center;gap:2.5cqw;margin-bottom:2.5cqw;opacity:0}
+.bar-label{font-size:3.6cqw;font-weight:700;color:#111;width:14cqw;flex-shrink:0}
+.bar-track{height:4cqw;background:rgba(0,0,0,0.08);border-radius:99px;flex:1;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;width:0%;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width 0s}
+.bar-pct{font-size:3.6cqw;font-weight:800;color:var(--acc);width:9cqw;text-align:right;flex-shrink:0}
+/* checkmark SVG scene */
+.ck-row{display:flex;align-items:flex-start;gap:3.5cqw;margin-bottom:4.5cqw;opacity:0}
+.ck-icon{width:8cqw;height:8cqw;flex-shrink:0}
+.ck-txt{font-size:4.2cqw;font-weight:700;color:#fff;line-height:1.35;padding-top:0.5cqw}
+/* follow card */
+.follow-card{margin-top:auto;background:var(--g88);border:3px solid var(--gb);border-radius:3cqw;
+  padding:4cqw 5cqw;text-align:center;color:#111;opacity:0;box-shadow:0 8px 40px rgba(0,0,0,0.5)}
+.follow-card .fc-h{font-size:5.6cqw;font-weight:900;color:#000;margin-bottom:1.5cqw}
+.follow-card .fc-s{font-size:3.6cqw;color:#444;line-height:1.4}
+/* disclaimer */
+.disclaim{font-size:3cqw;color:#777;margin-top:2.5cqw;text-align:center}
+/* blurred reveal */
+.blur-wrap{position:relative;overflow:hidden;opacity:0}
+.blur-txt{font-size:12cqw;font-weight:900;color:var(--acc);letter-spacing:0.02em;
+  filter:blur(18px);transition:filter 0.4s;text-align:center}
+.blur-txt.revealed{filter:blur(0)}
+/* nifty contrast pill */
+.nifty-pill{background:rgba(220,38,38,0.2);border:2px solid rgba(220,38,38,0.6);border-radius:1.5cqw;
+  padding:1.5cqw 3cqw;display:inline-flex;align-items:center;gap:2cqw;opacity:0;margin-bottom:3cqw;width:fit-content}
+.nifty-pill .np-val{font-size:5.6cqw;font-weight:900;color:#ff4444}
+.nifty-pill .np-lbl{font-size:3.4cqw;color:rgba(255,255,255,0.8);font-weight:600}
+/* grain overlay */
+#grain{position:fixed;inset:0;pointer-events:none;opacity:0.055;z-index:9999}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="b1" class="blob"></div>
+<div id="b2" class="blob"></div>
+<div id="b3" class="blob"></div>
+<div id="b4" class="blob"></div>
+<canvas id="grain"></canvas>
+
+<div id="wrap">
+
+<!-- ══ SCENE 1: HOOK — The Market Split ══ -->
+<div id="s1" class="scene">
+<div class="inner">
+  <div id="s1tp" class="tp" data-a="drop:0.05:0.6">📊 MARKET SPLIT</div>
+
+  <div id="s1nifty" class="nifty-pill">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4444" stroke-width="3" stroke-linecap="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+    <span class="np-val">−0.75%</span>
+    <span class="np-lbl">Nifty this week</span>
+  </div>
+
+  <div id="s1q" class="sub" style="font-size:4.4cqw;color:rgba(255,255,255,0.6);margin-bottom:3cqw;margin-top:0">Which sector beat the market by 5%?</div>
+
+  <div id="s1blur" class="blur-wrap" style="margin:0 auto 3cqw;width:100%">
+    <div id="s1btxt" class="blur-txt">+4.58%</div>
+    <div style="text-align:center;font-size:4cqw;font-weight:700;color:rgba(255,255,255,0);margin-top:1cqw;transition:color 0.4s" id="s1ans">IT SECTOR · THIS WEEK</div>
+  </div>
+
+  <div id="s1ctr" class="gc" style="margin-top:2cqw;text-align:center">
+    <div style="font-size:3.6cqw;font-weight:600;color:#555;margin-bottom:1cqw">TCS alone gained</div>
+    <div class="stat-num" id="s1cnt" style="font-size:10cqw">+0.00%</div>
+    <div style="font-size:3.4cqw;color:#666;margin-top:0.5cqw">this week · closed ₹2,572</div>
+  </div>
+
+  <div id="s1sub" class="sub" style="margin-top:3cqw;text-align:center;font-size:3.8cqw">
+    If you watched only the index, you missed the whole story.
+  </div>
+
+  <div class="handle">@finpulsemarkets</div>
+</div>
+</div>
+
+<!-- ══ SCENE 2: IT RALLY — 5 Stocks ══ -->
+<div id="s2" class="scene">
+<div class="inner">
+  <div id="s2tp" class="tp" data-a="drop:0.05:0.6">📈 IT RALLY</div>
+  <div id="s2hl" class="hl" style="font-size:7.4cqw;margin-bottom:2cqw">NIFTY IT: BEST WEEK OF Q3 FY27</div>
+
+  <div id="s2bars" style="margin-top:2cqw">
+    <!-- bars injected by JS -->
+  </div>
+
+  <div id="s2ctx" class="gc" style="margin-top:3cqw">
+    <div style="font-size:3.4cqw;font-weight:700;color:#333">📌 Context</div>
+    <div style="font-size:3.6cqw;color:#111;margin-top:1cqw;line-height:1.5">
+      IT sector gained <strong>+4.58%</strong> vs Nifty 50 at <strong>−0.75%</strong><br>
+      A <strong>5.33 percentage point</strong> outperformance in one week
+    </div>
+  </div>
+
+  <div class="handle">@finpulsemarkets</div>
+</div>
+</div>
+
+<!-- ══ SCENE 3: WHY ══ -->
+<div id="s3" class="scene">
+<div class="inner">
+  <div id="s3tp" class="tp" data-a="drop:0.05:0.6">🔍 WHY IT RALLIED</div>
+  <div id="s3hl" class="hl" style="font-size:7cqw;margin-bottom:4cqw">3 REASONS<br>IT BEAT THE MARKET</div>
+
+  <div id="s3r1" class="rc">
+    <svg class="rc-icon" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+    <div class="rc-txt">Nasdaq +6.68% this week
+      <span>Indian IT earns ~60% revenues from US clients — Nasdaq moves flow in</span>
+    </div>
+  </div>
+
+  <div id="s3r2" class="rc">
+    <svg class="rc-icon" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>
+    <div class="rc-txt">USD/INR at ₹92.99
+      <span>Strong dollar means higher rupee revenue for every export contract</span>
+    </div>
+  </div>
+
+  <div id="s3r3" class="rc">
+    <svg class="rc-icon" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+    <div class="rc-txt">FII: 19 consecutive buying sessions
+      <span>₹17,629 Cr net bought this week · ₹1.33 lakh crore total run</span>
+    </div>
+  </div>
+
+  <div class="handle">@finpulsemarkets</div>
+</div>
+</div>
+
+<!-- ══ SCENE 4: WHAT IT MEANS FOR YOU ══ -->
+<div id="s4" class="scene">
+<div class="inner">
+  <div id="s4tp" class="tp" data-a="drop:0.05:0.6">👤 FOR YOUR PORTFOLIO</div>
+  <div id="s4hl" class="hl" style="font-size:7.4cqw;margin-bottom:4cqw">WHAT THIS<br>MEANS FOR YOU</div>
+
+  <div id="s4c1" class="gc" style="margin-bottom:3cqw">
+    <div style="font-size:3.4cqw;font-weight:800;color:#111;margin-bottom:1cqw">📂 Hold IT Funds?</div>
+    <div style="font-size:3.8cqw;color:#222;line-height:1.5">Your NAV outperformed the Nifty index by 5% this week. Check your XIRR — sector rotation is working.</div>
+  </div>
+
+  <div id="s4c2" class="gc" style="margin-bottom:3cqw">
+    <div style="font-size:3.4cqw;font-weight:800;color:#111;margin-bottom:1cqw">🏦 Hold PSU Bank Funds?</div>
+    <div style="font-size:3.8cqw;color:#222;line-height:1.5">PSU Banks fell 3.94% this week. Capital is rotating. Watch the Dec 4 RBI decision — it moves bank stocks.</div>
+  </div>
+
+  <div id="s4c3" class="gc">
+    <div style="font-size:3.4cqw;font-weight:800;color:#111;margin-bottom:1cqw">📊 Only Track Nifty?</div>
+    <div style="font-size:3.8cqw;color:#222;line-height:1.5">The index missed a 5.3% gap. Sectors tell the real story — the rotation is happening right now.</div>
+  </div>
+
+  <div class="disclaim">Educational content only.</div>
+  <div class="handle">@finpulsemarkets</div>
+</div>
+</div>
+
+<!-- ══ SCENE 5: THE NUMBERS ══ -->
+<div id="s5" class="scene">
+<div class="inner">
+  <div id="s5tp" class="tp" data-a="drop:0.05:0.6">📐 THE DATA</div>
+  <div id="s5hl" class="hl" style="font-size:7.4cqw;margin-bottom:3cqw">THIS WEEK<br>IN NUMBERS</div>
+
+  <div class="grid2">
+    <div id="s5g1" class="gc" style="text-align:center">
+      <div class="stat-lbl" style="font-size:3.2cqw;color:#555;margin-bottom:1cqw">Nifty 50</div>
+      <div class="stat-num" style="color:#ff4444">−0.75%</div>
+      <div class="stat-lbl" style="font-size:2.8cqw">25,607.20</div>
+    </div>
+    <div id="s5g2" class="gc" style="text-align:center">
+      <div class="stat-lbl" style="font-size:3.2cqw;color:#555;margin-bottom:1cqw">Nifty IT</div>
+      <div class="stat-num">+4.58%</div>
+      <div class="stat-lbl" style="font-size:2.8cqw">Best week Q3 FY27</div>
+    </div>
+    <div id="s5g3" class="gc" style="text-align:center">
+      <div class="stat-lbl" style="font-size:3.2cqw;color:#555;margin-bottom:1cqw">Bank Nifty</div>
+      <div class="stat-num" style="color:#ff4444">−2.47%</div>
+      <div class="stat-lbl" style="font-size:2.8cqw">63,040.90</div>
+    </div>
+    <div id="s5g4" class="gc" style="text-align:center">
+      <div class="stat-lbl" style="font-size:3.2cqw;color:#555;margin-bottom:1cqw">TCS</div>
+      <div class="stat-num">+8.26%</div>
+      <div class="stat-lbl" style="font-size:2.8cqw">₹2,572.50</div>
+    </div>
+  </div>
+
+  <div id="s5fii" class="gc" style="margin-top:3cqw;text-align:center">
+    <div style="font-size:3.4cqw;color:#555;margin-bottom:1cqw;font-weight:600">FII Buying Streak</div>
+    <div class="stat-num" style="font-size:5.6cqw" id="s5fii_ctr">₹0 Cr</div>
+    <div class="stat-lbl" style="font-size:3cqw">this week · 19 consecutive sessions</div>
+  </div>
+
+  <div class="handle">@finpulsemarkets</div>
+</div>
+</div>
+
+<!-- ══ SCENE 6: CTA (no exit fade) ══ -->
+<div id="s6" class="scene">
+<div class="inner">
+  <div id="s6tp" class="tp" data-a="drop:0.05:0.6">✅ WHAT TO WATCH NEXT</div>
+  <div id="s6hl" class="hl" style="font-size:8cqw;margin-bottom:5cqw">TRACK THESE<br>THIS WEEK</div>
+
+  <div id="s6c1" class="ck-row">
+    <svg class="ck-icon" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="22" fill="var(--acc)" opacity="0.2" stroke="var(--acc)" stroke-width="2"/>
+      <path id="ck1p" d="M14 25 L21 32 L34 17" fill="none" stroke="var(--acc)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
+        stroke-dasharray="30" stroke-dashoffset="30"/>
+    </svg>
+    <div class="ck-txt">Track IT and PSU Bank separately — they're diverging from the index</div>
+  </div>
+
+  <div id="s6c2" class="ck-row">
+    <svg class="ck-icon" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="22" fill="var(--acc)" opacity="0.2" stroke="var(--acc)" stroke-width="2"/>
+      <path id="ck2p" d="M14 25 L21 32 L34 17" fill="none" stroke="var(--acc)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
+        stroke-dasharray="30" stroke-dashoffset="30"/>
+    </svg>
+    <div class="ck-txt">Monitor FII sector-wise flow data — not just Nifty totals</div>
+  </div>
+
+  <div id="s6c3" class="ck-row">
+    <svg class="ck-icon" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="22" fill="var(--acc)" opacity="0.2" stroke="var(--acc)" stroke-width="2"/>
+      <path id="ck3p" d="M14 25 L21 32 L34 17" fill="none" stroke="var(--acc)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
+        stroke-dasharray="30" stroke-dashoffset="30"/>
+    </svg>
+    <div class="ck-txt">Dec 2–4 RBI MPC meeting: decision on Dec 4 — both IT and banks react sharply</div>
+  </div>
+
+  <div id="s6follow" class="follow-card">
+    <div class="fc-h">Follow @finpulsemarkets</div>
+    <div class="fc-s">Daily market breakdowns · Every morning &amp; evening<br>Share with someone who only tracks the Nifty 📊</div>
+  </div>
+
+  <div class="handle">@finpulsemarkets</div>
+</div>
+</div>
+
+</div><!-- /#wrap -->
+
+<script>
+// ══ CONSTANTS ══════════════════════════════════════════════
+const DURS   = [7, 7, 7, 7.5, 7, 9.5];
+const STARTS = [0, 7, 14, 21, 28.5, 35.5];
+const TOTAL  = 45;
+const OUT    = 0.4;
+
+// ══ AUDIO ENGINE ════════════════════════════════════════════
+const AC = new (window.AudioContext||window.webkitAudioContext)();
+const CUED = {};
+function tone(freq,dur,type='sine',vol=0.3,fadeIn=0.01,fadeOut=0.1){
+  const osc=AC.createOscillator(),g=AC.createGain();
+  osc.type=type;osc.frequency.value=freq;
+  g.gain.setValueAtTime(0,AC.currentTime);
+  g.gain.linearRampToValueAtTime(vol,AC.currentTime+fadeIn);
+  g.gain.setValueAtTime(vol,AC.currentTime+dur-fadeOut);
+  g.gain.linearRampToValueAtTime(0,AC.currentTime+dur);
+  osc.connect(g);g.connect(AC.destination);
+  osc.start();osc.stop(AC.currentTime+dur);
+}
+function noise(dur,vol=0.15){
+  const buf=AC.createBuffer(1,AC.sampleRate*dur,AC.sampleRate),d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1);
+  const src=AC.createBufferSource(),g=AC.createGain();
+  src.buffer=buf;g.gain.setValueAtTime(vol,AC.currentTime);
+  g.gain.linearRampToValueAtTime(0,AC.currentTime+dur);
+  src.connect(g);g.connect(AC.destination);src.start();
+}
+const SFX={
+  whoosh:()=>noise(0.25,0.18),
+  tick:()=>tone(1200,0.06,'square',0.2),
+  beep:()=>tone(880,0.1,'sine',0.25),
+  final_beep:()=>tone(1320,0.18,'sine',0.3),
+  reveal_whoosh:()=>{noise(0.3,0.22);tone(600,0.3,'sine',0.15,0.01,0.25)},
+  impact:()=>{noise(0.15,0.3);tone(80,0.2,'sawtooth',0.2)},
+  swoosh:()=>noise(0.2,0.14),
+  glass_pop:()=>tone(1800,0.12,'sine',0.2,0.005,0.1),
+  ding:()=>tone(1046,0.35,'sine',0.28,0.005,0.3),
+  pulse:()=>tone(440,0.08,'square',0.1)
+};
+function cue(T,name,vol){
+  const k=`${name}@${T.toFixed(2)}`;
+  if(CUED[k])return;CUED[k]=true;
+  if(SFX[name])SFX[name]();
+}
+let _audioUnlocked=false;
+document.addEventListener('click',()=>{if(!_audioUnlocked){AC.resume();_audioUnlocked=true}},{once:true});
+
+// ══ BAR DATA ═══════════════════════════════════════════════
+const BARS=[
+  {ticker:'TCS',  pct:8.26, maxPct:10},
+  {ticker:'HCL',  pct:5.93, maxPct:10},
+  {ticker:'INFY', pct:4.85, maxPct:10},
+  {ticker:'TECHM',pct:3.88, maxPct:10},
+  {ticker:'WIPRO',pct:3.45, maxPct:10},
+];
+
+function buildBars(){
+  const c=document.getElementById('s2bars');
+  BARS.forEach((b,i)=>{
+    const div=document.createElement('div');
+    div.className='bar-wrap';
+    div.id=`bar${i}`;
+    div.innerHTML=`<div class="bar-label">${b.ticker}</div>
+      <div class="bar-track"><div class="bar-fill" id="bf${i}"></div></div>
+      <div class="bar-pct">+${b.pct}%</div>`;
+    c.appendChild(div);
+  });
+}
+buildBars();
+
+// ══ ORBS ════════════════════════════════════════════════════
+function orbs(T){
+  const bs=document.querySelectorAll('.blob');
+  const sinArg=(n,f,p)=>Math.sin(T*f+p)*n;
+  bs[0].style.transform=`translate(${sinArg(60,0.3,0)}px,${sinArg(80,0.2,1)}px)`;
+  bs[1].style.transform=`translate(${sinArg(70,0.25,2)}px,${sinArg(60,0.35,0.5)}px)`;
+  bs[2].style.transform=`translate(${sinArg(50,0.4,1)}px,${sinArg(70,0.3,2)}px)`;
+  bs[3].style.transform=`translate(${sinArg(80,0.2,3)}px,${sinArg(50,0.4,1.5)}px)`;
+  bs.forEach(b=>b.style.opacity=0.9);
+}
+
+// ══ EASING ══════════════════════════════════════════════════
+function outCubic(t){return 1-Math.pow(1-t,3)}
+function outBack(t){const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)}
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
+function ease(t,start,dur){return outCubic(clamp((t-start)/dur,0,1))}
+function easeBack(t,start,dur){return outBack(clamp((t-start)/dur,0,1))}
+
+// ══ APPLY ANIM ══════════════════════════════════════════════
+function applyAnim(el,prog,type){
+  if(!el)return;
+  if(type==='pop'){
+    const p=easeBack(prog,0,1);
+    el.style.opacity=Math.min(1,prog*4);
+    el.style.transform=`scale(${0.7+0.3*p})`;
+  } else if(type==='up'){
+    const p=outCubic(prog);
+    el.style.opacity=Math.min(1,prog*3);
+    el.style.transform=`translateY(${(1-p)*40}px)`;
+  } else if(type==='drop'){
+    const p=outBack(prog);
+    el.style.opacity=Math.min(1,prog*4);
+    el.style.transform=`translateY(${(1-p)*-20}px) scale(${0.85+0.15*p})`;
+  } else if(type==='left'){
+    const p=outCubic(prog);
+    el.style.opacity=Math.min(1,prog*3);
+    el.style.transform=`translateX(${(1-p)*-60}px)`;
+  } else if(type==='right'){
+    const p=outCubic(prog);
+    el.style.opacity=Math.min(1,prog*3);
+    el.style.transform=`translateX(${(1-p)*60}px)`;
+  } else if(type==='fade'){
+    el.style.opacity=Math.min(1,prog*3);
+  }
+}
+
+// ══ SCENE OPACITY (with OUT fade) ════════════════════════════
+function sceneAlpha(si,T){
+  const st=STARTS[si],dur=DURS[si];
+  const isLast=(si===5);
+  if(T<st)return 0;
+  const local=T-st;
+  if(local<0.3)return outCubic(local/0.3);
+  if(!isLast && local>dur-OUT)return outCubic(1-(local-(dur-OUT))/OUT);
+  return 1;
+}
+
+// ══ COUNTER ═════════════════════════════════════════════════
+function lerp(a,b,t){return a+(b-a)*t}
+
+// ══ GLASS SHIMMER ════════════════════════════════════════════
+let _glassEls=[];
+function shimmer(T){
+  if(!_glassEls.length)_glassEls=Array.from(document.querySelectorAll('.gc'));
+  _glassEls.forEach((el,gi)=>{
+    const sw=(T*0.45+gi*0.27)%1;
+    el.style.setProperty('--sw',sw);
+  });
+}
+
+// ══ GRAIN CANVAS ════════════════════════════════════════════
+(function initGrain(){
+  const c=document.getElementById('grain');
+  c.width=1080;c.height=1920;
+  const ctx=c.getContext('2d');
+  function drawGrain(){
+    const id=ctx.createImageData(1080,1920);const d=id.data;
+    for(let i=0;i<d.length;i+=4){
+      const v=Math.random()*255|0;
+      d[i]=v;d[i+1]=v;d[i+2]=v;d[i+3]=255;
+    }
+    ctx.putImageData(id,0,0);
+  }
+  drawGrain();
+  setInterval(drawGrain,50);
+})();
+
+// ══ SCENE DRIVERS ════════════════════════════════════════════
+function s1(T){
+  const t=T-STARTS[0];
+  const tp=document.getElementById('s1tp');
+  const nifty=document.getElementById('s1nifty');
+  const q=document.getElementById('s1q');
+  const blur=document.getElementById('s1blur');
+  const btxt=document.getElementById('s1btxt');
+  const ans=document.getElementById('s1ans');
+  const ctr=document.getElementById('s1ctr');
+  const cnt=document.getElementById('s1cnt');
+  const sub=document.getElementById('s1sub');
+
+  applyAnim(tp, ease(t,0,0.6), 'drop');
+  applyAnim(nifty, ease(t,0.5,0.6), 'up');
+  applyAnim(q, ease(t,1,0.5), 'fade');
+  applyAnim(blur, ease(t,1.5,0.4), 'pop');
+
+  // blur reveal at t=3.2s
+  if(t>=3.2){
+    btxt.classList.add('revealed');
+    ans.style.color='rgba(255,255,255,0.8)';
+    cue(T,'reveal_whoosh',0.8);
+    cue(T+0.2,'impact',0.6);
+  }
+
+  // TCS counter 0→8.26% from t=3.5→6
+  if(t>3.5){
+    applyAnim(ctr, ease(t,3.5,0.5), 'up');
+    const prog=clamp((t-3.8)/2.2,0,1);
+    const val=lerp(0,8.26,outCubic(prog));
+    cnt.textContent=`+${val.toFixed(2)}%`;
+    if(prog>=1)cue(T,'ding',0.7);
+  }
+  applyAnim(sub, ease(t,5,0.6), 'up');
+}
+
+function s2(T){
+  const t=T-STARTS[1];
+  applyAnim(document.getElementById('s2tp'), ease(t,0,0.5), 'drop');
+  applyAnim(document.getElementById('s2hl'), ease(t,0.4,0.5), 'up');
+  cue(STARTS[1]+0.1,'whoosh',0.5);
+
+  BARS.forEach((b,i)=>{
+    const bw=document.getElementById(`bar${i}`);
+    const bf=document.getElementById(`bf${i}`);
+    const delay=0.9+i*0.5;
+    const prog=ease(t,delay,0.6);
+    if(bw)applyAnim(bw,prog,'left');
+    if(bf){
+      const pct=(b.pct/b.maxPct)*100;
+      bf.style.width=(outCubic(clamp((t-delay-0.1)/0.5,0,1))*pct)+'%';
+    }
+    if(bw && prog>0.5)cue(STARTS[1]+delay,'swoosh',0.3);
+  });
+
+  applyAnim(document.getElementById('s2ctx'), ease(t,3.8,0.6), 'up');
+}
+
+function s3(T){
+  const t=T-STARTS[2];
+  applyAnim(document.getElementById('s3tp'), ease(t,0,0.5), 'drop');
+  applyAnim(document.getElementById('s3hl'), ease(t,0.4,0.5), 'up');
+  cue(STARTS[2]+0.1,'swoosh',0.4);
+  applyAnim(document.getElementById('s3r1'), ease(t,0.9,0.5), 'left');
+  if(ease(t,0.9,0.5)>0.5)cue(STARTS[2]+0.9,'glass_pop',0.4);
+  applyAnim(document.getElementById('s3r2'), ease(t,1.7,0.5), 'left');
+  if(ease(t,1.7,0.5)>0.5)cue(STARTS[2]+1.7,'glass_pop',0.4);
+  applyAnim(document.getElementById('s3r3'), ease(t,2.5,0.5), 'left');
+  if(ease(t,2.5,0.5)>0.5)cue(STARTS[2]+2.5,'glass_pop',0.4);
+}
+
+function s4(T){
+  const t=T-STARTS[3];
+  applyAnim(document.getElementById('s4tp'), ease(t,0,0.5), 'drop');
+  applyAnim(document.getElementById('s4hl'), ease(t,0.4,0.5), 'up');
+  cue(STARTS[3]+0.1,'swoosh',0.4);
+  applyAnim(document.getElementById('s4c1'), ease(t,0.9,0.6), 'up');
+  applyAnim(document.getElementById('s4c2'), ease(t,1.7,0.6), 'up');
+  applyAnim(document.getElementById('s4c3'), ease(t,2.5,0.6), 'up');
+}
+
+function s5(T){
+  const t=T-STARTS[4];
+  applyAnim(document.getElementById('s5tp'), ease(t,0,0.5), 'drop');
+  applyAnim(document.getElementById('s5hl'), ease(t,0.4,0.5), 'up');
+  cue(STARTS[4]+0.1,'whoosh',0.4);
+  ['s5g1','s5g2','s5g3','s5g4'].forEach((id,i)=>{
+    applyAnim(document.getElementById(id), ease(t,0.8+i*0.4,0.5), 'pop');
+  });
+  // FII counter
+  const fiiEl=document.getElementById('s5fii');
+  const fiiCtr=document.getElementById('s5fii_ctr');
+  applyAnim(fiiEl, ease(t,2.5,0.6), 'up');
+  if(t>2.6){
+    const prog=clamp((t-2.6)/1.8,0,1);
+    const val=lerp(0,17629,outCubic(prog));
+    fiiCtr.textContent=`₹${Math.round(val).toLocaleString('en-IN')} Cr`;
+    if(prog>=1)cue(T,'final_beep',0.6);
+  }
+}
+
+function s6(T){
+  const t=T-STARTS[5];
+  applyAnim(document.getElementById('s6tp'), ease(t,0,0.5), 'drop');
+  applyAnim(document.getElementById('s6hl'), ease(t,0.4,0.5), 'up');
+  cue(STARTS[5]+0.1,'swoosh',0.4);
+
+  // Checkmarks
+  [[0,'s6c1','ck1p'],[1.2,'s6c2','ck2p'],[2.4,'s6c3','ck3p']].forEach(([delay,rowId,pathId])=>{
+    const prog=ease(t,delay,0.5);
+    applyAnim(document.getElementById(rowId),prog,'up');
+    const path=document.getElementById(pathId);
+    if(path){
+      const dash=30*(1-outCubic(clamp((t-delay-0.1)/0.5,0,1)));
+      path.setAttribute('stroke-dashoffset',dash);
+      if(prog>0.6)cue(STARTS[5]+delay+0.1,'ding',0.5);
+    }
+  });
+
+  applyAnim(document.getElementById('s6follow'), ease(t,4,0.7), 'up');
+  cue(STARTS[5]+4.1,'pulse',0.4);
+}
+
+// ══ MASTER DRIVER ════════════════════════════════════════════
+let _raf=null;
+let _playing=false;
+let _startWall=null;
+let _pausedAt=0;
+
+function setT(T){
+  T=Math.max(0,Math.min(TOTAL,T));
+  orbs(T);
+  shimmer(T);
+
+  // scene visibility
+  STARTS.forEach((st,si)=>{
+    const sc=document.getElementById(`s${si+1}`);
+    if(!sc)return;
+    const alpha=sceneAlpha(si,T);
+    sc.style.opacity=alpha;
+    if(alpha>0)sc.classList.add('vis'); else sc.classList.remove('vis');
+  });
+
+  // scene drivers
+  if(T>=STARTS[0])s1(T);
+  if(T>=STARTS[1])s2(T);
+  if(T>=STARTS[2])s3(T);
+  if(T>=STARTS[3])s4(T);
+  if(T>=STARTS[4])s5(T);
+  if(T>=STARTS[5])s6(T);
+}
+
+function play(){
+  if(_playing)return;
+  _playing=true;
+  _startWall=performance.now()-_pausedAt*1000;
+  function tick(){
+    const T=Math.min(TOTAL,(performance.now()-_startWall)/1000);
+    setT(T);
+    if(T<TOTAL)_raf=requestAnimationFrame(tick);
+    else _playing=false;
+  }
+  _raf=requestAnimationFrame(tick);
+}
+
+// ── Init at thumbnail frame ──
+setT(0.5);
+// Auto-play (Playwright doesn't need this but browser preview does)
+document.addEventListener('click',()=>{if(!_playing)play()},{once:true});
+setTimeout(play,100);
+</script>
+</body>
+</html>
