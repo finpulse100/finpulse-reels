@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1080, initial-scale=1">
+  <title>Fin Pulse · OPEC+ Nov 29 · 2026-11-28</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap">
+  <style>
+    :root {
+      --bg:       #1a0005;
+      --ink:      #200008;
+      --chip-bg:  #2a000a;
+      --chip-ink: #fda4af;
+      --acc:      #f43f5e;
+      --acc2:     #f97316;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1080px; height: 1920px;
+      overflow: hidden;
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      container-type: inline-size;
+    }
+
+    /* ── Blobs ── */
+    .blob-wrap {
+      position: absolute; inset: 0; overflow: hidden;
+      z-index: 0; pointer-events: none;
+    }
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px);
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .b1 { width: 55cqw; height: 55cqw; top: -10cqw; left: -15cqw;
+          background: rgba(220,38,38,0.72); animation-duration: 17s; }
+    .b2 { width: 50cqw; height: 50cqw; top: 30cqw; right: -18cqw;
+          background: rgba(236,72,153,0.70); animation-duration: 21s; animation-delay: -4s; }
+    .b3 { width: 48cqw; height: 48cqw; bottom: 20cqw; left: -12cqw;
+          background: rgba(249,115,22,0.68); animation-duration: 24s; animation-delay: -8s; }
+    .b4 { width: 42cqw; height: 42cqw; bottom: -8cqw; right: -10cqw;
+          background: rgba(139,92,246,0.65); animation-duration: 19s; animation-delay: -12s; }
+    @keyframes drift {
+      0%   { transform: translate(0,0) scale(1); }
+      33%  { transform: translate(5cqw,8cqw) scale(1.08); }
+      66%  { transform: translate(-4cqw,4cqw) scale(0.95); }
+      100% { transform: translate(3cqw,-6cqw) scale(1.05); }
+    }
+
+    /* ── Scenes ── */
+    .scene {
+      position: absolute; inset: 0;
+      opacity: 0; z-index: 1;
+    }
+    .inner {
+      position: relative; z-index: 2;
+      padding: 17cqw 11cqw 30cqw 6cqw;
+      height: 100%;
+      display: flex; flex-direction: column; gap: 2.8cqw;
+    }
+
+    /* ── Handle ── */
+    .handle {
+      position: absolute; bottom: 7cqw; right: 5cqw;
+      font-size: 3.4cqw; font-weight: 800;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.03em; z-index: 10;
+    }
+
+    /* ── Tag pill (always first child of .inner) ── */
+    .tag-pill {
+      display: inline-flex; align-items: center;
+      background: var(--chip-bg);
+      border: 1.5px solid rgba(244,63,94,0.4);
+      border-radius: 100px;
+      padding: 1.4cqw 3.5cqw;
+      font-size: 4.6cqw; font-weight: 800;
+      color: var(--chip-ink);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      align-self: flex-start;
+    }
+    .tag-pill .dot {
+      width: 2cqw; height: 2cqw; border-radius: 50%;
+      background: var(--acc); margin-right: 2cqw;
+      animation: blink 1.1s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── Alert stamp ── */
+    .alert-stamp {
+      display: inline-flex; align-items: center; gap: 2cqw;
+      background: var(--acc);
+      border-radius: 2.5cqw;
+      padding: 1.6cqw 4cqw;
+      font-size: 5.2cqw; font-weight: 900;
+      color: #fff; letter-spacing: 0.06em;
+      align-self: flex-start;
+      transform: scale(0); opacity: 0;
+      transform-origin: left center;
+    }
+
+    /* ── Headlines ── */
+    .hook-h1 {
+      font-size: 10.5cqw; font-weight: 900; line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+    .s-head {
+      font-size: 8.6cqw; font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    .hl  { color: var(--acc); }
+    .hl2 { color: var(--acc2); }
+
+    /* ── Stat row (S1) ── */
+    .stat-row {
+      display: flex; gap: 2.5cqw; align-items: stretch;
+    }
+    .stat-card {
+      flex: 1;
+      background: rgba(255,255,255,0.88);
+      border: 3px solid rgba(255,255,255,0.95);
+      border-radius: 3.5cqw;
+      padding: 3cqw 2.5cqw 2.5cqw;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; color: #111;
+      opacity: 0; transform: translateY(4cqw);
+    }
+    .stat-card .sv {
+      font-size: 8.5cqw; font-weight: 900; line-height: 1;
+      color: #b91c1c;
+    }
+    .stat-card .sv .unit { font-size: 5cqw; font-weight: 700; }
+    .stat-card .sl {
+      font-size: 3.2cqw; font-weight: 600; line-height: 1.25;
+      color: #333; margin-top: 1.5cqw;
+    }
+
+    /* ── Digit reveal (S1) ── */
+    #dig-reveal {
+      display: flex; gap: 1.5cqw; align-items: flex-end;
+      opacity: 0; perspective: 600px;
+    }
+    .dig-block {
+      background: rgba(255,255,255,0.88);
+      border: 2.5px solid rgba(255,255,255,0.95);
+      border-radius: 2.5cqw;
+      padding: 1.5cqw 3cqw;
+      font-size: 11cqw; font-weight: 900;
+      color: #b91c1c;
+      opacity: 0;
+      transform: translateY(5cqw) rotateX(90deg);
+      transform-origin: bottom center;
+    }
+    .dig-block.du {
+      font-size: 7cqw; padding-bottom: 2.8cqw;
+      color: #9f1239;
+    }
+
+    /* ── Sub line (S1) ── */
+    .sub-line {
+      font-size: 4.8cqw; font-weight: 700;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.3; opacity: 0;
+    }
+
+    /* ── Timeline (S2) ── */
+    .tl-wrap { opacity: 0; }
+    .tl-track {
+      display: flex; align-items: center; height: 10cqw;
+    }
+    .tl-node {
+      display: flex; flex-direction: column; align-items: center;
+      flex-shrink: 0; opacity: 0;
+    }
+    .tl-node .nd {
+      width: 3.5cqw; height: 3.5cqw; border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+    .tl-node.today .nd {
+      width: 5cqw; height: 5cqw;
+      background: var(--acc); border-color: var(--acc);
+      box-shadow: 0 0 0 2cqw rgba(244,63,94,0.2);
+    }
+    .tl-seg {
+      flex: 1; height: 2px;
+      background: rgba(255,255,255,0.15);
+      transform: scaleX(0); transform-origin: left;
+    }
+    .tl-labels {
+      display: flex; margin-top: 1.5cqw;
+    }
+    .tl-lbl {
+      flex: 1; text-align: center;
+      font-size: 3.2cqw; font-weight: 700;
+      color: rgba(255,255,255,0.5); opacity: 0;
+    }
+    .tl-lbl .ev {
+      font-size: 2.6cqw; font-weight: 600;
+      color: rgba(255,255,255,0.35); margin-top: 0.6cqw;
+    }
+    .tl-lbl.today { color: var(--acc); font-size: 3.6cqw; font-weight: 900; }
+    .tl-lbl.today .ev { color: var(--acc); font-weight: 800; }
+
+    /* ── Glass card (utility) ── */
+    .glass-card {
+      background: rgba(255,255,255,0.88);
+      border: 3px solid rgba(255,255,255,0.95);
+      border-radius: 3.5cqw;
+      padding: 3.5cqw 4cqw;
+      color: #111; opacity: 0;
+    }
+    .glass-card .gc-t { font-size: 5cqw; font-weight: 800; }
+    .glass-card .gc-s { font-size: 3.6cqw; font-weight: 500; color: #444; margin-top: 1cqw; line-height: 1.4; }
+
+    /* ── Icon rows (S3) ── */
+    .icon-rows { display: flex; flex-direction: column; gap: 2.8cqw; }
+    .icon-row {
+      display: flex; align-items: center; gap: 3.5cqw;
+      background: rgba(255,255,255,0.08);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 3cqw;
+      padding: 3cqw 4cqw;
+      opacity: 0; transform: translateX(-6cqw);
+    }
+    .icon-row .ir-ico { font-size: 7cqw; flex-shrink: 0; }
+    .icon-row .ir-body { flex: 1; }
+    .icon-row .ir-title { font-size: 5.4cqw; font-weight: 800; }
+    .icon-row .ir-sub {
+      font-size: 3.6cqw; font-weight: 500;
+      color: rgba(255,255,255,0.55); margin-top: 0.5cqw;
+    }
+    .icon-row .ir-val {
+      font-size: 5.6cqw; font-weight: 900;
+      color: var(--acc2); flex-shrink: 0;
+    }
+
+    /* ── Impact cards (S4) ── */
+    .impact-cards { display: flex; flex-direction: column; gap: 2.6cqw; }
+    .impact-card {
+      display: flex; align-items: center; gap: 3cqw;
+      background: rgba(255,255,255,0.88);
+      border: 3px solid rgba(255,255,255,0.95);
+      border-radius: 3.5cqw;
+      padding: 3cqw 4cqw;
+      color: #111;
+      opacity: 0; transform: translateX(5cqw);
+    }
+    .impact-card .ic-ico { font-size: 7cqw; flex-shrink: 0; }
+    .impact-card .ic-body { flex: 1; }
+    .impact-card .ic-t { font-size: 5.2cqw; font-weight: 800; }
+    .impact-card .ic-s { font-size: 3.6cqw; font-weight: 500; color: #444; margin-top: 0.5cqw; }
+    .ed-note {
+      font-size: 3.4cqw; color: rgba(255,255,255,0.4);
+      text-align: center;
+    }
+
+    /* ── Scenario cards (S5) ── */
+    .scenario-row { display: flex; gap: 3cqw; }
+    .sc-card {
+      flex: 1; border-radius: 4cqw;
+      padding: 4cqw 3.5cqw;
+      display: flex; flex-direction: column; gap: 2.2cqw;
+      opacity: 0;
+    }
+    .sc-card.bear {
+      background: rgba(220,38,38,0.18);
+      border: 2px solid rgba(244,63,94,0.5);
+    }
+    .sc-card.bull {
+      background: rgba(22,163,74,0.18);
+      border: 2px solid rgba(34,197,94,0.5);
+    }
+    .sc-emoji { font-size: 8cqw; }
+    .sc-label {
+      font-size: 4cqw; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .sc-card.bear .sc-label { color: var(--acc); }
+    .sc-card.bull .sc-label { color: #4ade80; }
+    .sc-title { font-size: 6.2cqw; font-weight: 800; line-height: 1.1; }
+    .sc-body {
+      font-size: 3.9cqw; font-weight: 600;
+      color: rgba(255,255,255,0.7); line-height: 1.5;
+    }
+
+    /* ── Checklist (S6) ── */
+    .checklist { display: flex; flex-direction: column; gap: 3.2cqw; }
+    .check-item {
+      display: flex; align-items: flex-start; gap: 3cqw;
+      opacity: 0; transform: translateY(3cqw);
+    }
+    .chk-box {
+      width: 7cqw; height: 7cqw; border-radius: 50%;
+      background: var(--acc);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4cqw; font-weight: 900; flex-shrink: 0;
+      margin-top: 0.5cqw;
+    }
+    .ck-body { flex: 1; }
+    .ck-title { font-size: 5.4cqw; font-weight: 800; line-height: 1.1; }
+    .ck-sub {
+      font-size: 3.7cqw; font-weight: 500;
+      color: rgba(255,255,255,0.55); margin-top: 0.8cqw;
+    }
+
+    /* ── Follow card (S6) ── */
+    .follow-card {
+      background: rgba(255,255,255,0.88);
+      border: 3px solid rgba(255,255,255,0.95);
+      border-radius: 3.5cqw;
+      padding: 3.5cqw 5cqw;
+      display: flex; align-items: center; gap: 3cqw;
+      opacity: 0;
+    }
+    .fc-icon {
+      width: 10cqw; height: 10cqw; border-radius: 50%;
+      background: linear-gradient(135deg, var(--acc), var(--acc2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5.5cqw; color: #fff; flex-shrink: 0;
+    }
+    .fc-body { flex: 1; }
+    .fc-handle { font-size: 5.6cqw; font-weight: 900; color: #111; }
+    .fc-cta { font-size: 3.8cqw; font-weight: 600; color: #555; }
+    .fc-btn {
+      background: var(--acc); border-radius: 100px;
+      padding: 1.8cqw 4cqw;
+      font-size: 4cqw; font-weight: 800; color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Grain canvas (invisible entropy layer for encode quality) ── -->
+<canvas id="grain" style="position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0.05;mix-blend-mode:overlay"></canvas>
+
+<!-- ── Persistent blobs ── -->
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     S1 · Hook A · CRUDE ALERT  (0 – 7 s)
+══════════════════════════════════════════════════════════ -->
+<div class="scene" id="s1">
+  <div class="inner">
+    <div class="tag-pill"><span class="dot"></span>CRUDE ALERT</div>
+    <div class="alert-stamp" id="s1-stamp">⚡ OPEC+ NOV 29</div>
+    <h1 class="hook-h1">India imports <span class="hl">88%</span><br>of its oil.</h1>
+    <div class="stat-row">
+      <div class="stat-card" id="s1-c1">
+        <div class="sv"><span id="s1-dep">0</span><span class="unit">%</span></div>
+        <div class="sl">crude<br>dependency</div>
+      </div>
+      <div class="stat-card" id="s1-c2">
+        <div class="sv">$<span>96</span></div>
+        <div class="sl">Brent<br>/barrel</div>
+      </div>
+      <div class="stat-card" id="s1-c3">
+        <div class="sv">$<span id="s1-bill">0</span><span class="unit">B</span></div>
+        <div class="sl">import bill<br>5M FY27</div>
+      </div>
+    </div>
+    <div id="dig-reveal">
+      <div class="dig-block" id="d1">8</div>
+      <div class="dig-block" id="d2">8</div>
+      <div class="dig-block" id="d3">.</div>
+      <div class="dig-block" id="d4">7</div>
+      <div class="dig-block du" id="du">%</div>
+    </div>
+    <div class="sub-line" id="s1-sub">1 meeting changes this. Tomorrow.</div>
+  </div>
+  <div class="handle">@finpulsemarkets</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     S2 · OPEC+ CONTEXT  (7 – 14 s)
+══════════════════════════════════════════════════════════ -->
+<div class="scene" id="s2">
+  <div class="inner">
+    <div class="tag-pill"><span class="dot"></span>OPEC+ CONTEXT</div>
+    <h2 class="s-head">Output <span class="hl">frozen</span> all year.<br>Tomorrow: <span class="hl2">2027 quotas</span> set.</h2>
+    <div class="tl-wrap" id="s2-tl">
+      <div class="tl-track">
+        <div class="tl-node" id="tn0"><div class="nd"></div></div>
+        <div class="tl-seg"  id="ts0"></div>
+        <div class="tl-node" id="tn1"><div class="nd"></div></div>
+        <div class="tl-seg"  id="ts1"></div>
+        <div class="tl-node" id="tn2"><div class="nd"></div></div>
+        <div class="tl-seg"  id="ts2"></div>
+        <div class="tl-node" id="tn3"><div class="nd"></div></div>
+        <div class="tl-seg"  id="ts3"></div>
+        <div class="tl-node today" id="tn4"><div class="nd"></div></div>
+      </div>
+      <div class="tl-labels">
+        <div class="tl-lbl" id="tl0">Jun<div class="ev">UNCHANGED</div></div>
+        <div class="tl-lbl" id="tl1">Aug<div class="ev">UNCHANGED</div></div>
+        <div class="tl-lbl" id="tl2">Oct<div class="ev">UNCHANGED</div></div>
+        <div class="tl-lbl" id="tl3">Nov<div class="ev">UNCHANGED</div></div>
+        <div class="tl-lbl today" id="tl4">Nov 29<div class="ev">2027<br>QUOTAS</div></div>
+      </div>
+    </div>
+    <div class="glass-card" id="s2-gc">
+      <div class="gc-t">🛢 Brent crude: ~$96 / barrel</div>
+      <div class="gc-s">India is the world's 2nd largest oil importer · Every $1 rise in crude = ₹850 Cr extra monthly outflow</div>
+    </div>
+  </div>
+  <div class="handle">@finpulsemarkets</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     S3 · INDIA'S EXPOSURE  (14 – 21 s)
+══════════════════════════════════════════════════════════ -->
+<div class="scene" id="s3">
+  <div class="inner">
+    <div class="tag-pill"><span class="dot"></span>INDIA'S EXPOSURE</div>
+    <h2 class="s-head">No hedge.<br>No buffer.<br><span class="hl">88% imported.</span></h2>
+    <div class="icon-rows">
+      <div class="icon-row" id="s3-r1">
+        <div class="ir-ico">🛢</div>
+        <div class="ir-body">
+          <div class="ir-title">Crude dependency</div>
+          <div class="ir-sub">EY report FY2026</div>
+        </div>
+        <div class="ir-val">88.7%</div>
+      </div>
+      <div class="icon-row" id="s3-r2">
+        <div class="ir-ico">💸</div>
+        <div class="ir-body">
+          <div class="ir-title">India import bill</div>
+          <div class="ir-sub">First 5 months FY27 — up 48% YoY</div>
+        </div>
+        <div class="ir-val">$74.8B</div>
+      </div>
+      <div class="icon-row" id="s3-r3">
+        <div class="ir-ico">⚠️</div>
+        <div class="ir-body">
+          <div class="ir-title">OMC margins at risk</div>
+          <div class="ir-sub">HPCL · BPCL · IOC directly exposed</div>
+        </div>
+        <div class="ir-val">3 PSUs</div>
+      </div>
+    </div>
+  </div>
+  <div class="handle">@finpulsemarkets</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     S4 · WHAT CHANGES FOR YOU  (21 – 28.5 s)
+══════════════════════════════════════════════════════════ -->
+<div class="scene" id="s4">
+  <div class="inner">
+    <div class="tag-pill"><span class="dot"></span>WHAT CHANGES FOR YOU</div>
+    <h2 class="s-head">Every <span class="hl">$1 move</span><br>in crude hits<br>your wallet</h2>
+    <div class="impact-cards">
+      <div class="impact-card" id="s4-c1">
+        <div class="ic-ico">⛽</div>
+        <div class="ic-body">
+          <div class="ic-t">Petrol &amp; diesel prices</div>
+          <div class="ic-s">OMCs absorb or pass cost — directly at pump</div>
+        </div>
+      </div>
+      <div class="impact-card" id="s4-c2">
+        <div class="ic-ico">🚚</div>
+        <div class="ic-body">
+          <div class="ic-t">Transport inflation</div>
+          <div class="ic-s">Freight costs rise → goods become costlier</div>
+        </div>
+      </div>
+      <div class="impact-card" id="s4-c3">
+        <div class="ic-ico">📈</div>
+        <div class="ic-body">
+          <div class="ic-t">HPCL · BPCL · IOC</div>
+          <div class="ic-s">OMC stock prices react to crude moves fast</div>
+        </div>
+      </div>
+    </div>
+    <div class="ed-note">Educational content only.</div>
+  </div>
+  <div class="handle">@finpulsemarkets</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     S5 · TWO SCENARIOS  (28.5 – 35.5 s)
+══════════════════════════════════════════════════════════ -->
+<div class="scene" id="s5">
+  <div class="inner">
+    <div class="tag-pill"><span class="dot"></span>TOMORROW'S 2 OUTCOMES</div>
+    <h2 class="s-head">One meeting.<br>Two paths.</h2>
+    <div class="scenario-row">
+      <div class="sc-card bear" id="s5-bear">
+        <div class="sc-emoji">🔴</div>
+        <div class="sc-label">Rollover</div>
+        <div class="sc-title">Quotas unchanged</div>
+        <div class="sc-body">Brent stays $95-100<br>Import bill stays elevated<br>OMC margins squeezed</div>
+      </div>
+      <div class="sc-card bull" id="s5-bull">
+        <div class="sc-emoji">🟢</div>
+        <div class="sc-label">Eased</div>
+        <div class="sc-title">More supply</div>
+        <div class="sc-body">Crude may fall<br>Potential petrol relief<br>OMC margins improve</div>
+      </div>
+    </div>
+    <div class="glass-card" id="s5-gc">
+      <div class="gc-t">Market consensus: Rollover most likely</div>
+      <div class="gc-s">Most analysts expect quotas to roll into Jan 2027 · A surprise ease would sharply move crude &amp; OMC stocks</div>
+    </div>
+  </div>
+  <div class="handle">@finpulsemarkets</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     S6 · CTA · NO EXIT FADE  (35.5 – 45 s)
+══════════════════════════════════════════════════════════ -->
+<div class="scene" id="s6">
+  <div class="inner">
+    <div class="tag-pill"><span class="dot"></span>TRACK THESE</div>
+    <h2 class="s-head">OPEC+ meets in<br><span class="hl">24 hours</span>.<br>Watch these <span class="hl2">3 signals</span>.</h2>
+    <div class="checklist">
+      <div class="check-item" id="s6-k1">
+        <div class="chk-box">✓</div>
+        <div class="ck-body">
+          <div class="ck-title">India crude dependency — 88.7%</div>
+          <div class="ck-sub">Any supply change hits us harder than most nations</div>
+        </div>
+      </div>
+      <div class="check-item" id="s6-k2">
+        <div class="chk-box">✓</div>
+        <div class="ck-body">
+          <div class="ck-title">OPEC+ quota: rollover vs. ease</div>
+          <div class="ck-sub">Decision lands Nov 29 · Watch Brent crude move</div>
+        </div>
+      </div>
+      <div class="check-item" id="s6-k3">
+        <div class="chk-box">✓</div>
+        <div class="ck-body">
+          <div class="ck-title">HPCL, BPCL, IOC + current account deficit</div>
+          <div class="ck-sub">OMC stocks &amp; CAD are your real-time signal</div>
+        </div>
+      </div>
+    </div>
+    <div class="follow-card" id="s6-fc">
+      <div class="fc-icon">📲</div>
+      <div class="fc-body">
+        <div class="fc-handle">@finpulsemarkets</div>
+        <div class="fc-cta">Follow for daily market reels</div>
+      </div>
+      <div class="fc-btn">Follow</div>
+    </div>
+  </div>
+  <div class="handle">@finpulsemarkets</div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+//  TIMING
+// ════════════════════════════════════════════════
+const DURS   = [7, 7, 7, 7.5, 7, 9.5];
+const STARTS = [0, 7, 14, 21, 28.5, 35.5];
+const TOTAL  = 45;
+
+// ════════════════════════════════════════════════
+//  AUDIO ENGINE
+// ════════════════════════════════════════════════
+let AudioCtx = null;
+try { AudioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
+
+function synth(type, freq, gain, dur=0.3, endFreq=null) {
+  return function(vol=1) {
+    if (!AudioCtx) return;
+    try {
+      const osc = AudioCtx.createOscillator();
+      const g   = AudioCtx.createGain();
+      osc.connect(g); g.connect(AudioCtx.destination);
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, AudioCtx.currentTime);
+      if (endFreq) osc.frequency.linearRampToValueAtTime(endFreq, AudioCtx.currentTime + dur);
+      g.gain.setValueAtTime(gain * vol, AudioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, AudioCtx.currentTime + dur);
+      osc.start(); osc.stop(AudioCtx.currentTime + dur + 0.05);
+    } catch(e){}
+  };
+}
+
+const SFX = {
+  whoosh:        synth('sawtooth',  300, 0.25, 0.30),
+  tick:          synth('square',   1200, 0.07, 0.07),
+  beep:          synth('sine',      880, 0.10, 0.20),
+  final_beep:    synth('sine',     1320, 0.18, 0.30),
+  reveal_whoosh: synth('sawtooth',  200, 0.30, 0.40, 500),
+  impact:        synth('triangle',  120, 0.15, 0.40),
+  swoosh:        synth('triangle',  600, 0.20, 0.30, 200),
+  glass_pop:     synth('sine',     1800, 0.06, 0.15),
+  ding:          synth('sine',     1047, 0.25, 0.40),
+  pulse:         synth('sine',      440, 0.12, 0.30),
+};
+
+const _cued = {};
+function cue(T, name, vol=1) {
+  const key = name + '_' + Math.round(T * 10);
+  if (_cued[key]) return;
+  _cued[key] = true;
+  if (SFX[name]) SFX[name](vol);
+}
+
+// ════════════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════════════
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function easeOut(p) { return 1 - Math.pow(1 - clamp(p,0,1), 3); }
+
+function fadeIn(el, t, delay, dur=0.4) {
+  const p = easeOut(clamp((t - delay) / dur, 0, 1));
+  el.style.opacity = p;
+  return p;
+}
+function slideUp(el, t, delay, dur=0.4) {
+  const p = easeOut(clamp((t - delay) / dur, 0, 1));
+  el.style.opacity   = p;
+  el.style.transform = `translateY(calc(4cqw * ${1 - p}))`;
+  return p;
+}
+function slideInLeft(el, t, delay, dur=0.4) {
+  const p = easeOut(clamp((t - delay) / dur, 0, 1));
+  el.style.opacity   = p;
+  el.style.transform = `translateX(calc(-6cqw * ${1 - p}))`;
+  return p;
+}
+function slideInRight(el, t, delay, dur=0.4) {
+  const p = easeOut(clamp((t - delay) / dur, 0, 1));
+  el.style.opacity   = p;
+  el.style.transform = `translateX(calc(5cqw * ${1 - p}))`;
+  return p;
+}
+
+// ════════════════════════════════════════════════
+//  SCENE UPDATERS
+// ════════════════════════════════════════════════
+
+// ── S1: Hook A ──
+const s1Stamp = document.getElementById('s1-stamp');
+const s1Sub   = document.getElementById('s1-sub');
+const s1C1    = document.getElementById('s1-c1');
+const s1C2    = document.getElementById('s1-c2');
+const s1C3    = document.getElementById('s1-c3');
+const s1Dep   = document.getElementById('s1-dep');
+const s1Bill  = document.getElementById('s1-bill');
+const digRev  = document.getElementById('dig-reveal');
+const d1=document.getElementById('d1'), d2=document.getElementById('d2');
+const d3=document.getElementById('d3'), d4=document.getElementById('d4');
+const du=document.getElementById('du');
+
+function updateS1(t) {
+  // Alert stamp snap-in
+  if (t >= 0.3) {
+    const p = easeOut(clamp((t - 0.3) / 0.25, 0, 1));
+    s1Stamp.style.transform = `scale(${p})`;
+    s1Stamp.style.opacity   = p;
+    if (p > 0.05 && t < 0.4) cue(t, 'impact');
+  } else {
+    s1Stamp.style.transform = 'scale(0)';
+    s1Stamp.style.opacity   = '0';
+  }
+
+  // Stat cards staggered
+  slideUp(s1C1, t, 0.9, 0.4);
+  slideUp(s1C2, t, 1.1, 0.4);
+  slideUp(s1C3, t, 1.3, 0.4);
+  if (t >= 0.9  && t < 1.0 ) cue(t, 'glass_pop', 0.8);
+  if (t >= 1.1  && t < 1.2 ) cue(t, 'glass_pop', 0.8);
+  if (t >= 1.3  && t < 1.4 ) cue(t, 'glass_pop', 0.8);
+
+  // Dependency counter 0 → 88.7
+  if (t >= 0.9) {
+    const p = easeOut(clamp((t - 0.9) / 1.5, 0, 1));
+    s1Dep.textContent = (88.7 * p).toFixed(1);
+  } else {
+    s1Dep.textContent = '0';
+  }
+
+  // Import bill counter 0 → 74.8
+  if (t >= 1.3) {
+    const p = easeOut(clamp((t - 1.3) / 1.5, 0, 1));
+    s1Bill.textContent = (74.8 * p).toFixed(1);
+  } else {
+    s1Bill.textContent = '0';
+  }
+
+  // Digit reveal: 88.7% (from t = 4.5)
+  if (t >= 4.5) {
+    digRev.style.opacity = '1';
+    const dEls = [d1, d2, d3, d4, du];
+    dEls.forEach((el, i) => {
+      const p = easeOut(clamp((t - 4.5 - i * 0.1) / 0.35, 0, 1));
+      el.style.opacity   = p;
+      el.style.transform = `translateY(calc(5cqw * ${1-p})) rotateX(${90*(1-p)}deg)`;
+    });
+    if (t >= 4.5 && t < 4.65) cue(t, 'reveal_whoosh', 0.9);
+  } else {
+    digRev.style.opacity = '0';
+    [d1,d2,d3,d4,du].forEach(el => {
+      el.style.opacity   = '0';
+      el.style.transform = 'translateY(5cqw) rotateX(90deg)';
+    });
+  }
+
+  // Sub line
+  fadeIn(s1Sub, t, 5.4, 0.4);
+  if (t >= 5.4 && t < 5.55) cue(t, 'ding', 0.7);
+}
+
+// ── S2: OPEC+ Context ──
+const s2TL  = document.getElementById('s2-tl');
+const s2GC  = document.getElementById('s2-gc');
+const tnodes = [0,1,2,3,4].map(i => document.getElementById('tn'+i));
+const tsegs  = [0,1,2,3].map(i => document.getElementById('ts'+i));
+const tlbls  = [0,1,2,3,4].map(i => document.getElementById('tl'+i));
+
+function updateS2(t) {
+  s2TL.style.opacity = '1';
+
+  // Nodes animate in
+  tnodes.forEach((n, i) => {
+    n.style.opacity = easeOut(clamp((t - 0.4 - i*0.3) / 0.3, 0, 1));
+  });
+  // Segments expand
+  tsegs.forEach((s, i) => {
+    const p = easeOut(clamp((t - 0.55 - i*0.3) / 0.35, 0, 1));
+    s.style.transform = `scaleX(${p})`;
+    s.style.opacity   = p > 0 ? '1' : '0';
+  });
+  // Labels
+  tlbls.forEach((lb, i) => {
+    lb.style.opacity = easeOut(clamp((t - 0.4 - i*0.3) / 0.3, 0, 1));
+  });
+
+  // SFX per node
+  for (let i = 0; i < 4; i++) {
+    const tr = 0.4 + i * 0.3;
+    if (t >= tr && t < tr + 0.1) cue(t, 'tick', 0.5);
+  }
+  const lastTr = 0.4 + 4*0.3;
+  if (t >= lastTr && t < lastTr + 0.1) cue(t, 'beep', 0.9);
+
+  // Glass card
+  slideUp(s2GC, t, 2.6, 0.5);
+  if (t >= 2.6 && t < 2.75) cue(t, 'glass_pop', 0.7);
+}
+
+// ── S3: India's Exposure ──
+const s3r1 = document.getElementById('s3-r1');
+const s3r2 = document.getElementById('s3-r2');
+const s3r3 = document.getElementById('s3-r3');
+
+function updateS3(t) {
+  slideInLeft(s3r1, t, 0.5, 0.4);
+  slideInLeft(s3r2, t, 1.0, 0.4);
+  slideInLeft(s3r3, t, 1.5, 0.4);
+  if (t >= 0.5 && t < 0.65) cue(t, 'swoosh', 0.7);
+  if (t >= 1.0 && t < 1.15) cue(t, 'swoosh', 0.7);
+  if (t >= 1.5 && t < 1.65) cue(t, 'swoosh', 0.7);
+}
+
+// ── S4: What Changes For You ──
+const s4c1 = document.getElementById('s4-c1');
+const s4c2 = document.getElementById('s4-c2');
+const s4c3 = document.getElementById('s4-c3');
+
+function updateS4(t) {
+  slideInRight(s4c1, t, 0.5, 0.4);
+  slideInRight(s4c2, t, 1.0, 0.4);
+  slideInRight(s4c3, t, 1.5, 0.4);
+  if (t >= 0.5 && t < 0.65) cue(t, 'glass_pop', 0.8);
+  if (t >= 1.0 && t < 1.15) cue(t, 'glass_pop', 0.8);
+  if (t >= 1.5 && t < 1.65) cue(t, 'glass_pop', 0.8);
+}
+
+// ── S5: Two Scenarios ──
+const s5Bear = document.getElementById('s5-bear');
+const s5Bull = document.getElementById('s5-bull');
+const s5GC   = document.getElementById('s5-gc');
+
+function updateS5(t) {
+  // Bear slides from left
+  {
+    const p = easeOut(clamp((t - 0.4) / 0.5, 0, 1));
+    s5Bear.style.opacity   = p;
+    s5Bear.style.transform = `translateX(calc(-6cqw * ${1-p}))`;
+  }
+  // Bull slides from right
+  {
+    const p = easeOut(clamp((t - 0.65) / 0.5, 0, 1));
+    s5Bull.style.opacity   = p;
+    s5Bull.style.transform = `translateX(calc(6cqw * ${1-p}))`;
+  }
+  if (t >= 0.4 && t < 0.55) cue(t, 'impact', 0.7);
+  if (t >= 0.65 && t < 0.8) cue(t, 'impact', 0.7);
+
+  slideUp(s5GC, t, 2.2, 0.5);
+  if (t >= 2.2 && t < 2.35) cue(t, 'glass_pop', 0.6);
+}
+
+// ── S6: CTA (isLast — no exit fade applied externally) ──
+const s6k1 = document.getElementById('s6-k1');
+const s6k2 = document.getElementById('s6-k2');
+const s6k3 = document.getElementById('s6-k3');
+const s6FC = document.getElementById('s6-fc');
+
+function updateS6(t) {
+  slideUp(s6k1, t, 0.5,  0.45);
+  slideUp(s6k2, t, 1.3,  0.45);
+  slideUp(s6k3, t, 2.1,  0.45);
+  if (t >= 0.5 && t < 0.65) cue(t, 'ding', 0.8);
+  if (t >= 1.3 && t < 1.45) cue(t, 'ding', 0.8);
+  if (t >= 2.1 && t < 2.25) cue(t, 'ding', 0.8);
+
+  fadeIn(s6FC, t, 4.0, 0.6);
+  if (t >= 4.0 && t < 4.15) cue(t, 'final_beep', 1.0);
+}
+
+// ════════════════════════════════════════════════
+//  MASTER DRIVER
+// ════════════════════════════════════════════════
+const scenes = document.querySelectorAll('.scene');
+
+function setT(T) {
+  // find current scene
+  let sc = 0;
+  for (let i = STARTS.length - 1; i >= 0; i--) {
+    if (T >= STARTS[i]) { sc = i; break; }
+  }
+  const isLast = (sc === DURS.length - 1);
+  const t      = T - STARTS[sc];
+
+  // hide all, show current
+  scenes.forEach((s, idx) => {
+    s.style.opacity       = (idx === sc) ? '1' : '0';
+    s.style.pointerEvents = (idx === sc) ? 'auto' : 'none';
+  });
+
+  // enter/exit opacity
+  let opacity = 1;
+  if (t < 0.3) {
+    opacity = t / 0.3;
+  }
+  if (!isLast && t > DURS[sc] - 0.5) {
+    opacity = Math.min(opacity, 1 - (t - (DURS[sc] - 0.5)) / 0.5);
+  }
+  scenes[sc].style.opacity = Math.max(0, Math.min(1, opacity));
+
+  // dispatch
+  switch (sc) {
+    case 0: updateS1(t); break;
+    case 1: updateS2(t); break;
+    case 2: updateS3(t); break;
+    case 3: updateS4(t); break;
+    case 4: updateS5(t); break;
+    case 5: updateS6(t); break;
+  }
+}
+
+// ════════════════════════════════════════════════
+//  GRAIN OVERLAY (adds per-frame entropy for encode quality; visually imperceptible)
+// ════════════════════════════════════════════════
+(function() {
+  const cnv = document.getElementById('grain');
+  cnv.width  = 1080;
+  cnv.height = 1920;
+  const gc   = cnv.getContext('2d');
+  const W = 1080, H = 1920;
+  const imgData = gc.createImageData(W, H);
+  const px = imgData.data;
+
+  function redrawGrain() {
+    for (let i = 0; i < px.length; i += 4) {
+      const v = (Math.random() * 255) | 0;
+      px[i] = v; px[i+1] = v; px[i+2] = v; px[i+3] = 255;
+    }
+    gc.putImageData(imgData, 0, 0);
+  }
+
+  // Wrap setT so grain redraws on every frame call
+  const _setT = setT;
+  window.setT = function(T) { _setT(T); redrawGrain(); };
+})();
+
+// Thumbnail init
+setT(0.5);
+</script>
+</body>
+</html>
